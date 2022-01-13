@@ -16,7 +16,7 @@
                         </a>
                     </li>
                     <?php
-                    if ($_SESSION["usuario"]["id_clasificacion"] == 2 || $_SESSION["usuario"]["id"] == 6950) {
+                    if ($_SESSION["usuario"]["id_clasificacion"] == 2) {
                     ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,6 +47,12 @@
                         <a class="nav-link" href="reportes.php">
                             <i class="fa fa-file-archive-o"></i>
                             Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalogo.php">
+                            <i class="fa fa-file-archive-o"></i>
+                            Catalogo
                         </a>
                     </li>
                     <li class="nav-item dropdown">
