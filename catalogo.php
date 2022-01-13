@@ -127,15 +127,14 @@
                                             <br />
                                             <button class="btn btn-primary" data-toggle="modal"
                                                 data-target="#modal_detalle_premio" ng-click="SeleccionarPremio($index)"
-                                                ng-disabled=" premio.puntos_actuales > saldo_disponible"
-                                                ng-show="usuario_en_sesion.id_rol == 3">
+                                                ng-disabled=" premio.puntos_actuales > saldo_disponible">
                                                 <i class="fa fa-star"></i> Seleccionar
                                             </button>
-                                            <button class="btn btn-primary"
+                                            <!--<button class="btn btn-primary"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible"
                                                 ng-show="usuario_en_sesion.id_rol != 3">
                                                 <i class="fa fa-phone"></i> Llamar
-                                            </button>
+                                            </button>-->
                                         </div>
                                         <p class="descripcion">
                                             <b>Marca:</b> {{premio.marca}}
@@ -201,7 +200,7 @@
                     <h2 class="modal-title">Agregar al carrito</h2>
                 </div>
                 <div class="modal-body text-center">
-                    <img ng-src='https://formasestrategicas.com.co/premios/{{premio_seleccionado.id_premio}}.jpg'
+                    <img ng-src='https://formasestrategicas.com.co/premios/{{premio_seleccionado.id}}.jpg'
                         alt="No disponible" onError="this.src='images/premios/replace.png'" />
                     <h5>
                         {{premio_seleccionado.premio}}
@@ -213,7 +212,7 @@
                         estos premios sólo se pueden redimir por nuestro call center
                         en la línea 018000 413580
                     </p>
-                    <p ng-show="premio_seleccionado.solo_call == 0">
+                    <p>
                         {{premio_seleccionado.descripcion}}
                     </p>
                     <button class="btn btn-warning" data-dismiss="modal" data-toggle="modal"
