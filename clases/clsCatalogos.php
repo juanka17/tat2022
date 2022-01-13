@@ -394,6 +394,11 @@ class clsCatalogos {
                     $order = " order by 1 ";
                 };
                 break;
+            
+            case "representantes": {
+                $query = "SELECT id,nombre FROM afiliados WHERE id IN (SELECT id_visitador FROM almacenes)";
+                $order = " ";
+                }; break;
         }
         $query = $query . $order;
 
