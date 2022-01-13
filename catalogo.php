@@ -126,14 +126,15 @@
                                             <br />
                                             <button class="btn btn-primary" data-toggle="modal"
                                                 data-target="#modal_detalle_premio" ng-click="SeleccionarPremio($index)"
-                                                ng-disabled=" premio.puntos_actuales > saldo_disponible">
+                                                ng-disabled=" premio.puntos_actuales > saldo_disponible "
+                                                ng-show="premio.id != 2646">                                                
                                                 <i class="fa fa-star"></i> Seleccionar
                                             </button>
-                                            <button class="btn btn-primary"
+                                            <!--<button class="btn btn-primary"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible"
                                                 ng-show="usuario_en_sesion.id_rol != 3 && premio.id != 2646">
                                                 <i class="fa fa-phone"></i> Llamar
-                                            </button>
+                                            </button>-->
 
                                             <a class="btn btn-primary"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible"
