@@ -8,92 +8,33 @@
     <script type="text/javascript">
     var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
     </script>
+
     <style>
+    .descripcion {
+        overflow: hidden;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
     .box-body {
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 3px;
         border-bottom-left-radius: 3px;
         padding: 10px;
-        height: auto;
+        height: 420px;
     }
 
-    .box-body-1 {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-        height: auto;
-        margin-bottom: 18px;
+    .profile-user-img {
+        margin: 0 auto;
+        width: 100px;
+        padding: 3px;
+        border: 3px solid #d2d6de;
     }
 
-    .banner {
-        border: 3px solid #000000;
-        border-radius: 10px;
-        border-color: #ff5e09;
-        background: #ff7e06;
-    }
-
-    #cronograma {
-        width: 100%;
-    }
-
-    #tienda_perfecta {
-        height: 87px;
-    }
-
-    @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-        .box-body {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
-            padding: 10px;
-            height: auto;
-            margin-bottom: 18px;
-        }
-
-        .box-body-1 {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
-            height: auto;
-            margin-bottom: 18px;
-            width: 693px;
-        }
-
-        #tienda_perfecta {
-            height: 90%;
-        }
-    }
-
-    @media screen and (max-width: 39.9375em) {
-        .box-body {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
-            padding: 10px;
-            height: auto;
-            margin-bottom: 18px;
-        }
-
-        .box-body-1 {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 3px;
-            border-bottom-left-radius: 3px;
-            padding: 2% 0% 3% 4%;
-            height: auto;
-            margin-bottom: 18px;
-            width: 100%;
-        }
-
-        #tienda_perfecta {
-            height: 20px;
-        }
+    .img-circle {
+        border-radius: 50%;
     }
     </style>
 </head>
@@ -101,60 +42,60 @@
 <body ng-app="catalogoApp" ng-controller="catalogoController" class="wrapper layout-top-nav"
     style="height: auto; min-height: 100%;">
     <?php include 'componentes/mostrar_imagen.php'; ?>
-    <div class="content-wrapper" style="min-height: 556px;">
+    <div class="content-wrapper">
         <?php include 'componentes/controles_superiores.php'; ?>
         <?php include 'componentes/menu.php'; ?>
         <div class="container-fluid">
             <section class="content-header">
+                <h1>
+                    Catálogo<small>puntos disponibles: {{datos_usuario.saldo_actual | number}}</small>
+                </h1>
                 <ol class="breadcrumb">
                     <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
                 </ol>
             </section>
             <section class="content">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-10 offset-lg-1 text-center">
-                        <div class="col-sm-12 col-md-4">
-                            <div class="col-sm-12 col-md-12 form-group">
-                                <label>Nombre del premio</label>
-                                {{datos_usuario}}
-                                <input class="form-control" ng-model="filtros.nombre" type="text"
-                                    placeholder="Nombre premio" ng-change="SeleccionarPremiosVisibles()">
-                            </div>
-                            <div class="col-sm-12 col-md-12 form-group">
-                                <label> Categoria</label>
-                                <select class="form-control" size="7" ng-model="filtros.id_categoria"
-                                    ng-change="SeleccionarPremiosVisibles()">
-                                    <option class="btn btn-warning btn-block" value="0">TODOS LOS PREMIOS</option>
-                                    <option class="btn btn-warning btn-block"
-                                        ng-repeat="categoria in categoria_premios track by $index"
-                                        ng-value="categoria.id">
-                                        {{categoria.nombre}}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-12 col-md-12 form-group">
-                                <br />
-                                <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(1);"><i
-                                        class="fa fa-arrow-up"></i> Ordenar Menor a Mayor</button>
-                            </div>
-                            <div class="col-sm-12 col-md-12 form-group">
-
-                                <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(2);"><i
-                                        class="fa fa-star"></i> Más Redimidos</button>
-                            </div>
-                            <div class="col-sm-12 col-md-12 form-group">
-
-                                <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(3);"><i
-                                        class="fa fa-shopping-cart"></i> Puedes Redimir Hoy</button>
-                            </div>
-                            <div class="col-sm-12 col-md-12 form-group">
-
-                                <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(4);"><i
-                                        class="fa fa-child"></i> Si Te Esfuerzas</button>
-                            </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-12 form-group">
+                            <label>Nombre del premio</label>
+                            <input class="form-control" ng-model="filtros.nombre" type="text"
+                                placeholder="Nombre premio" ng-change="SeleccionarPremiosVisibles()">
                         </div>
-                        <br />
-                        <div class="col-sm-12 col-md-9">
+                        <div class="col-sm-12 col-md-12 form-group">
+                            <label> Categoria</label>
+                            <select class="form-control" size="12" ng-model="filtros.id_categoria"
+                                ng-change="SeleccionarPremiosVisibles()">
+                                <option class="btn btn-warning btn-block" value="0">TODOS LOS PREMIOS</option>
+                                <option class="btn btn-warning btn-block"
+                                    ng-repeat="categoria in categoria_premios track by $index" ng-value="categoria.id">
+                                    {{categoria.NOMBRE}}
+                                </option>
+                            </select>
+                        </div>
+                        <!--<div class="col-sm-12 col-md-12 form-group">
+                            <br />
+                            <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(1);"><i
+                                    class="fa fa-arrow-up"></i> Ordenar Menor a Mayor</button>
+                        </div>
+                        <div class="col-sm-12 col-md-12 form-group">
+
+                            <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(2);"><i
+                                    class="fa fa-star"></i> Más Redimidos</button>
+                        </div>
+                        <div class="col-sm-12 col-md-12 form-group">
+
+                            <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(3);"><i
+                                    class="fa fa-shopping-cart"></i> Puedes Redimir Hoy</button>
+                        </div>
+                        <div class="col-sm-12 col-md-12 form-group">
+
+                            <button class="btn btn-warning btn-block" ng-click="ObtenerPremios(4);"><i
+                                    class="fa fa-child"></i> Si Te Esfuerzas</button>
+                        </div>-->
+                    </div>
+                    <div class="col-sm-12 col-md-8">
+                        <div class="row">
                             <div class="col-sm-12">
                                 <br />
                                 <button class="btn btn-block" style="background-color: black; color: white;"
@@ -162,82 +103,83 @@
                                     <i class="fa fa-shopping-basket"></i> Ver Carrito ({{carrito.elementos.length}})
                                 </button>
                             </div>
-                            <div class="col-sm-12 col-md-4 " ng-repeat="premio in premios_visibles track by $index"
-                                ng-show="usuario_en_sesion.id_rol == 2 || (usuario_en_sesion.id_rol == 10 && premio.puntos > 0) ">
-                                <br />
-                                <div class="box box-primary">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4 " ng-repeat="premio in premios_visibles" ng-show="true">
+                                <div class="box box-danger">
                                     <div class="box-body box-profile">
                                         <br />
-                                        <img class="profile-user-img img-responsive img-circle"
-                                            ng-src='https://formasestrategicas.com.co/premios/{{premio.id_premio}}.jpg'
-                                            alt="No disponible" onError="this.src='../../images/premios/replace.png'" />
+                                        <div style="text-align: center;">
+                                            <img class="profile-user-img img-responsive img-circle" style="align:center"
+                                                ng-src='https://formasestrategicas.com.co/premios/{{premio.id}}.jpg'
+                                                alt="No disponible"
+                                                onError="this.src='../../images/premios/replace.png'" />
+                                        </div>
                                         <br />
-                                        <h6 class="text-center">{{premio.premio}}</h6>
+                                        <h6 class="text-center">{{premio.nombre}}</h6>
                                         <h3 class="text-center">
                                             {{ premio.puntos == premio.puntos_actuales ? premio.puntos : premio.puntos_actuales | number}}
                                             <span ng-show="premio.puntos != premio.puntos_actuales"
                                                 style="color: red; text-decoration: line-through;">({{premio.puntos}})</span>
                                             Puntos
                                         </h3>
-                                        <div class="btn-group-vertical btn-block"
-                                            ng-show="usuario_en_sesion.id_rol != 3">
+                                        <div class="btn-group-vertical btn-block">
                                             <br />
-                                            <button class="btn btn-warning" data-toggle="modal"
+                                            <button class="btn btn-primary" data-toggle="modal"
                                                 data-target="#modal_detalle_premio" ng-click="SeleccionarPremio($index)"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible"
-                                                ng-show="premio.solo_call == 0 || usuario_en_sesion.id_rol == 2">
+                                                ng-show="usuario_en_sesion.id_rol == 3">
                                                 <i class="fa fa-star"></i> Seleccionar
                                             </button>
-                                            <button class="btn btn-warning" ng-disabled="true"
-                                                ng-show="premio.solo_call == 1 && usuario_en_sesion.id_rol != 2">
+                                            <button class="btn btn-primary"
+                                                ng-disabled=" premio.puntos_actuales > saldo_disponible"
+                                                ng-show="usuario_en_sesion.id_rol != 3">
                                                 <i class="fa fa-phone"></i> Llamar
                                             </button>
                                         </div>
-                                        <div class="descripcion">
-                                            <p>
-                                                <b>Marca:</b> {{premio.marca}}
-                                                <br />
-                                                {{premio.descripcion}}
-                                            </p>
-                                        </div>
+                                        <p class="descripcion">
+                                            <b>Marca:</b> {{premio.marca}}
+                                            <br />
+                                            {{premio.descripcion}}
+                                        </p>
                                     </div>
                                     <!-- /.box-body -->
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 ">
+                    </div>
+                    <div class="col-sm-12 ">
 
-                            <div class="btn-group btn-block">
-                                <div class="col-sm-12 col-md-2">
-                                    <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0"
-                                        ng-click="SeleccionarPaginaListaVisible(pagina_actual - pagina_actual)">
-                                        INICIO
-                                    </button>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0"
-                                        ng-click="SeleccionarPaginaListaVisible(pagina_actual - 1)">
-                                        <i class="fa fa-backward"></i>
-                                    </button>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <button class="btn btn-warning btn-block"> {{pagina_actual + 1}} de
-                                        {{cantidad_paginas + 1}} </button>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <button class="btn btn-warning btn-block"
-                                        ng-disabled="pagina_actual >= cantidad_paginas"
-                                        ng-click="SeleccionarPaginaListaVisible(pagina_actual + 1)">
-                                        <i class="fa fa-forward"></i>
-                                    </button>
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <button class="btn btn-warning btn-block"
-                                        ng-disabled="pagina_actual >= cantidad_paginas"
-                                        ng-click="SeleccionarPaginaListaVisible(pagina_actual + (cantidad_paginas - pagina_actual))">
-                                        FIN
-                                    </button>
-                                </div>
+                        <div class="btn-group btn-block">
+                            <div class="col-sm-12 col-md-2">
+                                <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0"
+                                    ng-click="SeleccionarPaginaListaVisible(pagina_actual - pagina_actual)">
+                                    INICIO
+                                </button>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0"
+                                    ng-click="SeleccionarPaginaListaVisible(pagina_actual - 1)">
+                                    <i class="fa fa-backward"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <button class="btn btn-warning btn-block"> {{pagina_actual + 1}} de
+                                    {{cantidad_paginas + 1}} </button>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <button class="btn btn-warning btn-block"
+                                    ng-disabled="pagina_actual >= cantidad_paginas"
+                                    ng-click="SeleccionarPaginaListaVisible(pagina_actual + 1)">
+                                    <i class="fa fa-forward"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <button class="btn btn-warning btn-block"
+                                    ng-disabled="pagina_actual >= cantidad_paginas"
+                                    ng-click="SeleccionarPaginaListaVisible(pagina_actual + (cantidad_paginas - pagina_actual))">
+                                    FIN
+                                </button>
                             </div>
                         </div>
                     </div>

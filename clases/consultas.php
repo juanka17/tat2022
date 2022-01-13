@@ -68,23 +68,23 @@ class Consultas
         FROM afiliados afi 
             WHERE afi.id = %i';
     public static $consulta_premios = '
-    SELECT
-	pre.ID,
-	pre.NOMBRE,
-	pre.DESCRIPCION,
-	pre.MARCA,
-	pre.PUNTOS,
-        pre.CATALOGO,
-        pre.CATEGORIA_AFILIADO,
-	cap.ID ID_CATEGORIA,
-	cap.NOMBRE CATEGORIA,
-	cap.CLIENTE_VISUALIZA,
-	(select count(red.id) from redenciones red where red.id_premio = pre.id) * -1 REDIMIDOS
-    FROM 
-	premios pre
-	inner join categoria_premio cap on cap.id = pre.id_categoria
-    WHERE
-	pre.ACTIVO = 1';
+        select
+            pre.id,
+            pre.nombre,
+            pre.descripcion,
+            pre.marca,
+            pre.puntos,
+            pre.catalogo,
+            pre.categoria_afiliado,
+            cap.id id_categoria,
+            cap.nombre categoria,
+            cap.cliente_visualiza,
+            (select count(red.id) from redenciones red where red.id_premio = pre.id) * -1 redimidos
+        from premios pre
+            inner join categoria_premio cap on cap.id = pre.id_categoria
+        where  pre.activo = 1 
+        ';
+    
     public static $consulta_familiares = '
     SELECT
 	fam.ID,

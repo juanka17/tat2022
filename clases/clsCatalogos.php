@@ -31,7 +31,7 @@ class clsCatalogos {
         $order = " ORDER BY 2";
         switch ($parametros->catalogo) {
             case "premios": {
-                    $query = Consultas::$consulta_premios . " and (catalogo LIKE '5') ";
+                    $query = Consultas::$consulta_premios;
                     $order = " ORDER BY cap.id ";
                 };
                 break;

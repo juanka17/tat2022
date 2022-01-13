@@ -22,6 +22,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="catalogo.php?id_afiliado={{datos_usuario.id}}">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
+                            Catalogo
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="?logout">
                             <i class="fa fa-sign-out"></i>
                             Cerrar sesión

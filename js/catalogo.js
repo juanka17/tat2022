@@ -1,11 +1,9 @@
 angular.module('catalogoApp', []).controller('catalogoController', function($scope, $http, $document) {
 
-
-
     // <editor-fold defaultstate="collapsed" desc="Listado Premios">
 
     $scope.ObtenerCategoriaPremios = function() {
-        var parametros = { catalogo: "categoria_premios" };
+        var parametros = { catalogo: "categoria_premio" };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostarCategoriaPremios);
     };
 
@@ -20,7 +18,7 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
             var parametros = { catalogo: "premios" };
             $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarPremios);
         }
-        if ($scope.inicio == 1) {
+        /*if ($scope.inicio == 1) {
             var parametros = { catalogo: "premios_menor_mayor" };
             $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarPremios);
         }
@@ -36,28 +34,14 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
             var esfuerzate = usuario_en_sesion.saldo_actual * 3;
             var parametros = { catalogo: "si_te_esfuerzas", saldo_actual: esfuerzate };
             $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarPremios);
-        }
+        }*/
     };
 
     $scope.MostrarPremios = function(data) {
         $scope.premios_total = data;
-        $scope.MostrarPremioDeLaSemana();
-    };
-
-    $scope.MostrarPremioDeLaSemana = function() {
-        if ($scope.id_premio != 0) {
-            $scope.premios = Array();
-            $scope.lista_almacenes = Array();
-            angular.forEach($scope.premios_total, function(premio) {
-                if (premio.id_premio == $scope.id_premio) {
-                    $scope.premios.push(premio);
-                }
-            });
-            $scope.cantidad_paginas = Math.ceil($scope.premios.length / $scope.items_por_pagina) - 1;
-            $scope.SeleccionarPaginaListaVisible(0)
-        } else {
-            $scope.SeleccionarPremiosVisibles();
-        }
+        console.log($scope.premios_total);
+        //$scope.MostrarPremioDeLaSemana();
+        $scope.SeleccionarPremiosVisibles();
     };
 
     $scope.items_por_pagina = 6;
@@ -65,7 +49,6 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
     $scope.SeleccionarPremiosVisibles = function() {
         console.log($scope.filtros);
         $scope.premios = Array();
-        $scope.lista_almacenes = Array();
         angular.forEach($scope.premios_total, function(premio) {
             if (
                 ($scope.filtros.nombre.length == 0 || premio.premio.toLowerCase().indexOf($scope.filtros.nombre.toLowerCase()) > -1) &&
@@ -186,10 +169,9 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
         });
     };
 
-    $scope.usuario_en_sesion = usuario_en_sesion;
-    $scope.id_premio = id_premio;
-    $scope.id_usuario = id_usuario;
-    $scope.CargarDatosUsuario();
+    $scope.datos_usuario = datos_usuario;
+    //$scope.id_premio = id_premio;
+
 
     $(function() {
         $('#modal_resultado_registro').on('hidden.bs.modal', function(e) {
@@ -199,4 +181,5 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
         })
     });
 
+    $scope.ObtenerCategoriaPremios();
 });

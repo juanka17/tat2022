@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-12 col-md-8 offset-md-2">
+    <div class="col-sm-12 offset-md-1 col-md-10 ">
         <nav class="navbar navbar-expand-lg navbar-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -50,8 +50,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="catalogo.php">
-                            <i class="fa fa-file-archive-o"></i>
+                        <a class="nav-link" href="catalogo.php?id_afiliado={{datos_usuario.id}}">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             Catalogo
                         </a>
                     </li>
