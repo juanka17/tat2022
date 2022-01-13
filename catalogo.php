@@ -119,8 +119,7 @@
                                         <h6 class="text-center">{{premio.nombre}}</h6>
                                         <h3 class="text-center">
                                             {{ premio.puntos == premio.puntos_actuales ? premio.puntos : premio.puntos_actuales | number}}
-                                            <span ng-show="premio.puntos != premio.puntos_actuales"
-                                                style="color: red; text-decoration: line-through;">({{premio.puntos}})</span>
+                                            <span ng-show="true">({{premio.puntos}})</span>
                                             Puntos
                                         </h3>
                                         <div class="btn-group-vertical btn-block">
@@ -133,9 +132,15 @@
                                             </button>
                                             <button class="btn btn-primary"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible"
-                                                ng-show="usuario_en_sesion.id_rol != 3">
+                                                ng-show="usuario_en_sesion.id_rol != 3 && premio.id != 2646">
                                                 <i class="fa fa-phone"></i> Llamar
                                             </button>
+
+                                            <a class="btn btn-primary"
+                                                ng-disabled=" premio.puntos_actuales > saldo_disponible"
+                                                ng-show="premio.id == 2646" download="images/bono_digital.png"
+                                                href="images/bono_digital.png"><i class="fa fa-download"></i>
+                                                Descargar Bono</a>
                                         </div>
                                         <p class="descripcion">
                                             <b>Marca:</b> {{premio.marca}}
