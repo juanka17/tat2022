@@ -22,7 +22,7 @@ class DB {
 
   // initial connection
   public static $host = 'servidor1.formasestrategicas.com.co';
-  public static $dbName = 'formases_pfizer_tat_2021';
+  public static $dbName = 'formases_pfizer_tat_2022'; //formases_pfizer_tat_2021
   public static $user = 'formases_crmUser'; 
   public static $password = 'F0rm@s_3strateg1c@s_13';
   
