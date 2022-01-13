@@ -1,0 +1,19 @@
+{
+  "name": "pfizer_2019",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://zayro8905@bitbucket.org/jaiverpava92/pfizer_2019.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/jaiverpava92/pfizer_2019#readme",
+  "dependencies": {
+    "angular-chart.js": "^1.1.1"
+  }
+}
