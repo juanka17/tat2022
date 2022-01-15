@@ -2,6 +2,20 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
 
     // <editor-fold defaultstate="collapsed" desc="Listado Premios">
 
+    $scope.CargarDatosUsuario = function() {
+        var parametros = { catalogo: "usuario", id: $scope.id_usuario };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarDatosUsuario);
+    };
+
+    $scope.MostrarDatosUsuario = function(data) {
+        $scope.datos_usuario = data[0];
+        $scope.saldo_disponible = $scope.datos_usuario.saldo_actual == null ? 0 : parseInt($scope.datos_usuario.saldo_actual);
+        $scope.nombre_ciudad = $scope.datos_usuario.ciudad_departamento;
+        $scope.direccion = $scope.datos_usuario.direccion;
+        $scope.ObtenerCategoriaPremios();
+
+    };
+
     $scope.ObtenerCategoriaPremios = function() {
         var parametros = { catalogo: "categoria_premio" };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostarCategoriaPremios);
@@ -138,7 +152,7 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
             ciudad: $scope.nombre_ciudad
         };
 
-        $scope.EjecutarLlamado("especiales", "registrar_redenciones", parametros, $scope.ResultadoRegistroRedenciones);
+        $scope.EjecutarLlamado("redenciones", "RegistrarRedencion", parametros, $scope.ResultadoRegistroRedenciones);
     };
 
     $scope.ResultadoRegistroRedenciones = function(data) {
@@ -181,5 +195,5 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
         })
     });
 
-    $scope.ObtenerCategoriaPremios();
+    //$scope.ObtenerCategoriaPremios();
 });

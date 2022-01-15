@@ -50,7 +50,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="catalogo.php?id_afiliado={{datos_usuario.id}}">
+                        <a class="nav-link" href="catalogo.php?id_usuario={{datos_usuario.id}}">
                             <i class="fa fa-gift" aria-hidden="true"></i>
                             Catalogo
                         </a>

@@ -56,6 +56,7 @@ class clsCatalogos {
                 break;
             case "ciudad": {
                     $query = $query . " where id_departamento = " . $parametros->departamento;
+                    echo $query;
                 };
                 break;
             case "familiares_afiliado": {

@@ -5,8 +5,21 @@
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
     <script src="js/catalogo.js?reload=1" type="text/javascript"></script>
+    <script src="js/app.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
     <script type="text/javascript">
     var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
+    var id_usuario = 0;
+    var id_premio = 0;
+    if (typeof getParameterByName("id_usuario") !== 'undefined' && getParameterByName("id_usuario") != "") {
+        id_usuario = getParameterByName("id_usuario");
+    } else {
+        alert("No hay usuario seleccionado.");
+    }
+    if (typeof getParameterByName("id_premio") !== 'undefined' && getParameterByName("id_premio") != "") {
+        id_premio = getParameterByName("id_premio");
+    }
     </script>
 
     <style>
@@ -127,7 +140,7 @@
                                             <button class="btn btn-primary" data-toggle="modal"
                                                 data-target="#modal_detalle_premio" ng-click="SeleccionarPremio($index)"
                                                 ng-disabled=" premio.puntos_actuales > saldo_disponible "
-                                                ng-show="premio.id != 2646">                                                
+                                                ng-show="premio.id != 2646">
                                                 <i class="fa fa-star"></i> Seleccionar
                                             </button>
                                             <!--<button class="btn btn-primary"
@@ -223,9 +236,7 @@
                         {{premio_seleccionado.descripcion}}
                     </p>
                     <button class="btn btn-warning" data-dismiss="modal" data-toggle="modal"
-                        data-target="#modal_carrito"
-                        ng-show=" premio_seleccionado.solo_call == 0 || usuario_en_sesion.id_rol == 2"
-                        ng-click="AgregarAlCarrito()">
+                        data-target="#modal_carrito" ng-click="AgregarAlCarrito()">
                         <i class="fa fa-shopping-basket"></i> Agregar al Carrito
                     </button>
                 </div>
@@ -419,6 +430,7 @@
             </div>
         </div>
     </div>
+
     <div id="modal_resultado_registro" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
