@@ -1,7 +1,8 @@
 <div class="row">
     <div class="col-sm-12 col-md-8 offset-md-2">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -25,6 +26,12 @@
                         <a class="nav-link" href="catalogo.php?id_afiliado={{datos_usuario.id}}">
                             <i class="fa fa-gift" aria-hidden="true"></i>
                             Catalogo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="estado_cuenta.php?id_afiliado={{datos_usuario.id}}">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            Estado de cuenta
                         </a>
                     </li>
                     <li class="nav-item">

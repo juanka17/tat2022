@@ -991,21 +991,17 @@ class Consultas
             afi.id_almacen,
             alm.nombre almacen,
             cla.id id_clasificacion,
-            cla.nombre clasificacion,
-            ifnull(obtener_saldo_actual(afi.id),0) saldo_actual
-            FROM afiliados afi
+            cla.nombre clasificacion
+        FROM afiliados afi
             left JOIN almacenes alm ON alm.id = afi.ID_ALMACEN
-            INNER JOIN clasificacion cla ON cla.id = afi.id_clasificacion
-            
+            INNER JOIN clasificacion cla ON cla.id = afi.id_clasificacion  
     ";
     public static $estado_cuenta_afiliado = "
         select
             e.*,
-            c.nombre concepto,
             p.id_temporada,
             p.nombre periodo
-            from estado_cuenta_afiliado e
-            INNER JOIN concepto_estado_cuenta c ON c.id = e.id_concepto
+            from t_estado_cuenta e
             INNER JOIN periodo p ON p.id = e.id_periodo
     ";
     public static $denegar_solicitud_premio = "

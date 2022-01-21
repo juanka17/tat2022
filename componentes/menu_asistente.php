@@ -30,6 +30,18 @@
                 <i class="fa fa-plus-square"></i> <span>Mecánica</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="catalogo.php?id_afiliado={{datos_usuario.id}}">
+                <i class="fa fa-gift" aria-hidden="true"></i>
+                Catalogo
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="estado_cuenta.php?id_afiliado={{datos_usuario.id}}">
+                <i class="fa fa-address-card" aria-hidden="true"></i>
+                Estado de cuenta
+            </a>
+        </li>
         <li>
             <a href="?logout">
                 <i class="fa fa-sign-out"></i> <span>Cerrar sesión</span>

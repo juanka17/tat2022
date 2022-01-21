@@ -45,12 +45,12 @@ class clsCatalogos {
                 };
                 break;
             case "estado_cuenta_afiliado": {
-                    $query = Consultas::$estado_cuenta_afiliado . " where e.id_usuario = " . $parametros->id_usuario;
+                    $query = Consultas::$estado_cuenta_afiliado . " where e.id_vendedor = " . $parametros->id_usuario;
                     $order = " ";
                 };
                 break;
             case "ventas_usuario": {
-                    $query = "call sp_ventas_usuario_totales(" . $parametros->id_usuario . ",0);";
+                    $query = "call sp_ventas_promedio();";
                     $order = "";
                 };
                 break;

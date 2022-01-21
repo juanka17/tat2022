@@ -195,5 +195,5 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
         })
     });
 
-    //$scope.ObtenerCategoriaPremios();
+    $scope.ObtenerCategoriaPremios();
 });

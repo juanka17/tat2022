@@ -1,7 +1,8 @@
 <div class="row">
     <div class="col-sm-12 offset-md-1 col-md-10 ">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -18,27 +19,28 @@
                     <?php
                     if ($_SESSION["usuario"]["id_clasificacion"] == 2) {
                     ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-user"></i>
-                                Admin
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="menu_administracion.php">
+                                <i class="fa fa-user"></i> Admin
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="menu_administracion.php">
-                                    <i class="fa fa-user"></i> Admin
-                                </a>
-                                <a class="dropdown-item" href="autorizacion_entregas.php">
-                                    <i class="fa fa-file-excel-o"></i>
-                                    Autorizar Entregas
-                                </a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="almacenes.php">
-                                <i class="fa fa-users"></i>
-                                Clientes
+                            <a class="dropdown-item" href="autorizacion_entregas.php">
+                                <i class="fa fa-file-excel-o"></i>
+                                Autorizar Entregas
                             </a>
-                        </li>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="almacenes.php">
+                            <i class="fa fa-users"></i>
+                            Clientes
+                        </a>
+                    </li>
 
                     <?php
                     }
@@ -55,8 +57,15 @@
                             Catalogo
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="estado_cuenta.php?id_afiliado={{datos_usuario.id}}">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                            Estado de cuenta
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-industry"></i>
                             Indicadores
                         </a>
