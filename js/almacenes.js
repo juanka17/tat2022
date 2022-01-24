@@ -116,6 +116,59 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     /*----------------------------------*/
 
 
+    /*-----------Cuotas Distribuidora---------*/
+
+    $scope.CargarCuotasAlmacen = function(data) {
+
+        var parametros = { catalogo: "cuotas_almacen", id_almacen: id_almacen, id_periodo: data };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCuotasDistribuidora);
+    };
+
+    $scope.MostrarCuotasDistribuidora = function(data) {
+        $scope.cuotas_distribuidora = data;
+        if ($scope.cuotas_distribuidora.length == 0) {
+            $scope.crear_nueva_cuota = 0;
+        } else {
+            $scope.crear_nueva_cuota = 1;
+        }
+    };
+
+    $scope.GuardarCuotasDistribuidora = function(cuota, mes) {
+
+        var datos = {
+            id_almacen: id_almacen,
+            id_periodo: mes,
+            cuota: $("#cuota_ventas").val().replace(/\./g, '')
+        }
+
+        if ($scope.crear_nueva_cuota == 0) {
+            var parametros = {
+                catalogo: "cuotas_almacen",
+                datos: datos,
+                id_almacen: id_almacen,
+                id_periodo: mes
+            };
+            $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
+        } else if ($scope.crear_nueva_cuota == 1) {
+            var parametros = {
+                catalogo: "cuotas_almacen",
+                datos: datos,
+                id_almacen: id_almacen,
+                id_periodo: mes,
+                id: $scope.cuotas_distribuidora[0].id
+            };
+            $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
+
+        }
+    };
+
+    $scope.ResultadoCreacionNuevoUsuario = function(data) {
+        alert("Cuota creada satisfactoriamente");
+    };
+
+    /*---------------------------------------- */
+
+
     //ranking Actual y Ganadores Bimestre
 
     $scope.CargarTemporadas = true

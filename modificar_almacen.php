@@ -211,6 +211,19 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
+                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 15;">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-red">
+                                        <i class="fa fa-check"></i>
+                                    </span>
+                                    <div class="info-box-content">
+                                        <br />
+                                        <span class="info-box-text">Cuotas Distribuidora</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
                             <div class="col-md-12 col-sm-6 col-xs-12"
                                 ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
@@ -384,6 +397,66 @@ hr {
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div ng-show="seccion == 15" class="col sm-12 text-left elementos">
+                            <br />
+                            <h2 class="text-center">Cuotas Distribuidoras</h2>
+                            <p>¡Hola!
+                                <br>
+                                En este modulo podras ingresar las cuotas de tu distribuidora.
+                            </p>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-3">
+                                    <label for="cuota_ventas">Seleccione mes a cargar</label>
+                                    <select class="form-control" name="cuota_mes_distribuidora"
+                                        ng-model="mes_cuota_seleccionado" id="cuota_mes_distribuidora">
+                                        <option value="13">Enero</option>
+                                        <option value="14">Febrero</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <br>
+                                    <button type="button" class="btn btn-primary"
+                                        ng-click="CargarCuotasAlmacen(mes_cuota_seleccionado)">Consultar Cuota</button>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="crear_nueva_cuota == 0">
+                                <div class="col-sm-12 col-md-6">
+                                    <small>*No se encontraron cuotas registradas para este periodo</small>
+                                    <br>
+                                    <label for="cuota_ventas">Crear Nueva Cuota</label>
+                                    <input class="form-control" type="text" id="cuota_ventas" name="cuota_ventas"
+                                        ng-model="nueva_cuota_distribuidora" onkeyup="format(this)"
+                                        onchange="format(this)">
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <br>
+                                    <button class="btn btn-primary"
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,mes_cuota_seleccionado)">
+                                        <i class="fa fa-plus"></i>
+                                        Crear Nueva Cuota
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="crear_nueva_cuota == 1">
+                                <div class="col-sm-12 col-md-6">
+                                    <br>
+                                    <label for="cuota_ventas">Editar Cuota</label>
+                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].cuota"
+                                        id="cuota_ventas" name="cuota_ventas" onkeyup="format(this)"
+                                        onchange="format(this)">
+
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <br>
+                                    <button class="btn btn-primary"
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,mes_cuota_seleccionado)">
+                                        <i class="fa fa-plus"></i>
+                                        Actualizar Cuota
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <div ng-show="seccion == 2" class="col md-12 text-left elementos"

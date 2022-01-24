@@ -401,6 +401,11 @@ class clsCatalogos {
                 $order = " ";
                 }; 
                 break;
+            case "cuotas_almacen": {
+                $query = "SELECT * FROM cuotas_almacen WHERE id_almacen =".$parametros->id_almacen." and id_periodo=".$parametros->id_periodo;
+                $order = " ";
+                }; 
+                break;
         }
         $query = $query . $order;
 
