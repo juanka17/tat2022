@@ -413,6 +413,7 @@ hr {
                                         ng-model="mes_cuota_seleccionado" id="cuota_mes_distribuidora">
                                         <option value="13">Enero</option>
                                         <option value="14">Febrero</option>
+                                        <option value="15">Marzo</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -425,33 +426,39 @@ hr {
                                 <div class="col-sm-12 col-md-6">
                                     <small>*No se encontraron cuotas registradas para este periodo</small>
                                     <br>
-                                    <label for="cuota_ventas">Crear Nueva Cuota</label>
+                                    <label for="cuota_ventas">Crear Nueva Cuota de Venta</label>
                                     <input class="form-control" type="text" id="cuota_ventas" name="cuota_ventas"
                                         ng-model="nueva_cuota_distribuidora" onkeyup="format(this)"
+                                        onchange="format(this)">
+                                    <label for="cuota_impactos">Crear Nueva Cuota de Impactos</label>
+                                    <input class="form-control" type="text" id="cuota_impactos" name="cuota_impctos"
+                                        ng-model="nueva_cuota_distribuidora_impactos" onkeyup="format(this)"
                                         onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-6">
                                     <br>
                                     <button class="btn btn-primary"
-                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,mes_cuota_seleccionado)">
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
                                         <i class="fa fa-plus"></i>
                                         Crear Nueva Cuota
                                     </button>
                                 </div>
                             </div>
                             <div class="row" ng-if="crear_nueva_cuota == 1">
-                                <div class="col-sm-12 col-md-6">
-                                    <br>
-                                    <label for="cuota_ventas">Editar Cuota</label>
+                                <div class="col-sm-12 col-md-10">
+                                    <label for="cuota_ventas">Editar Cuota Ventas</label>
                                     <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].cuota"
                                         id="cuota_ventas" name="cuota_ventas" onkeyup="format(this)"
                                         onchange="format(this)">
-
+                                    <label for="cuota_impactos">Editar Cuota Impactos</label>
+                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].impactos"
+                                        id="cuota_impactos" name="cuota_impactos" onkeyup="format(this)"
+                                        onchange="format(this)">
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-2">
                                     <br>
                                     <button class="btn btn-primary"
-                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,mes_cuota_seleccionado)">
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
                                         <i class="fa fa-plus"></i>
                                         Actualizar Cuota
                                     </button>
@@ -462,7 +469,8 @@ hr {
                         <div ng-show="seccion == 2" class="col md-12 text-left elementos"
                             ng-show="redenciones_empleado.length > 0">
                             <br />
-                            <h2 class="text-center">Ranking Actual <small>Seleccione la temporada que desea ver</small>
+                            <h2 class="text-center">Ranking Actual <small>Seleccione la temporada que desea
+                                    ver</small>
                             </h2>
                             <div ng-repeat="temporada in temporadas_ranking track by $index"
                                 ng-init="id_temporada_ranking_activa = 0;">

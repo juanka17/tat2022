@@ -133,12 +133,12 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
         }
     };
 
-    $scope.GuardarCuotasDistribuidora = function(cuota, mes) {
-
+    $scope.GuardarCuotasDistribuidora = function(cuota, impactos, mes) {
         var datos = {
             id_almacen: id_almacen,
             id_periodo: mes,
-            cuota: $("#cuota_ventas").val().replace(/\./g, '')
+            cuota: $("#cuota_ventas").val().replace(/\./g, ''),
+            impactos: $("#cuota_impactos").val().replace(/\./g, '')
         }
 
         if ($scope.crear_nueva_cuota == 0) {
@@ -148,6 +148,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 id_almacen: id_almacen,
                 id_periodo: mes
             };
+            console.log(parametros);
             $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
         } else if ($scope.crear_nueva_cuota == 1) {
             var parametros = {
@@ -157,13 +158,14 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 id_periodo: mes,
                 id: $scope.cuotas_distribuidora[0].id
             };
+            console.log(parametros);
             $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
-
         }
     };
 
     $scope.ResultadoCreacionNuevoUsuario = function(data) {
         alert("Cuota creada satisfactoriamente");
+        console.log("Cuota creada satisfactoriamente");
     };
 
     /*---------------------------------------- */
