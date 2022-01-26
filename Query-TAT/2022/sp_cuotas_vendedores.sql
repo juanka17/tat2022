@@ -6,135 +6,82 @@ DETERMINISTIC
 SQL SECURITY DEFINER
 BEGIN
 
-	set @id_almacen = tmp_almacen;
-	
 	DROP TEMPORARY TABLE IF EXISTS t_ventas_almacen;
-	CREATE TEMPORARY TABLE IF NOT EXISTS t_ventas_almacen AS (
-		select 
-			ecu.id_vendedor id_afiliado,
-			per.id_temporada,
-			ecu.id_periodo,
-			afi.id_almacen,
-			sum(ecu.valor) venta
-		from 
-			ventas ecu 
-			inner join afiliados afi on afi.id = ecu.id_vendedor
-			inner join periodo per on per.id = ecu.id_periodo
-		where 
-			afi.ID_ALMACEN = @id_almacen
-		group by 
-			ecu.id_vendedor,
-			ecu.id_periodo
-		order by
-			per.id_temporada,
-			per.id
-	);
+		CREATE TEMPORARY TABLE IF NOT EXISTS t_ventas_almacen AS (
+			SELECT alm.id id_almacen,
+				alm.nombre almacen,
+				SUM(ve.valor) venta_almacen
+			FROM ventas ve
+				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
+				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
+			WHERE ve.id_periodo IN (9,10,11)
+			GROUP BY alm.id
+			);
+				
+		DROP TEMPORARY TABLE IF EXISTS t_ventas_vendedores;
+		CREATE TEMPORARY TABLE IF NOT EXISTS t_ventas_vendedores AS (
+			SELECT alm.id id_almacen,
+				af.ID id_vendedor,
+				af.nombre vendedor,
+				af.NOMBRE,
+				SUM(ve.valor)/3 venta_vendedor
+			FROM ventas ve
+				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
+				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
+			WHERE ve.id_periodo IN (9,10,11)
+			GROUP BY af.ID
+			);
+
+		DROP TEMPORARY TABLE IF EXISTS t_participacion_vendedores;
+		CREATE TEMPORARY TABLE IF NOT EXISTS t_participacion_vendedores AS (
+			SELECT tv.id_almacen,
+					almacen,
+					venta_almacen,
+					id_vendedor,
+					vendedor,
+					venta_vendedor,
+					(venta_vendedor/venta_almacen)*100 porcentaje_participacion,
+					ca.cuota_aumentada cuota_almacen,
+					((venta_vendedor/venta_almacen)*100 * ca.cuota /100) cuota_sin_aumento,
+					case when ((venta_vendedor/venta_almacen)*100 * ca.cuota /100) < 500000 then 500000 
+						else ((venta_vendedor/venta_almacen)*100) * ca.cuota /100
+					end cuota_vendedor,
+					((venta_vendedor/venta_almacen)*100) * ca.impactos /100 cuota_impactos,
+					ca.impactos cuota_impactos_total
+			FROM t_ventas_vendedores tv
+			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
+			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen
+		);
+		
+		DROP TEMPORARY TABLE IF EXISTS t_supervisor_almacen;
+		CREATE TEMPORARY TABLE IF NOT EXISTS t_supervisor_almacen AS (
+			SELECT id id_supervisor, 
+			nombre, 
+			id_almacen
+			FROM afiliados WHERE id_almacen=tmp_almacen
+			AND id_clasificacion=4 and id_estatus=4
+		);
+
+		DROP TEMPORARY TABLE IF EXISTS t_vendedores_supervisor;
+		CREATE TEMPORARY TABLE IF NOT EXISTS t_vendedores_supervisor AS (
+			SELECT ven.*
+			FROM t_supervisor_almacen t 
+			INNER JOIN vendedores_supervisor ven ON ven.id_supervisor=t.id_supervisor
+		);
+
 	
-	DROP TEMPORARY TABLE IF EXISTS t_cuotas_almacen;
-	CREATE TEMPORARY TABLE IF NOT EXISTS t_cuotas_almacen AS (
-		select
-			cuo.id id_cuota,
-			per.id id_periodo,
-			per.nombre periodo,
-			af.ID_ALMACEN,
-			af.id id_afiliado,
-			af.nombre afiliado,
-			cuo.cuota_venta,
-			cuo.puede_redimir
-		from 
-			cuotas cuo
-			INNER join periodo per on per.id=cuo.id_periodo
-			INNER JOIN afiliados af ON af.ID = cuo.id_usuario
-		where
-			af.id_almacen = @id_almacen
-		order by
-			per.id_temporada,
-			per.id
-	);
-	
-	DROP TEMPORARY TABLE IF EXISTS t_consolidado;
-	CREATE TEMPORARY TABLE IF NOT EXISTS t_consolidado AS (
-		select
-			cuo.id_cuota,
-			cuo.id_periodo,
-			cuo.periodo,
-			cuo.id_almacen,
-			cuo.id_afiliado,
-			cuo.afiliado,
-			cuo.cuota_venta,
-			cuo.puede_redimir,
-			ven.venta
-		from 
-			t_cuotas_almacen cuo
-			left join t_ventas_almacen ven on 
-				cuo.id_almacen = ven.id_almacen and
-				cuo.id_periodo = ven.id_periodo AND
-				cuo.id_afiliado = ven.id_afiliado
-		order by
-			cuo.id_periodo
-	);
-	
-	DROP TEMPORARY TABLE IF EXISTS t_agrupado;
-	CREATE TEMPORARY TABLE IF NOT EXISTS t_agrupado AS (
-		select 
-			id_cuota,
-			id_almacen,
-			id_afiliado,
-			periodo,
-			cuota_venta,
-			venta,
-			puede_redimir
-		from 
-			t_consolidado
-		group by
-			id_almacen,
-			id_afiliado
-	);
-	
-	DROP TEMPORARY TABLE IF EXISTS t_total;
-	CREATE TEMPORARY TABLE IF NOT EXISTS t_total AS (
-		select
-			id_cuota,
-			id_almacen,
-			id_afiliado,
-			periodo,
-			cuota_venta,
-			venta,
-			round((venta * 100) / cuota_venta,2) cumplimiento,
-			puede_redimir
-		from 
-			t_agrupado
-	);
-	
-	select
-		afi.nombre supervisor,
-		(
-			select count(distinct red.id) 
-			from redenciones red 
-			INNER JOIN premios pre ON pre.id = red.id_premio
-			WHERE red.id_afiliado = tot.id_afiliado 
-			 AND pre.navidad != 1
-		) redenciones_temporada,
-		tot.*
-	from 
-		t_total tot
-		inner join afiliados afi on afi.id = tot.id_afiliado
-		LEFT JOIN nueva_clasificacion_usuario nue ON nue.id_afiliado = afi.id		
-		LEFT JOIN categorias cat ON cat.id = nue.id_categoria
-		ORDER BY 7 desc;
-	
-	select * from t_total;
-	select * from t_agrupado;
-	select * from t_consolidado;
-	select * from t_ventas_almacen;
-	select * from t_cuotas_almacen;
-	
-	
-	/*drop table t_cuotas_almacen;
-	drop table t_ventas_almacen;
-	drop table t_consolidado;
-	drop table t_agrupado;
-	drop table t_total;*/
+		SELECT * FROM t_participacion_vendedores;
+		SELECT * FROM t_ventas_almacen;
+		SELECT * FROM t_ventas_vendedores;	
+		SELECT * FROM t_supervisor_almacen;
+		SELECT * FROM t_vendedores_supervisor;
+		
+		DROP TEMPORARY TABLE t_participacion_vendedores;
+		DROP TEMPORARY TABLE t_ventas_almacen;
+		DROP TEMPORARY TABLE t_ventas_vendedores;
+		DROP TEMPORARY TABLE t_supervisor_almacen;
+		DROP TEMPORARY TABLE t_vendedores_supervisor;	
+
 
 END//
 DELIMITER ;

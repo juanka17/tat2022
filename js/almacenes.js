@@ -129,15 +129,23 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             $scope.crear_nueva_cuota = 0;
         } else {
             $scope.crear_nueva_cuota = 1;
+            $scope.ResultadoCreacionNuevoCuota();
         }
+
     };
+
+    $scope.MostrarCuotaAumentada = function() {
+        $scope.cuota_aumentada = Math.round(($("#cuota_ventas").val().replace(/\./g, '') * 1.08));
+        $("#cuota_aumentada").html($scope.cuota_aumentada);
+    }
 
     $scope.GuardarCuotasDistribuidora = function(cuota, impactos, mes) {
         var datos = {
             id_almacen: id_almacen,
             id_periodo: mes,
             cuota: $("#cuota_ventas").val().replace(/\./g, ''),
-            impactos: $("#cuota_impactos").val().replace(/\./g, '')
+            impactos: $("#cuota_impactos").val().replace(/\./g, ''),
+            cuota_aumentada: $scope.cuota_aumentada
         }
 
         if ($scope.crear_nueva_cuota == 0) {
@@ -147,8 +155,9 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 id_almacen: id_almacen,
                 id_periodo: mes
             };
-            console.log(parametros);
-            $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
+            $scope.crear_nueva_cuota = 1;
+            $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoCuota);
+            alert("Cuota creada satisfactoriamente");
         } else if ($scope.crear_nueva_cuota == 1) {
             var parametros = {
                 catalogo: "cuotas_almacen",
@@ -158,25 +167,38 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 id: $scope.cuotas_distribuidora[0].id
             };
             console.log(parametros);
-            $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoUsuario);
+            $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoCuota);
+            alert("Cuota creada satisfactoriamente");
         }
     };
 
-    $scope.ResultadoCreacionNuevoUsuario = function(data) {
-        alert("Cuota creada satisfactoriamente");
-        console.log("Cuota creada satisfactoriamente");
-        //$scope.CargarCuotas(id_almacen);
+    $scope.ResultadoCreacionNuevoCuota = function(data) {
+
+        var parametros = {
+            catalogo: "consulta_cuotas_vendedor_supervisor",
+            id_almacen: $scope.almacen.id_drogueria
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.CargarCuotas);
     };
 
-    //$scope.CargarCuotas= function(id_almacen){
-    //    id_almacen: id_almacen,
-    //}
+    $scope.CargarCuotas = function(data) {
+
+        $scope.datos_vendedores = data;
+        $scope.cuota_total = 0;
+        $scope.datos_vendedores.forEach(element => {
+            $scope.cuota_total += element.cuota_vendedor;
+
+        });
+
+        //$scope.MostrarCuotasVendedorSupervisor();
+
+    };
     /*---------------------------------------- */
 
 
     //ranking Actual y Ganadores Bimestre
 
-    $scope.CargarTemporadas = true
+    $scope.CargarTemporadas = true;
     $scope.CargarTemporadasVentasAlmacen = function() {
         index_temporada_almacen = 0;
         if ($scope.CargarTemporadas) {
@@ -522,6 +544,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
     //cuotas vendedores
     // <editor-fold defaultstate="collapsed" desc="Cuotas Vendedores">
+    /*
     $scope.vercuotasvendedores = true;
     $scope.CargarCuotasVendedorSupervisor = function() {
         if ($scope.vercuotasvendedores) {
@@ -538,7 +561,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     $scope.MostrarCuotasVendedorSupervisor = function(data) {
         $scope.datos_vendedores = data;
         console.log($scope.datos_vendedores);
-    };
+    };*/
 
     $scope.SeleccionarListadoEmpleadosCuotasSupervisor = function() {
         $scope.empleados_cuotas_supervisor = Array();
