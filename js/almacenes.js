@@ -119,7 +119,6 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     /*-----------Cuotas Distribuidora---------*/
 
     $scope.CargarCuotasAlmacen = function(data) {
-
         var parametros = { catalogo: "cuotas_almacen", id_almacen: id_almacen, id_periodo: data };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCuotasDistribuidora);
     };
@@ -166,8 +165,12 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     $scope.ResultadoCreacionNuevoUsuario = function(data) {
         alert("Cuota creada satisfactoriamente");
         console.log("Cuota creada satisfactoriamente");
+        //$scope.CargarCuotas(id_almacen);
     };
 
+    //$scope.CargarCuotas= function(id_almacen){
+    //    id_almacen: id_almacen,
+    //}
     /*---------------------------------------- */
 
 
@@ -363,17 +366,8 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
         var cuotas = [];
 
         angular.forEach(data, function(cuota) {
-            if (temporada.temporada != cuota.temporada) {
-                if (temporada.id_temporada > 0) {
-                    cuotas.push(temporada);
-                    temporada = { id_temporada: 0, temporada: "", periodo_1: "", periodo_2: "", supervisores: [] };
-                }
-                temporada.temporada = cuota.temporada;
-                temporada.periodo_1 = cuota.periodos.split("|")[0];
-                temporada.periodo_2 = cuota.periodos.split("|")[1];
-            }
-
-            temporada.id_temporada = cuota.id_temporada;
+            cuotas.push(temporada);
+            temporada = { id_temporada: 0, temporada: "", periodo_1: "", periodo_2: "", supervisores: [] };
             temporada.supervisores.push(cuota);
         });
         cuotas.push(temporada);
@@ -542,26 +536,8 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     };
 
     $scope.MostrarCuotasVendedorSupervisor = function(data) {
-        var temporada = { id_temporada: 0, temporada: "", periodo_1: "", periodo_2: "", vendedores: [] };
-        var cuotas = [];
         $scope.datos_vendedores = data;
-        angular.forEach(data, function(cuota) {
-            if (temporada.temporada != cuota.temporada) {
-                if (temporada.id_temporada > 0) {
-                    cuotas.push(temporada);
-                    temporada = { id_temporada: 0, temporada: "", periodo_1: "", periodo_2: "", vendedores: [] };
-                }
-                temporada.temporada = cuota.temporada;
-                temporada.periodo_1 = cuota.periodos.split("|")[0];
-                temporada.periodo_2 = cuota.periodos.split("|")[1];
-            }
-
-            temporada.id_temporada = cuota.id_temporada;
-            temporada.vendedores.push(cuota);
-        });
-        cuotas.push(temporada);
-        $scope.cuotas_vendedores_supervisor = cuotas;
-        $scope.SeleccionarListadoEmpleadosCuotasSupervisor();
+        console.log($scope.datos_vendedores);
     };
 
     $scope.SeleccionarListadoEmpleadosCuotasSupervisor = function() {

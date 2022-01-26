@@ -34,7 +34,7 @@ angular.module('estadoCuentaApp', []).controller('estadoCuentaController', funct
             catalogo: "estado_cuenta_afiliado",
             id_usuario: $scope.usuario_en_sesion.id
         };
-        console.log(parametros);
+        //console.log(parametros);
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEstadoCuenta);
     };
 
@@ -68,6 +68,7 @@ angular.module('estadoCuentaApp', []).controller('estadoCuentaController', funct
         periodos.push(periodo_actual);
         console.log(periodo_actual);
         $scope.estado_cuenta = periodos;
+        console.log($scope.estado_cuenta);
         $scope.ObtenerVentasUsuario();
     };
 
@@ -109,6 +110,7 @@ angular.module('estadoCuentaApp', []).controller('estadoCuentaController', funct
 
     $scope.ventas_visibles = [];
     $scope.VerDetalles = function(id_temporada) {
+        console.log(id_temporada);
         $scope.ventas_visibles = [];
         var ventas_arr = $scope.ventas_totales;
         console.log(ventas_arr)

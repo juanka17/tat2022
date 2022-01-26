@@ -56,7 +56,7 @@ BEGIN
 			nombre, 
 			id_almacen
 			FROM afiliados WHERE id_almacen=tmp_almacen
-			AND id_categoria=5 AND id_clasificacion=4 and id_estatus=4
+			AND id_clasificacion=4 and id_estatus=4
 		);
 
 		DROP TEMPORARY TABLE IF EXISTS t_vendedores_supervisor;
@@ -80,6 +80,10 @@ BEGIN
 
 		SELECT * FROM t_ventas_almacen;
 		SELECT * FROM t_ventas_vendedores;
+		SELECT * FROM t_participacion_vendedores;
+		SELECT * FROM t_supervisor_almacen;
+		SELECT * FROM t_vendedores_supervisor;
+		
 
 		INSERT INTO cuotas_supervisor (id_afiliado,cuota_venta,id_periodo,cuota_impactos,id_almacen,puede_redimir,fecha)
 		SELECT sup.id_supervisor id_afiliado, 
@@ -95,11 +99,7 @@ BEGIN
 		WHERE sup.id_supervisor NOT IN (SELECT id_afiliado FROM cuotas_supervisor WHERE id_periodo=id_periodo_t)
 		GROUP BY sup.id_supervisor;
 
-DROP TEMPORARY TABLE IF EXISTS t_ventas_vendedores;
-DROP TEMPORARY TABLE IF EXISTS t_ventas_almacen;
-DROP TEMPORARY TABLE IF EXISTS t_ventas_vendedores;
-DROP TEMPORARY TABLE IF EXISTS t_supervisor_almacen;
 
 END//
 
-call sp_ventas_promedio(14, 3918);
+call sp_ventas_promedio(13, 3919);

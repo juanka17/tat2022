@@ -1138,14 +1138,13 @@ hr {
                                 <div class="box-body-cuotas">
                                     <div class="box-group" id="accordion">
                                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                                        <div class="panel box box-primary"
-                                            ng-repeat="temporada in cuotas_vendedores_supervisor track by $index">
+                                        <div class="panel box box-primary">
                                             <div class="box-header with-border">
                                                 <h4 class="box-title">
                                                     <a data-toggle="collapse" data-parent="#accordion"
                                                         href="#collapseOne_{{$index}}" aria-expanded="false"
                                                         class="collapsed">
-                                                        Clic para ver el {{temporada.temporada}}
+                                                        Clic para ver Enero
                                                     </a>
                                                 </h4>
                                             </div>
@@ -1156,78 +1155,27 @@ hr {
                                                         placeholder="Filtrar Nombre Vendedor"
                                                         ng-change="SeleccionarListadoEmpleadosCuotasSupervisor()" />
                                                     <br />
-                                                    <table class="table text-left">
+                                                    <table class="table text-center">
                                                         <thead>
-                                                            <tr ng-hide="datos_usuario.es_administrador == 2">
-                                                                <th>{{temporada.temporada}}</th>
-                                                                <th></th>
-                                                                <th style="border-bottom: 3px solid orange; text-align: center;"
-                                                                    colspan="4">{{temporada.periodo_1}}</th>
-                                                                <th style="border-bottom: 3px solid yellow; text-align: center;"
-                                                                    colspan="4">{{temporada.periodo_2}}</th>
-                                                                <th style="border-bottom: 3px solid greenyellow; text-align: center;"
-                                                                    colspan="4">General</th>
-                                                            </tr>
                                                             <tr>
                                                                 <th>Vendedor</th>
-                                                                <th>Actualizar Cuota</th>
-                                                                <th>Categoría</th>
                                                                 <th ng-hide="datos_usuario.es_administrador == 2"
                                                                     class="text-center">Cuota</th>
                                                                 <th ng-hide="datos_usuario.es_administrador == 2"
                                                                     class="text-center">Venta</th>
                                                                 <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Cum</th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Cuota</th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Venta</th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Cum</th>
-                                                                <th></th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Cuota</th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Venta</th>
-                                                                <th ng-hide="datos_usuario.es_administrador == 2"
-                                                                    class="text-center">Cum</th>
+                                                                    class="text-center">Cumplimiento</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr ng-repeat="cuota in empleados_cuotas_supervisor track by $index"
-                                                                ng-show="cuota.id_temporada == temporada.id_temporada">
+                                                            <tr ng-repeat="cuota in datos_vendedores track by $index">
                                                                 <td>{{cuota.supervisor}}</td>
-                                                                <td><button class="btn btn-primary"
-                                                                        ng-show="cuota.id_temporada == 8"
-                                                                        ng-click="ActualizarCuotasVendedores(cuota.id_cuota, cuota.id_categoria, cuota.cuota_1, cuota.cuota_2);"><i
-                                                                            class="fa fa-pencil"></i></button></td>
-                                                                <td>{{cuota.categoria}}</td>
                                                                 <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.cuota_1| number}}</td>
+                                                                    ${{cuota.cuota_venta| number}}</td>
                                                                 <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.venta_1| number}}</td>
+                                                                    ${{cuota.venta| number}}</td>
                                                                 <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    {{cuota.cumplimiento_1| number:1}}%</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.cuota_2| number}}</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.venta_2| number}}</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    {{cuota.cumplimiento_2| number:1}}%</td>
-                                                                <td></td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.cuota_bimestre| number}}</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    ${{cuota.venta_bimestre| number}}</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    {{cuota.cumplimiento_bimestre| number}}%</td>
-                                                                <td ng-hide="datos_usuario.es_administrador == 2">
-                                                                    <a ng-show="false && cuota.cumplimiento_bimestre >= 100 && cuota.redenciones_temporada == 0 && cuota.puede_redimir == 1 && datos_usuario.es_administrador != 4 && cuota.id_almacen != 56"
-                                                                        ng-href="redenciones.php?id_afiliado={{cuota.id_supervisor}}&id_almacen={{cuota.id_almacen}}&id_temporada={{cuota.id_temporada}}&catalogo_perfecto=0"
-                                                                        class="btn btn-primary btn-sm">
-                                                                        <i class="fa fa-shopping-cart"></i>
-                                                                    </a>
-                                                                </td>
+                                                                    {{cuota.cumplimiento| number:1}}%</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1720,7 +1668,7 @@ hr {
 
 
 
-    <script src="js/almacenes.js?ver=44" type="text/javascript"></script>
+    <script src="js/almacenes.js?ver=45" type="text/javascript"></script>
     <script src="js/signature.js?reload=true"></script>
 
 </body>

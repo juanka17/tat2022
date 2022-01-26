@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/estado_cuenta.js?ver=1" type="text/javascript"></script>
+    <script src="js/estado_cuenta.js?ver=2" type="text/javascript"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <style>
     svg>g>g:last-child {
@@ -132,7 +132,8 @@
                 </section>
                 <!-- Main content -->
                 <section class="content">
-                    <div class="row">
+                    <div class="row" ng-show="usuario_en_sesion.es_administrador==3">
+
                         <div class="col-sm-12 col-md-offset-11 col-md-1">
                             <button class="btn btn-danger" onclick="javascript:history.back();">Volver</button>
                         </div>
@@ -299,7 +300,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="registro in ventas_visibles track by $index" ng-show="registro.id_vendedor==datos_usuario.id">
-                                <td>{{registro.id_periodo}}</td>
+                                <td>{{registro.periodo}}</td>
                                 <td>${{registro.cuota_almacen| number}}</td>
                                 <td>${{registro.venta_almacen| number}}</td>
                                 <td>${{registro.cuota_vendedor| number}}</td>

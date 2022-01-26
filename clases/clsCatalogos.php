@@ -50,10 +50,16 @@ class clsCatalogos {
                 };
                 break;
             case "ventas_usuario": {
-                    $query = "call sp_ventas_promedio();";
+                    $query = "call sp_ventas_promedio_usuario();";
                     $order = "";
                 };
                 break;
+
+            case "cuotas_usuario": {
+                $query = "call sp_ventas_promedio();";
+                $order = "";
+            };
+            break;
             case "ciudad": {
                     $query = $query . " where id_departamento = " . $parametros->departamento;
                     echo $query;
