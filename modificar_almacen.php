@@ -3,82 +3,84 @@
 <html class="no-js" lang="en" dir="ltr">
 
 <?php include 'componentes/componentes_basicos.php'; ?>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" href="dev_x/lib/css/dx.light.css">
+
+
 <script>
-    function format(input) {
-        var num = input.value.replace(/\./g, '');
-        if (!isNaN(num)) {
-            num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
-            num = num.split('').reverse().join('').replace(/^[\.]/, '');
-            input.value = num;
-        } else {
-            alert('Solo se permiten numeros');
-            input.value = input.value.replace(/[^\d\.]*/g, '');
-        }
+function format(input) {
+    var num = input.value.replace(/\./g, '');
+    if (!isNaN(num)) {
+        num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g, '$1.');
+        num = num.split('').reverse().join('').replace(/^[\.]/, '');
+        input.value = num;
+    } else {
+        alert('Solo se permiten numeros');
+        input.value = input.value.replace(/[^\d\.]*/g, '');
     }
+}
 </script>
 <script type="text/javascript">
-    var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
-    var id_temporada_en_redencion = 9;
-    var seleccionar_almacen = false;
-    var id_almacen = 0;
-    if (typeof getParameterByName("id_almacen") !== 'undefined' && getParameterByName("id_almacen") != "") {
-        var seleccionar_almacen = true;
-        id_almacen = getParameterByName("id_almacen");
-    } else {
-        document.location.href = "almacenes.php";
-    }
+var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
+var id_temporada_en_redencion = 9;
+var seleccionar_almacen = false;
+var id_almacen = 0;
+if (typeof getParameterByName("id_almacen") !== 'undefined' && getParameterByName("id_almacen") != "") {
+    var seleccionar_almacen = true;
+    id_almacen = getParameterByName("id_almacen");
+} else {
+    document.location.href = "almacenes.php";
+}
 
-    function getParameterByName(name) {
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-            results = regex.exec(location.search);
-        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 </script>
 <style>
-    hr {
-        margin-top: 9px;
-        margin-bottom: 20px;
-        border: 0;
-        border-top: 9px solid #333;
-    }
+hr {
+    margin-top: 9px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 9px solid #333;
+}
 
-    #hr1 {
-        margin-top: 9px;
-        margin-bottom: 20px;
-        border: 0;
-        border-top: 9px solid #d193c4;
-    }
+#hr1 {
+    margin-top: 9px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 9px solid #d193c4;
+}
 
-    #hr2 {
-        margin-top: 9px;
-        margin-bottom: 20px;
-        border: 0;
-        border-top: 9px solid #00c0ef38;
-    }
+#hr2 {
+    margin-top: 9px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 9px solid #00c0ef38;
+}
 
-    #sig-canvas {
-        border: 2px dotted #CCCCCC;
-        border-radius: 5px;
-        cursor: crosshair;
-    }
+#sig-canvas {
+    border: 2px dotted #CCCCCC;
+    border-radius: 5px;
+    cursor: crosshair;
+}
 
-    #sig-dataUrl {
-        width: 100%;
-    }
+#sig-dataUrl {
+    width: 100%;
+}
 
-    #singModal {
-        top: 0px !important;
-        touch-action: none;
-        overflow: hidden;
-    }
+#singModal {
+    top: 0px !important;
+    touch-action: none;
+    overflow: hidden;
+}
 
-    #sig-canvas {
-        touch-action: none;
-    }
+#sig-canvas {
+    touch-action: none;
+}
 
-    /*.modal-dialog {
+/*.modal-dialog {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -91,79 +93,95 @@
         border-radius: 0;
     }*/
 
-    #box-body-cuotas {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        padding: 10px;
-        height: auto;
+#box-body-cuotas {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 10px;
+    height: auto;
 
-    }
+}
 
-    .cuotas-scroll {
-        overflow: scroll;
-    }
+.cuotas-scroll {
+    overflow: scroll;
+}
 
-    .mini_modal {
-        width: 70%;
-        height: auto;
-        margin: 10% 0% 0% 20%;
-        -webkit-transition: -webkit-transform .3s ease-out;
-        -o-transition: -o-transform .3s ease-out;
-        transition: transform .3s ease-out;
-        -webkit-transform: translate(0, -25%);
-        -ms-transform: translate(0, -25%);
-        -o-transform: translate(0, -25%);
-        transform: translate(0, -25%);
-    }
+.mini_modal {
+    width: 70%;
+    height: auto;
+    margin: 10% 0% 0% 20%;
+    -webkit-transition: -webkit-transform .3s ease-out;
+    -o-transition: -o-transform .3s ease-out;
+    transition: transform .3s ease-out;
+    -webkit-transform: translate(0, -25%);
+    -ms-transform: translate(0, -25%);
+    -o-transform: translate(0, -25%);
+    transform: translate(0, -25%);
+}
 
-    .elementos {
-        border: 2px solid #ff751d;
-        border-radius: 20px;
-        padding: 20px;
-        overflow: auto;
-    }
+.elementos {
+    border: 2px solid #ff751d;
+    border-radius: 20px;
+    padding: 20px;
+    overflow: auto;
+}
 
-    .table-bordered {
-        border: 2px solid #ff751d5c;
-        border-radius: 20px;
-    }
+.table-bordered {
+    border: 2px solid #ff751d5c;
+    border-radius: 20px;
+}
 
-    .table-bordered>thead>tr>th,
-    .table-bordered>tbody>tr>th,
-    .table-bordered>tfoot>tr>th,
-    .table-bordered>thead>tr>td,
-    .table-bordered>tbody>tr>td,
-    .table-bordered>tfoot>tr>td {
-        border: 1px solid #ff751d5c;
-        border-radius: 20px;
-    }
+.table-bordered>thead>tr>th,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>tbody>tr>td,
+.table-bordered>tfoot>tr>td {
+    border: 1px solid #ff751d5c;
+    border-radius: 20px;
+}
 
-    .hoverTable {
-        width: 100%;
-        border-collapse: collapse;
-    }
+.hoverTable {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .hoverTable td {
-        padding: 10px;
-        border: #f4f4f4 2px solid;
-    }
+.hoverTable td {
+    padding: 10px;
+    border: #f4f4f4 2px solid;
+}
 
-    /* Define the default color for all the table rows */
-    .hoverTable tr {
-        background: #ecf0f5;
-    }
+/* Define the default color for all the table rows */
+.hoverTable tr {
+    background: #ecf0f5;
+}
 
-    /* Define the hover highlight color for the table row */
-    .hoverTable tr:hover {
-        background-color: #ffff99;
-        cursor: pointer;
-    }
+/* Define the hover highlight color for the table row */
+.hoverTable tr:hover {
+    background-color: #ffff99;
+    cursor: pointer;
+}
+
+.options {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.option {
+    margin-top: 10px;
+}
 </style>
 </head>
 
-<body ng-app="almacenesApp" ng-controller="almacenesController" class="layout-top-nav" style="height: auto; min-height: 100%;">
+<body ng-app="almacenesApp" ng-controller="almacenesController" class="layout-top-nav"
+    style="height: auto; min-height: 100%;">
     <?php include 'componentes/mostrar_imagen.php'; ?>
     <div class="wrapper">
 
@@ -196,7 +214,8 @@
                     </div>
                     <div class="col-sm-12 col-md-3">
                         <div ng-hide="datos_usuario.es_administrador == 2">
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 1; CargarEcuEmpleadosAlmacen();">
+                            <div class="col-md-12 col-sm-6 col-xs-12"
+                                ng-click="seccion = 1; CargarEcuEmpleadosAlmacen();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-aqua">
                                         <i class="fa fa-pie-chart"></i>
@@ -222,7 +241,8 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12"
+                                ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-trophy"></i>
@@ -235,7 +255,8 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12"
+                                ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-yellow">
                                         <i class="fa fa-child"></i>
@@ -275,7 +296,8 @@
                                 <!-- /.info-box -->
                             </div>
 
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-show="datos_usuario.es_administrador == 1" ng-click="seccion = 7;CargarCuposAlmacenes();">
+                            <div class="col-md-12 col-sm-6 col-xs-12" ng-show="datos_usuario.es_administrador == 1"
+                                ng-click="seccion = 7;CargarCuposAlmacenes();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-info-circle"></i>
@@ -289,7 +311,8 @@
                                 <!-- /.info-box -->
                             </div>
 
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 11;ObtenerDocumentoHabeasData()">
+                            <div class="col-md-12 col-sm-6 col-xs-12"
+                                ng-click="seccion = 11;ObtenerDocumentoHabeasData()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-yellow">
                                         <i class="fa fa-file"></i>
@@ -303,7 +326,8 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 13;CargarCuotasVendedorSupervisor()">
+                            <div class="col-md-12 col-sm-6 col-xs-12"
+                                ng-click="seccion = 13;CargarCuotasVendedorSupervisor()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red">
                                         <i class="fa fa-users"></i>
@@ -352,7 +376,8 @@
                         <div ng-show="seccion == 1" class="col sm-12 text-left elementos">
                             <br />
                             <h2 class="text-center">Estado Cuenta</h2>
-                            <input type="text" class="form-control" ng-model="filtros.nombre" placeholder="Nombre Vendedor" ng-change="SeleccionarListadoEmpleados()" />
+                            <input type="text" class="form-control" ng-model="filtros.nombre"
+                                placeholder="Nombre Vendedor" ng-change="SeleccionarListadoEmpleados()" />
                             <br />
                             <table class="table hoverTable">
                                 <thead>
@@ -376,7 +401,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="puntos in empleados" ng-click="VerDetalleEstadoCuenta(puntos.id_vendedor)">
+                                    <tr ng-repeat="puntos in empleados"
+                                        ng-click="VerDetalleEstadoCuenta(puntos.id_vendedor)">
                                         <td>{{puntos.vendedor}}</td>
                                         <td>${{puntos.venta | number}}</td>
                                         <td>${{puntos.venta_especial | number}}</td>
@@ -397,18 +423,21 @@
                                 <br>
                                 En este modulo podras ingresar las cuotas de tu distribuidora.
                                 <br>
-                                NOTA: " Recuerda que esta cuota que asignas debe tener contemplado el crecimiento GSK y debe ser el mismo que se comunica a los vendedores"
+                                NOTA: " Recuerda que esta cuota que asignas debe tener contemplado el crecimiento GSK y
+                                debe ser el mismo que se comunica a los vendedores"
                             </p>
                             <div class="row">
                                 <div class="col-sm-12 col-md-3">
                                     <label for="cuota_ventas">Seleccione mes a cargar</label>
-                                    <select class="form-control" name="cuota_mes_distribuidora" ng-model="mes_cuota_seleccionado" id="cuota_mes_distribuidora">
+                                    <select class="form-control" name="cuota_mes_distribuidora"
+                                        ng-model="mes_cuota_seleccionado" id="cuota_mes_distribuidora">
                                         <option value="14">Febrero</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <br>
-                                    <button type="button" class="btn btn-primary" ng-click="CargarCuotasAlmacen(mes_cuota_seleccionado)">Consultar Cuota</button>
+                                    <button type="button" class="btn btn-primary"
+                                        ng-click="CargarCuotasAlmacen(mes_cuota_seleccionado)">Consultar Cuota</button>
                                 </div>
                             </div>
                             <div class="row" ng-if="crear_nueva_cuota == 0">
@@ -417,11 +446,16 @@
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <label for="cuota_ventas">Crear Nueva Cuota de Venta</label>
-                                    <input class="form-control" type="text" id="cuota_ventas" ng-blur="MostrarCuotaAumentada()" name="cuota_ventas" ng-model="nueva_cuota_distribuidora" onkeyup="format(this)" onchange="format(this)">
+                                    <input class="form-control" type="text" id="cuota_ventas"
+                                        ng-blur="MostrarCuotaAumentada()" name="cuota_ventas"
+                                        ng-model="nueva_cuota_distribuidora" onkeyup="format(this)"
+                                        onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <label for="cuota_impactos">Crear Nueva Cuota de Impactos</label>
-                                    <input class="form-control" type="text" id="cuota_impactos" name="cuota_impctos" ng-model="nueva_cuota_distribuidora_impactos" onkeyup="format(this)" onchange="format(this)">
+                                    <input class="form-control" type="text" id="cuota_impactos" name="cuota_impctos"
+                                        ng-model="nueva_cuota_distribuidora_impactos" onkeyup="format(this)"
+                                        onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <small>Cuota con Margen 8%</small><br>
@@ -429,7 +463,8 @@
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <br>
-                                    <button class="btn btn-primary" ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
+                                    <button class="btn btn-primary"
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
                                         <i class="fa fa-plus"></i>
                                         Crear Nueva Cuota
                                     </button>
@@ -438,11 +473,16 @@
                             <div class="row" ng-if="crear_nueva_cuota == 1">
                                 <div class="col-sm-12 col-md-3">
                                     <label for="cuota_ventas">Editar Cuota Ventas</label>
-                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].cuota" id="cuota_ventas" ng-blur="MostrarCuotaAumentada()" name="cuota_ventas" ng-model="nueva_cuota_distribuidora" name="cuota_ventas" onkeyup="format(this)" onchange="format(this)">
+                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].cuota"
+                                        id="cuota_ventas" ng-blur="MostrarCuotaAumentada()" name="cuota_ventas"
+                                        ng-model="nueva_cuota_distribuidora" name="cuota_ventas" onkeyup="format(this)"
+                                        onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <label for="cuota_impactos">Editar Cuota Impactos</label>
-                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].impactos" id="cuota_impactos" name="cuota_impactos" onkeyup="format(this)" onchange="format(this)">
+                                    <input class="form-control" type="text" ng-model="cuotas_distribuidora[0].impactos"
+                                        id="cuota_impactos" name="cuota_impactos" onkeyup="format(this)"
+                                        onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <small>Cuota con Margen 8%</small><br>
@@ -450,50 +490,41 @@
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <br>
-                                    <button class="btn btn-primary" ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
+                                    <button class="btn btn-primary"
+                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
                                         <i class="fa fa-plus"></i>
                                         Actualizar Cuota
                                     </button>
                                 </div>
                                 <div class="col-sm-12">
-                                    <div class="cuotas-scroll">
-                                        <input type="text" class="form-control hide" ng-model="filtros.nombre" placeholder="Filtrar Nombre Vendedor" ng-change="SeleccionarListadoEmpleadosCuotasSupervisor()" />
-                                        <br />
-                                        <h3>Cuota Definitiva ${{cuota_total | number:0}}</h3>
-                                        <table class="table text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th>Vendedor</th>
-                                                    <th class="text-center">Venta ultimo Q</th>
-                                                    <th class="text-center">Venta promedio</th>
-                                                    <th class="text-center">% Participación</th>
-                                                    <th class="text-center">Cuota</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="cuota in datos_vendedores track by $index">
-                                                    <td>{{cuota.vendedor}}</td>
-                                                    <td>${{cuota.venta_ultimo_q_vendedor| number}}</td>
-                                                    <td>${{cuota.venta_vendedor| number}}</td>
-                                                    <td>{{cuota.porcentaje_participacion| number}}%</td>
-                                                    <td>${{cuota.cuota_vendedor| number:1}}</td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <br>
+                                    <h3>Cuota Definitiva ${{cuota_total | number:0}}</h3>
+                                    <div class="dx-viewport">
+                                        <div class="demo-container">
+                                            <div id="gridContainer"></div>
+                                            <div class="options">
+                                                <div class="caption">Options</div>
+                                                <div class="option">
+                                                    <div id="autoExpand"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div ng-show="seccion == 2" class="col md-12 text-left elementos" ng-show="redenciones_empleado.length > 0">
+                        <div ng-show="seccion == 2" class="col md-12 text-left elementos"
+                            ng-show="redenciones_empleado.length > 0">
                             <br />
                             <h2 class="text-center">Ranking Actual <small>Seleccione la temporada que desea
                                     ver</small>
                             </h2>
-                            <div ng-repeat="temporada in temporadas_ranking track by $index" ng-init="id_temporada_ranking_activa = 0;">
-                                <button class="btn btn-primary btn-block text-left" ng-click="id_temporada_ranking_activa = id_temporada_ranking_activa == 0 ? temporada.id : 0">{{temporada.nombre}}</button>
+                            <div ng-repeat="temporada in temporadas_ranking track by $index"
+                                ng-init="id_temporada_ranking_activa = 0;">
+                                <button class="btn btn-primary btn-block text-left"
+                                    ng-click="id_temporada_ranking_activa = id_temporada_ranking_activa == 0 ? temporada.id : 0">{{temporada.nombre}}</button>
                                 <table class="table" ng-show="id_temporada_ranking_activa == temporada.id">
                                     <thead>
                                         <tr>
@@ -519,7 +550,8 @@
                             </div>
                         </div>
 
-                        <div ng-show="seccion == 3" class="col md-12 text-left elementos" ng-show="redenciones.length >= 0">
+                        <div ng-show="seccion == 3" class="col md-12 text-left elementos"
+                            ng-show="redenciones.length >= 0">
                             <br />
                             <h2 class="text-center">Ganadores</h2>
                             <table class="table" ng-hide="almacen.telefono == 0">
@@ -534,21 +566,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="ganador in temporadas_ranking_diamante.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_diamante && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_diamante.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_diamante && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_diamante && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada.cupos_diamante">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_diamante && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada.cupos_diamante">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_diamante && datos_usuario.es_administrador != 4">
-                                            <button class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_diamante && datos_usuario.es_administrador != 4">
+                                            <button class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -556,21 +595,29 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="ganador in temporadas_ranking_diamante_0.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_diamante && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_diamante_0.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_diamante && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_diamante && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada_4.cupos_diamante">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_diamante && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada_4.cupos_diamante">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_diamante && datos_usuario.es_administrador != 4">
-                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_diamante" class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_diamante && datos_usuario.es_administrador != 4">
+                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_diamante"
+                                                class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -578,21 +625,28 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="ganador in temporadas_ranking_oro.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_oro && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_oro.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_oro && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_oro && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada.cupos_oro">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_oro && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada.cupos_oro">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_oro && datos_usuario.es_administrador != 4">
-                                            <button class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_oro && datos_usuario.es_administrador != 4">
+                                            <button class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -600,21 +654,29 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="ganador in temporadas_ranking_oro_0.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_oro && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_oro_0.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_oro && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_oro && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada_4.cupos_oro">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_oro && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada_4.cupos_oro">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_oro && datos_usuario.es_administrador != 4">
-                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_oro" class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_oro && datos_usuario.es_administrador != 4">
+                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_oro"
+                                                class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -622,21 +684,28 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="ganador in temporadas_ranking_plata.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_plata && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_plata.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada.cupos_plata && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_plata && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada.cupos_plata">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_plata && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada.cupos_plata">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_plata && datos_usuario.es_administrador != 4">
-                                            <button class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada.cupos_plata && datos_usuario.es_administrador != 4">
+                                            <button class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -644,21 +713,29 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="ganador in temporadas_ranking_plata_0.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_plata && ganador.puntos > 0">
+                                    <tr ng-repeat="ganador in temporadas_ranking_plata_0.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < cupos_temporada_4.cupos_plata && ganador.puntos > 0">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center " ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_plata && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-ms" ng-show="redenciones_temporada < cupos_temporada_4.cupos_plata">
+                                        <td class="text-center "
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_plata && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=0&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-ms"
+                                                ng-show="redenciones_temporada < cupos_temporada_4.cupos_plata">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
                                         <td class="text-center " ng-show="ganador.entregas_solicitadas == 1">
                                             Premio Solicitado
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_plata && datos_usuario.es_administrador != 4">
-                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_plata" class="btn btn-danger btn-sm" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < cupos_temporada_4.cupos_plata && datos_usuario.es_administrador != 4">
+                                            <button ng-show="redenciones_temporada < cupos_temporada_4.cupos_plata"
+                                                class="btn btn-danger btn-sm"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -666,19 +743,27 @@
                                             {{ganador.comentario}}
                                         </td>
                                     </tr>
-                                    <tr class="hide" ng-repeat="ganador in temporada_1.ranking track by $index" ng-show="redencion.puede_redimir != 0 && $index < almacen.encuestas_periodo">
+                                    <tr class="hide" ng-repeat="ganador in temporada_1.ranking track by $index"
+                                        ng-show="redencion.puede_redimir != 0 && $index < almacen.encuestas_periodo">
                                         <td class="text-uppercase">{{ganador.vendedor}}</td>
                                         <td class="text-uppercase">{{ganador.categoria}}</td>
                                         <td class="text-center text-uppercase">{{ganador.bimestre}}</td>
                                         <td class="text-center">{{ganador.puntos| number}}</td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < almacen.encuestas_periodo && datos_usuario.es_administrador != 4">
-                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=1&id_categoria={{ganador.id_categoria}}" class="btn btn-primary btn-sm" ng-show="redenciones_temporada < almacen.encuestas_periodo">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < almacen.encuestas_periodo && datos_usuario.es_administrador != 4">
+                                            <a ng-href="redenciones.php?id_afiliado={{ganador.id_vendedor}}&id_almacen={{almacen.id_drogueria}}&id_temporada={{ganador.id_temporada}}&catalogo_perfecto=1&id_categoria={{ganador.id_categoria}}"
+                                                class="btn btn-primary btn-sm"
+                                                ng-show="redenciones_temporada < almacen.encuestas_periodo">
                                                 <i class="fa fa-shopping-cart"></i>
                                             </a>
                                         </td>
-                                        <td class="text-center" ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < almacen.encuestas_periodo && datos_usuario.es_administrador != 4">
+                                        <td class="text-center"
+                                            ng-show="ganador.novedad == 0 && ganador.entregas_solicitadas == 0 && $index < almacen.encuestas_periodo && datos_usuario.es_administrador != 4">
 
-                                            <button ng-show="redenciones_temporada < almacen.encuestas_periodo" class="btn btn-danger btn-tiny" ng-click="IniciarDenegacionRedencion(ganador.id_ecu)" data-toggle="modal" data-target="#modalDenegarRedencion">
+                                            <button ng-show="redenciones_temporada < almacen.encuestas_periodo"
+                                                class="btn btn-danger btn-tiny"
+                                                ng-click="IniciarDenegacionRedencion(ganador.id_ecu)"
+                                                data-toggle="modal" data-target="#modalDenegarRedencion">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </td>
@@ -690,29 +775,36 @@
                             </table>
                         </div>
 
-                        <div ng-show="seccion == 4" class="col md-12 text-left elementos" ng-show="redenciones.length > 0">
+                        <div ng-show="seccion == 4" class="col md-12 text-left elementos"
+                            ng-show="redenciones.length > 0">
                             <br />
                             <div ng-show="datos_usuario.es_administrador != 4">
                                 <h2 class="text-center">Entregas</h2>
                                 <h3>Legalizar por temporada</h3>
                                 <br />
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12" ng-repeat="temp in temporadas_activas track by $index">
-                                        <button ng-click="SeleccionarTemporadaEntregas(temp.id)" class="btn btn-primary btn-block">
+                                    <div class="col-sm-12 col-md-12"
+                                        ng-repeat="temp in temporadas_activas track by $index">
+                                        <button ng-click="SeleccionarTemporadaEntregas(temp.id)"
+                                            class="btn btn-primary btn-block">
                                             <i class="fa fa-eye"></i>
                                             Ver {{temp.nombre}}
                                         </button>
                                     </div>
                                     <div class="col-sm-12 col-md-12">
                                         <br>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoTutorial">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#videoTutorial">
                                             Video Tutorial
                                         </button>
                                     </div>
                                 </div>
                                 <br />
                                 <div class="button-group" role="group" aria-label="">
-                                    <a class="btn btn-danger" ng-repeat="temporada in temporadas_por_legalizar track by $index" ng-href="legalizacion_masiva.php?id_almacen={{almacen.id_drogueria}}&id_temporada={{temporada.id}}" ng-show="redenciones_procesadas > 0 && (temporada.id == temporada_seleccionada)">
+                                    <a class="btn btn-danger"
+                                        ng-repeat="temporada in temporadas_por_legalizar track by $index"
+                                        ng-href="legalizacion_masiva.php?id_almacen={{almacen.id_drogueria}}&id_temporada={{temporada.id}}"
+                                        ng-show="redenciones_procesadas > 0 && (temporada.id == temporada_seleccionada)">
                                         <i class="fa fa-pencil"></i> Legalizar {{temporada.nombre}}
                                     </a>
                                 </div>
@@ -731,7 +823,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="redencion in redenciones track by $index" ng-show="redencion.id_temporada == temporada_seleccionada">
+                                    <tr ng-repeat="redencion in redenciones track by $index"
+                                        ng-show="redencion.id_temporada == temporada_seleccionada">
                                         <td class="text-left">{{redencion.id_redencion}}</td>
                                         <td class="text-left">{{redencion.empleado}}</td>
                                         <td class="text-left">{{redencion.clasificacion}}</td>
@@ -741,7 +834,8 @@
                                         <td class="text-left">{{redencion.estado}}</td>
                                         <td class="text-left">{{redencion.temporada}}</td>
                                         <td class="text-left" ng-show="redencion.id_operacion == 5">
-                                            <a class="btn btn-primary" target="_blank" ng-href="documento_legalizacion.php?folio={{redencion.id_redencion}}">
+                                            <a class="btn btn-primary" target="_blank"
+                                                ng-href="documento_legalizacion.php?folio={{redencion.id_redencion}}">
                                                 Ver documento
                                             </a>
                                         </td>
@@ -759,9 +853,12 @@
                                         <thead>
                                             <tr>
                                                 <th>{{temporada.temporada}}</th>
-                                                <th style="border-bottom: 3px solid orange; text-align: center;" colspan="3">{{temporada.periodo_1}}</th>
-                                                <th style="border-bottom: 3px solid yellow; text-align: center;" colspan="3">{{temporada.periodo_2}}</th>
-                                                <th style="border-bottom: 3px solid greenyellow; text-align: center;" colspan="3">General</th>
+                                                <th style="border-bottom: 3px solid orange; text-align: center;"
+                                                    colspan="3">{{temporada.periodo_1}}</th>
+                                                <th style="border-bottom: 3px solid yellow; text-align: center;"
+                                                    colspan="3">{{temporada.periodo_2}}</th>
+                                                <th style="border-bottom: 3px solid greenyellow; text-align: center;"
+                                                    colspan="3">General</th>
                                             </tr>
                                             <tr>
                                                 <th>Supervisor</th>
@@ -777,7 +874,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="cuota in empleados_cuotas  track by $index" ng-show="cuota.id_temporada == temporada.id_temporada">
+                                            <tr ng-repeat="cuota in empleados_cuotas  track by $index"
+                                                ng-show="cuota.id_temporada == temporada.id_temporada">
                                                 <td>{{cuota.supervisor}}</td>
                                                 <td>${{cuota.cuota_1| number}}</td>
                                                 <td>${{cuota.venta_1| number}}</td>
@@ -789,12 +887,15 @@
                                                 <td>${{cuota.venta_bimestre| number}}</td>
                                                 <td>{{cuota.cumplimiento_bimestre| number}}%</td>
                                                 <td>
-                                                    <a ng-show="cuota.ranking <= almacen.supervisores && cuota.cumplimiento_bimestre >= 95 && cuota.redenciones_temporada == 0 && cuota.puede_redimir == 1 && cuota.id_temporada == 4" ng-href="redenciones.php?id_afiliado={{cuota.id_supervisor}}&id_almacen={{cuota.id_almacen}}&id_temporada={{cuota.id_temporada}}&catalogo_perfecto=0&id_categoria=1" class="btn btn-primary btn-sm">
+                                                    <a ng-show="cuota.ranking <= almacen.supervisores && cuota.cumplimiento_bimestre >= 95 && cuota.redenciones_temporada == 0 && cuota.puede_redimir == 1 && cuota.id_temporada == 4"
+                                                        ng-href="redenciones.php?id_afiliado={{cuota.id_supervisor}}&id_almacen={{cuota.id_almacen}}&id_temporada={{cuota.id_temporada}}&catalogo_perfecto=0&id_categoria=1"
+                                                        class="btn btn-primary btn-sm">
                                                         <i class="fa fa-shopping-cart"></i>
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <p ng-show="cuota.cumplimiento_bimestre >= 95 && cuota.redenciones_temporada == 1 && cuota.puede_redimir == 1">
+                                                    <p
+                                                        ng-show="cuota.cumplimiento_bimestre >= 95 && cuota.redenciones_temporada == 1 && cuota.puede_redimir == 1">
                                                         Ya Solicitó
                                                     </p>
                                                 </td>
@@ -814,13 +915,15 @@
                                 <div class="col-sm-12 col-md-offset-1 col-md-5">
                                     <div class="form-group">
                                         <label for="nombre">Nombre:</label>
-                                        <input class="form-control" type='text' ng-model="almacen.drogueria" ng-disabled="true" />
+                                        <input class="form-control" type='text' ng-model="almacen.drogueria"
+                                            ng-disabled="true" />
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-5">
                                     <div class="form-group">
                                         <label for="nombre">Visitador:</label>
-                                        <input class="form-control" type='text' ng-model="almacen.visitador" ng-disabled="true" />
+                                        <input class="form-control" type='text' ng-model="almacen.visitador"
+                                            ng-disabled="true" />
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-offset-1 col-md-10">
@@ -847,7 +950,8 @@
                                     </table>
                                 </div>
                                 <div ng-show="false" class="col-sm-4">
-                                    <button class="btn btn-primary" ng-click="ObtenerCategoriasLlamadas()" data-open="modalLlamadas">
+                                    <button class="btn btn-primary" ng-click="ObtenerCategoriasLlamadas()"
+                                        data-open="modalLlamadas">
                                         Capturar Llamada
                                     </button>
                                 </div>
@@ -873,84 +977,112 @@
                                         <div class="row" ng-init="tipo = 0">
                                             <div class="col-sm-12 col-md-offset-1 col-md-10">
                                                 <div ng-show="habeas_data.length == 1 && habeas_data[0].tipo_acta == 1">
-                                                    <iframe ng-src="{{habeas_data[0].firma}}" frameborder="0" width="100%" height="550" marginheight="0" marginwidth="0" id="pdf">
+                                                    <iframe ng-src="{{habeas_data[0].firma}}" frameborder="0"
+                                                        width="100%" height="550" marginheight="0" marginwidth="0"
+                                                        id="pdf">
                                                         Ver Habeas Data
                                                     </iframe>
                                                 </div>
-                                                <div ng-show="habeas_data.length == 0 || (habeas_data.length == 1 && habeas_data[0].tipo_acta == 0)">
-                                                    <iframe src="terminoscondiciones_programa_sociosamigos_canal_tat.pdf" frameborder="0" width="100%" height="550" marginheight="0" marginwidth="0" id="pdf">
+                                                <div
+                                                    ng-show="habeas_data.length == 0 || (habeas_data.length == 1 && habeas_data[0].tipo_acta == 0)">
+                                                    <iframe
+                                                        src="terminoscondiciones_programa_sociosamigos_canal_tat.pdf"
+                                                        frameborder="0" width="100%" height="550" marginheight="0"
+                                                        marginwidth="0" id="pdf">
                                                         Ver Habeas Data
                                                     </iframe>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-md-offset-1 col-md-10" ng-show="habeas_data.length == 0">
+                                            <div class="col-sm-12 col-md-offset-1 col-md-10"
+                                                ng-show="habeas_data.length == 0">
                                                 <div class="col-sm-12 col-md-12">
-                                                    <button class="btn btn-primary btn-block" ng-click="tipo = 1">Aceptar Términos y Condiciones con
+                                                    <button class="btn btn-primary btn-block"
+                                                        ng-click="tipo = 1">Aceptar Términos y Condiciones con
                                                         Firma</button>
                                                 </div>
                                                 <div class="col-sm-12 col-md-12">
                                                     <br>
-                                                    <button class="btn btn-primary btn-block" ng-click="tipo = 2">Aceptar Términos y Condiciones con
+                                                    <button class="btn btn-primary btn-block"
+                                                        ng-click="tipo = 2">Aceptar Términos y Condiciones con
                                                         Documento</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row" ng-show="habeas_data.length == 0 && tipo == 1" ng-init="boton = 1">
+                                        <div class="row" ng-show="habeas_data.length == 0 && tipo == 1"
+                                            ng-init="boton = 1">
                                             <div class="col-sm-12 col-md-offset-1 col-md-4">
                                                 <p>
                                                     Cliente
-                                                    <input type="text" class="form-control" ng-model="almacen.drogueria" ng-disabled="true" />
+                                                    <input type="text" class="form-control" ng-model="almacen.drogueria"
+                                                        ng-disabled="true" />
                                                 </p>
                                                 <p>
                                                     <b>Apreciado Cliente:</b>
-                                                    <input class="form-control" type='text' ng-model="legalizacion.nombre" />
+                                                    <input class="form-control" type='text'
+                                                        ng-model="legalizacion.nombre" />
                                                 </p>
                                                 <p>
                                                     <b>Documento Cliente:</b>
-                                                    <input class="form-control" type='number' ng-model="legalizacion.documento" />
+                                                    <input class="form-control" type='number'
+                                                        ng-model="legalizacion.documento" />
                                                 </p>
                                                 <p>
                                                     Fecha
-                                                    <input class="form-control" type='text' ng-disabled="true" ng-model="legalizacion.fecha" />
+                                                    <input class="form-control" type='text' ng-disabled="true"
+                                                        ng-model="legalizacion.fecha" />
                                                 </p>
                                             </div>
                                             <div class="col-sm-12 col-md-offset-1 col-md-10">
                                                 <div id="img_perfil">
-                                                    <img id="sig-image-confirmed" src="" alt="Firma no registrada!" ng-show="legalizacion.firma != ''" />
+                                                    <img id="sig-image-confirmed" src="" alt="Firma no registrada!"
+                                                        ng-show="legalizacion.firma != ''" />
                                                 </div>
-                                                <button class="btn btn-primary" data-toggle="modal" data-target="#singModal" ng-click="AbrirModalFirmaVendedor()">Firma
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#singModal" ng-click="AbrirModalFirmaVendedor()">Firma
                                                     Cliente</button>
                                             </div>
                                             <div class="col-sm-12 col-md-offset-1 col-md-10">
                                                 <br />
                                                 <br />
-                                                <button class="btn btn-success" id="sig-clearBtn" ng-show="boton == 1" ng-click="LegalizarRedencion()">Guardar</button>
+                                                <button class="btn btn-success" id="sig-clearBtn" ng-show="boton == 1"
+                                                    ng-click="LegalizarRedencion()">Guardar</button>
                                             </div>
                                         </div>
-                                        <div class="row" ng-show="habeas_data.length == 0 && tipo == 2 " ng-init="boton = 1">
+                                        <div class="row" ng-show="habeas_data.length == 0 && tipo == 2 "
+                                            ng-init="boton = 1">
                                             <div class="col-sm-12 col-md-offset-1 col-md-4">
                                                 <h3>Selecione el documento.</h3>
-                                                <form method="POST" action="clases/cargararchivos.php" enctype="multipart/form-data">
+                                                <form method="POST" action="clases/cargararchivos.php"
+                                                    enctype="multipart/form-data">
                                                     <input type="file" name="archivo" accept="application/pdf" required>
-                                                    <input hidden type="text" name="id_almacen" ng-model="almacen.id_drogueria" value="{{almacen.id_drogueria}}">
-                                                    <button type="submit" class="btn btn-primary btn-block" value="cargar Archivos"><i class="fa fa-upload"></i> Subir
+                                                    <input hidden type="text" name="id_almacen"
+                                                        ng-model="almacen.id_drogueria"
+                                                        value="{{almacen.id_drogueria}}">
+                                                    <button type="submit" class="btn btn-primary btn-block"
+                                                        value="cargar Archivos"><i class="fa fa-upload"></i> Subir
                                                         Archivo</button>
                                                 </form>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-offset-1 col-md-4" ng-show="habeas_data.length == 1">
-                                                <a ng-if="habeas_data[0].tipo_acta == 0" class="btn btn-primary btn-block" href="https://sociosyamigos.com.co/tat/ver_actas.php?id_almacen={{habeas_data[0].id_almacen}}">
+                                            <div class="col-sm-12 col-md-offset-1 col-md-4"
+                                                ng-show="habeas_data.length == 1">
+                                                <a ng-if="habeas_data[0].tipo_acta == 0"
+                                                    class="btn btn-primary btn-block"
+                                                    href="https://sociosyamigos.com.co/tat/ver_actas.php?id_almacen={{habeas_data[0].id_almacen}}">
                                                     Descargar Documento</a>
 
-                                                <a ng-if="habeas_data[0].tipo_acta == 1" class="btn btn-primary btn-block" target="_blank" href="https://sociosyamigos.com.co/tat/{{habeas_data[0].firma}}">
+                                                <a ng-if="habeas_data[0].tipo_acta == 1"
+                                                    class="btn btn-primary btn-block" target="_blank"
+                                                    href="https://sociosyamigos.com.co/tat/{{habeas_data[0].firma}}">
                                                     Descargar Documento</a>
                                             </div>
                                         </div>
                                         <br />
                                         <div class="row" ng-show="false">
                                             <div class="col-md-12">
-                                                <textarea id="sig-dataUrl" class="form-control" rows="5" ng-value="legalizacion.firma_vendedor">Data URL for your signature will go here!</textarea>
+                                                <textarea id="sig-dataUrl" class="form-control" rows="5"
+                                                    ng-value="legalizacion.firma_vendedor">Data URL for your signature will go here!</textarea>
                                             </div>
                                         </div>
                                         <br />
@@ -964,14 +1096,18 @@
                             <br />
                             <h2 class="text-center">Simulador Ventas</h2>
                             <div class="col-sm-12">
-                                <div ng-repeat="temporada in cuotas_vendedores track by $index" ng-show="temporada.id_temporada == 5">
+                                <div ng-repeat="temporada in cuotas_vendedores track by $index"
+                                    ng-show="temporada.id_temporada == 5">
                                     <table class="table">
                                         <thead>
                                             <tr ng-hide="datos_usuario.es_administrador == 2">
                                                 <th>{{temporada.temporada}}</th>
-                                                <th style="border-bottom: 3px solid orange; text-align: center;" colspan="4">{{temporada.periodo_1}}</th>
-                                                <th style="border-bottom: 3px solid yellow; text-align: center;" colspan="4">{{temporada.periodo_2}}</th>
-                                                <th style="border-bottom: 3px solid greenyellow; text-align: center;" colspan="4">General</th>
+                                                <th style="border-bottom: 3px solid orange; text-align: center;"
+                                                    colspan="4">{{temporada.periodo_1}}</th>
+                                                <th style="border-bottom: 3px solid yellow; text-align: center;"
+                                                    colspan="4">{{temporada.periodo_2}}</th>
+                                                <th style="border-bottom: 3px solid greenyellow; text-align: center;"
+                                                    colspan="4">General</th>
                                             </tr>
                                             <tr>
                                                 <th>Supervisor</th>
@@ -997,10 +1133,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="cuota in empleados_cuotas track by $index" ng-show="cuota.id_temporada == 5">
+                                            <tr ng-repeat="cuota in empleados_cuotas track by $index"
+                                                ng-show="cuota.id_temporada == 5">
                                                 <td>{{cuota.supervisor}}</td>
                                                 <td>
-                                                    <a href="simulador_ventas.php?id_usuario={{cuota.id_afiliado}}&id_temporada={{cuota.id_temporada}}" class="btn btn-primary">
+                                                    <a href="simulador_ventas.php?id_usuario={{cuota.id_afiliado}}&id_temporada={{cuota.id_temporada}}"
+                                                        class="btn btn-primary">
                                                         <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                                     </a>
                                                 </td>
@@ -1026,12 +1164,15 @@
                                                     {{cuota.cumplimiento_bimestre| number}}%
                                                 </td>
                                                 <td>
-                                                    <a ng-show="cuota.cumplimiento_bimestre >= 100 && cuota.redenciones_temporada == 0 && cuota.puede_redimir == 1 && datos_usuario.es_administrador != 4 && cuota.id_almacen != 56" ng-href="redenciones.php?id_afiliado={{cuota.id_supervisor}}&id_almacen={{cuota.id_almacen}}&id_temporada={{cuota.id_temporada}}&catalogo_perfecto=0" class="btn btn-primary btn-sm">
+                                                    <a ng-show="cuota.cumplimiento_bimestre >= 100 && cuota.redenciones_temporada == 0 && cuota.puede_redimir == 1 && datos_usuario.es_administrador != 4 && cuota.id_almacen != 56"
+                                                        ng-href="redenciones.php?id_afiliado={{cuota.id_supervisor}}&id_almacen={{cuota.id_almacen}}&id_temporada={{cuota.id_temporada}}&catalogo_perfecto=0"
+                                                        class="btn btn-primary btn-sm">
                                                         <i class="fa fa-shopping-cart"></i>
                                                     </a>
                                                 </td>
                                                 <td ng-hide="datos_usuario.es_administrador == 2">
-                                                    <p ng-show="cuota.cumplimiento_bimestre >= 100 && cuota.redenciones_temporada == 1 && cuota.puede_redimir == 1 && datos_usuario.es_administrador != 4 && cuota.id_almacen != 56">
+                                                    <p
+                                                        ng-show="cuota.cumplimiento_bimestre >= 100 && cuota.redenciones_temporada == 1 && cuota.puede_redimir == 1 && datos_usuario.es_administrador != 4 && cuota.id_almacen != 56">
                                                         Ya Solicitó
                                                     </p>
                                                 </td>
@@ -1065,7 +1206,8 @@
                                 <div class="col-sm-12 col-md-4">
                                     <label>Seleccione Supervisor</label>
                                     <select class="form-control" ng-model="nuevo_afiliado.id_supervisor">
-                                        <option ng-repeat="supervisores in supervisores_afiliados" value="{{supervisores.id}}">{{supervisores.nombre}}</option>
+                                        <option ng-repeat="supervisores in supervisores_afiliados"
+                                            value="{{supervisores.id}}">{{supervisores.nombre}}</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
@@ -1097,7 +1239,9 @@
                                     <br />
                                     <button class="btn btn-primary btn-block" ng-click="CrearNuevoUsuario();">Crear
                                         Vendedor</button>
-                                    <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#inactivar_usuarios" ng-click="BuscarVendedoresAlmacen();">Inactivar Vendedor</button>
+                                    <button class="btn btn-danger btn-block" data-toggle="modal"
+                                        data-target="#inactivar_usuarios"
+                                        ng-click="BuscarVendedoresAlmacen();">Inactivar Vendedor</button>
                                 </div>
 
                             </div>
@@ -1107,7 +1251,8 @@
 
                 </div>
             </section>
-            <div class="modal fade " id="detalleEstadoCuenta" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade " id="detalleEstadoCuenta" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1151,7 +1296,9 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class=" text-center caja_bimestres_estado_cuenta" ng-repeat="puntos in puntos_empleado_detallado" ng-show="puntos.id_temporada == temporada_estado_cuenta">
+                            <div class=" text-center caja_bimestres_estado_cuenta"
+                                ng-repeat="puntos in puntos_empleado_detallado"
+                                ng-show="puntos.id_temporada == temporada_estado_cuenta">
                                 <br>
                                 <h3>{{puntos.categoria}}</h3>
                                 <table id="tabla_supevisor" class="table table-bordered table-hover text-center">
@@ -1204,7 +1351,8 @@
                 </div>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="singModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="singModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1216,7 +1364,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <button class="btn btn-primary" id="sig-submitBtn" ng-click="GuardarFirmaVendedor()" ng-show="legalizacion.firma == ''" data-dismiss="modal">
+                            <button class="btn btn-primary" id="sig-submitBtn" ng-click="GuardarFirmaVendedor()"
+                                ng-show="legalizacion.firma == ''" data-dismiss="modal">
                                 Confirmar Firma
                             </button>
                             <canvas id="sig-canvas" ng-show="legalizacion.firma == ''">
@@ -1253,7 +1402,8 @@
                 <div class="modal-body">
                     <div ng-repeat="periodo in ventas_periodo track by $index" ng-init="detalle_activo = -1;
                                         periodo_seleccionado = -1">
-                        <div class="row" ng-click="periodo_seleccionado = periodo_seleccionado == -1 ? periodo.id_periodo : -1">
+                        <div class="row"
+                            ng-click="periodo_seleccionado = periodo_seleccionado == -1 ? periodo.id_periodo : -1">
                             <div class="col-md-8 text-left">
                                 <b>{{periodo.periodo}}</b>
                                 <i class="fa fa-plus-circle" ng-show="periodo_seleccionado == -1"></i>
@@ -1437,19 +1587,22 @@
                             <label>
                                 Actualizar Cuota Mes 1.
                             </label>
-                            <input type="text" class="form-control" id="cuota_1" onkeyup="format(this)" onchange="format(this)" placeholder="{{ActualizarCuotaCuota1}}" />
+                            <input type="text" class="form-control" id="cuota_1" onkeyup="format(this)"
+                                onchange="format(this)" placeholder="{{ActualizarCuotaCuota1}}" />
                         </div>
                         <div class="col-sm-12 col-md-6 form-group">
                             <label>
                                 Actualizar Cuota Mes 2.
                             </label>
-                            <input type="text" class="form-control" id="cuota_2" onkeyup="format(this)" onchange="format(this)" placeholder="{{ActualizarCuotaCuota2}}" />
+                            <input type="text" class="form-control" id="cuota_2" onkeyup="format(this)"
+                                onchange="format(this)" placeholder="{{ActualizarCuotaCuota2}}" />
                         </div>
                         <div class="col-sm-12  form-group" ng-init="botonactualizarcuota = true">
                             <br />
                             <br />
                             <br />
-                            <button class="btn btn-primary" ng-show="botonactualizarcuota" ng-click="ActualizarCuotasCargadas()">Actualizar Cuotas</button>
+                            <button class="btn btn-primary" ng-show="botonactualizarcuota"
+                                ng-click="ActualizarCuotasCargadas()">Actualizar Cuotas</button>
                         </div>
 
                     </div>
@@ -1462,7 +1615,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="inactivar_usuarios" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="inactivar_usuarios" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1472,7 +1626,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control" ng-model="filtros.nombre" placeholder="Filtrar Nombre Vendedor" ng-change="SeleccionarListadoVendedoresInactivar()" />
+                    <input type="text" class="form-control" ng-model="filtros.nombre"
+                        placeholder="Filtrar Nombre Vendedor" ng-change="SeleccionarListadoVendedoresInactivar()" />
                     <br />
                     <table class="table">
                         <th>Inactivar</th>
@@ -1481,7 +1636,8 @@
                         <th>Categoria</th>
                         <tbody>
                             <tr ng-repeat="inactivar in inactivar_empleado">
-                                <td><button class="btn btn-danger btn-tiny" ng-click="InactivarVendedor(inactivar.id)"><i class="fa fa-trash"></i></button>
+                                <td><button class="btn btn-danger btn-tiny"
+                                        ng-click="InactivarVendedor(inactivar.id)"><i class="fa fa-trash"></i></button>
                                 </td>
                                 <td>{{inactivar.id}}</td>
                                 <td>{{inactivar.nombre}}</td>
@@ -1507,7 +1663,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <object width="470" height="415" data="https://www.youtube.com/embed/NjjaY5f-7HQ?rel=0&amp;showinfo=0">
+                    <object width="470" height="415"
+                        data="https://www.youtube.com/embed/NjjaY5f-7HQ?rel=0&amp;showinfo=0">
                     </object>
                 </div>
                 <div class="modal-footer">
@@ -1522,6 +1679,9 @@
 
     <script src="js/almacenes.js?ver=45" type="text/javascript"></script>
     <script src="js/signature.js?reload=true"></script>
+    <!-- DevExtreme library -->
+    <script type="text/javascript" src="dev_x/lib/js/jszip.js"></script>
+    <script type="text/javascript" src="dev_x/lib/js/dx.all.js"></script>
 
 </body>
 

@@ -11,7 +11,7 @@ BEGIN
 			SELECT alm.id id_almacen,
 				alm.nombre almacen,
 				SUM(ve.valor) venta_almacen
-			FROM ventas ve
+			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
 				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
 			WHERE ve.id_periodo IN (9,10,11)
@@ -24,8 +24,9 @@ BEGIN
 				af.ID id_vendedor,
 				af.nombre vendedor,
 				af.NOMBRE,
-				SUM(ve.valor)/3 venta_vendedor
-			FROM ventas ve
+				SUM(ve.valor) venta_ultimo_q_vendedor,
+				round(SUM(ve.valor)/3) venta_vendedor
+			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
 				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
 			WHERE ve.id_periodo IN (9,10,11)
@@ -34,20 +35,20 @@ BEGIN
 
 		DROP TEMPORARY TABLE IF EXISTS t_participacion_vendedores;
 		CREATE TEMPORARY TABLE IF NOT EXISTS t_participacion_vendedores AS (
-			SELECT tv.id_almacen,
-					almacen,
-					venta_almacen,
-					id_vendedor,
-					vendedor,
-					venta_vendedor,
-					(venta_vendedor/venta_almacen)*100 porcentaje_participacion,
-					ca.cuota_aumentada cuota_almacen,
-					((venta_vendedor/venta_almacen)*100 * ca.cuota /100) cuota_sin_aumento,
-					case when ((venta_vendedor/venta_almacen)*100 * ca.cuota /100) < 500000 then 500000 
-						else ((venta_vendedor/venta_almacen)*100) * ca.cuota /100
-					end cuota_vendedor,
-					((venta_vendedor/venta_almacen)*100) * ca.impactos /100 cuota_impactos,
-					ca.impactos cuota_impactos_total
+			SELECT 
+				tv.id_almacen,
+				almacen,				
+				tv.id_vendedor,
+				vendedor,
+				venta_almacen,
+				venta_ultimo_q_vendedor,
+				venta_vendedor,
+				(venta_ultimo_q_vendedor/venta_almacen)*100 porcentaje_participacion,
+				ca.cuota_aumentada cuota_almacen,
+				((venta_ultimo_q_vendedor/venta_almacen)*100 * ca.cuota /100) cuota_sin_aumento,
+				case when ((venta_ultimo_q_vendedor/venta_almacen)*100 * ca.cuota_aumentada /100) < 500000 then 500000 
+					 ELSE ROUND(((venta_ultimo_q_vendedor/venta_almacen)*100) * ca.cuota_aumentada /100)
+				end cuota_vendedor
 			FROM t_ventas_vendedores tv
 			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
 			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen
@@ -62,25 +63,35 @@ BEGIN
 			AND id_clasificacion=4 and id_estatus=4
 		);
 
-		DROP TEMPORARY TABLE IF EXISTS t_vendedores_supervisor;
-		CREATE TEMPORARY TABLE IF NOT EXISTS t_vendedores_supervisor AS (
-			SELECT ven.*
-			FROM t_supervisor_almacen t 
-			INNER JOIN vendedores_supervisor ven ON ven.id_supervisor=t.id_supervisor
-		);
 
 	
-		SELECT * FROM t_participacion_vendedores;
+		SELECT
+			par.id_almacen,
+			par.almacen,	
+			ven.id_supervisor,			
+			par.id_vendedor,
+			par.vendedor,
+			par.venta_almacen,
+			par.venta_ultimo_q_vendedor,
+			par.venta_vendedor,
+			par.porcentaje_participacion,
+			par.cuota_almacen,
+			par.cuota_sin_aumento,
+			par.cuota_vendedor,
+			sup.NOMBRE supervisor
+		FROM t_participacion_vendedores par
+		left JOIN vendedores_supervisor ven ON ven.id_vendedor = par.id_vendedor
+		left JOIN afiliados sup ON sup.ID = ven.id_supervisor
+		ORDER BY porcentaje_participacion desc;
+		
 		SELECT * FROM t_ventas_almacen;
 		SELECT * FROM t_ventas_vendedores;	
 		SELECT * FROM t_supervisor_almacen;
-		SELECT * FROM t_vendedores_supervisor;
 		
 		DROP TEMPORARY TABLE t_participacion_vendedores;
 		DROP TEMPORARY TABLE t_ventas_almacen;
 		DROP TEMPORARY TABLE t_ventas_vendedores;
 		DROP TEMPORARY TABLE t_supervisor_almacen;
-		DROP TEMPORARY TABLE t_vendedores_supervisor;	
 
 
 END//
