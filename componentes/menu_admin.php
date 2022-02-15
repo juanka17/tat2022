@@ -57,12 +57,6 @@
                             Catalogo
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="estado_cuenta.php?id_afiliado={{datos_usuario.id}}">
-                            <i class="fa fa-address-card" aria-hidden="true"></i>
-                            Estado de cuenta
-                        </a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

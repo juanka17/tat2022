@@ -241,12 +241,7 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-<<<<<<< HEAD
                             <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
-=======
-                            <div class="col-md-12 col-sm-6 col-xs-12"
-                                ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
->>>>>>> 72b9f0fd47dadde152198938c6ceec8cb8231e1a
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-trophy"></i>
@@ -259,12 +254,7 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-<<<<<<< HEAD
                             <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
-=======
-                            <div class="col-md-12 col-sm-6 col-xs-12"
-                                ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
->>>>>>> 72b9f0fd47dadde152198938c6ceec8cb8231e1a
                                 <div class="info-box">
                                     <span class="info-box-icon bg-yellow">
                                         <i class="fa fa-child"></i>
@@ -304,12 +294,7 @@ hr {
                                 <!-- /.info-box -->
                             </div>
 
-<<<<<<< HEAD
                             <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-show="datos_usuario.es_administrador == 1" ng-click="seccion = 7;CargarCuposAlmacenes();">
-=======
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-show="datos_usuario.es_administrador == 1"
-                                ng-click="seccion = 7;CargarCuposAlmacenes();">
->>>>>>> 72b9f0fd47dadde152198938c6ceec8cb8231e1a
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-info-circle"></i>
