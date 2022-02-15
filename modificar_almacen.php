@@ -419,12 +419,12 @@ hr {
                         <div ng-show="seccion == 15" class="col sm-12 text-left elementos">
                             <br />
                             <h2 class="text-center">Cuotas Distribuidoras</h2>
-                            <p>¡Hola!
+                            <p>¡Hola Equipo!
                                 <br>
-                                En este modulo podras ingresar las cuotas de tu distribuidora.
+                                En este módulo podrás asignar la cuota de tu distribuidora.
                                 <br>
-                                NOTA: " Recuerda que esta cuota que asignas debe tener contemplado el crecimiento GSK y
-                                debe ser el mismo que se comunica a los vendedores"
+                                *NOTA: Recuerda que esta cuota que asignas, debe tener contemplado el crecimiento GSK y
+                                debe ser el mismo que se comunica a los vendedores.
                             </p>
                             <div class="row">
                                 <div class="col-sm-12 col-md-3">
