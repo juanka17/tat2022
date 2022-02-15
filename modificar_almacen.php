@@ -222,7 +222,7 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-trophy"></i>
@@ -235,7 +235,7 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-yellow">
                                         <i class="fa fa-child"></i>
@@ -248,7 +248,7 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 4;CargaRedencionesAlmacen();">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 4;CargaRedencionesAlmacen();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red">
                                         <i class="fa fa-truck"></i>
@@ -275,7 +275,7 @@
                                 <!-- /.info-box -->
                             </div>
 
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-show="datos_usuario.es_administrador == 1" ng-click="seccion = 7;CargarCuposAlmacenes();">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-show="datos_usuario.es_administrador == 1" ng-click="seccion = 7;CargarCuposAlmacenes();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-info-circle"></i>

@@ -11,7 +11,7 @@ BEGIN
 			SELECT alm.id id_almacen,
 				alm.nombre almacen,
 				SUM(ve.valor) venta_almacen
-			FROM ventas ve
+			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
 				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
 			WHERE ve.id_periodo IN (9,10,11)
@@ -25,7 +25,7 @@ BEGIN
 				af.nombre vendedor,
 				af.NOMBRE,
 				SUM(ve.valor)/3 venta_vendedor
-			FROM ventas ve
+			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
 				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
 			WHERE ve.id_periodo IN (9,10,11)
