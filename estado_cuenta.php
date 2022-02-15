@@ -6,6 +6,7 @@
     <?php include 'componentes/componentes_basicos.php'; ?>
     <script src="js/estado_cuenta.js?ver=2" type="text/javascript"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/app.js"></script>
     <style>
     svg>g>g:last-child {
         pointer-events: none
@@ -134,7 +135,7 @@
                 <section class="content">
                     <div class="row" ng-show="usuario_en_sesion.es_administrador==3">
 
-                        <div class="col-sm-12 col-md-offset-11 col-md-1">
+                        <div class="col-sm-12 text-right">
                             <button class="btn btn-danger" onclick="javascript:history.back();">Volver</button>
                         </div>
                         <div class="col-sm-12 col-md-12">
@@ -142,7 +143,6 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Categoria</th>
                                         <th>Almacén</th>
                                         <th>Ventas generales</th>
                                         <th>Puntos</th>
@@ -151,7 +151,6 @@
                                 <tbody>
                                     <tr>
                                         <td>{{datos_usuario.nombre}}</td>
-                                        <td>{{datos_usuario.clasificacion}}</td>
                                         <td>{{datos_usuario.almacen}}</td>
                                         <td>
                                             <button class="btn btn-primary btn-sm" data-toggle="modal"
@@ -163,98 +162,36 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-sm-12 col-md-5">
-                            <h4>Resumen total de puntos</h4>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Puntos Ganados</th>
-                                        <th>Puntos Redimidos</th>
-                                        <th>Puntos Disponibles </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat=" puntos_usu in puntos_usuario track by $index">
-                                        <td>{{puntos_usu.puntos_ganados| number}}</td>
-                                        <td>{{puntos_usu.puntos_redimidos| number}}</td>
-                                        <td>{{puntos_usu.puntos_disponibles| number}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-12 col-md-7">
+                        <div class="col-sm-12">
                             <div class="row">
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="col-sm-12 col-md-12">
-                                        <div id="columnchart_material"></div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12">
-                                        <br />
-                                        <br />
-                                        <div id="linechart_material"></div>
-                                    </div>
+                                <div class="col-sm-12 col-md-2">
                                 </div>
-                                <div class="col-sm-12 col-md-7">
-                                    <div class="col-ms-12 col-md-12">
+                                <div class="col-sm-12 col-md-8">
+                                    <div class="">
                                         <h3 class="text-center">Transacciones</h3>
                                         <div ng-repeat="periodo in estado_cuenta track by $index">
                                             <button type="button" class="btn btn-primary btn-block"
                                                 data-toggle="collapse"
-                                                data-target="#demo{{$index}}">{{periodo.periodo}}</button>
+                                                data-target="#demo{{$index}}">Febrero</button>
                                             <div id="demo{{$index}}" class="collapse">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Cuota</th>
-                                                            <th>Venta</th>
-                                                            <th>Puntos Venta</th>
-                                                            <th>Puntos Cumplimiento</th>
-                                                            <th>Puntos</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr ng-repeat="registro in periodo.registros track by $index">
-                                                            <td>{{registro.cuota| number}}</td>
-                                                            <td>{{registro.venta| number}}</td>
-                                                            <td>{{registro.puntos_venta| number}}</td>
-                                                            <td>{{registro.puntos_cumplimiento| number}}</td>
-                                                            <td>{{registro.puntos_venta| number}}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <div ng-repeat="periodo in estado_cuenta_tickets track by $index"
-                                            ng-hide="estado_cuenta_tickets[0].registros.length == 0"
-                                            class="col-ms-12 col-md-6">
-                                            <h3 class="text-center">Tickets</h3>
-                                            <button type="button" class="btn btn-primary btn-block"
-                                                data-toggle="collapse"
-                                                data-target="#demo1{{$index}}">{{periodo.periodo}}</button>
-                                            <div id="demo1{{$index}}" class="collapse">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
                                                             <th>Concepto</th>
                                                             <th>Descripcion</th>
-                                                            <th>Puntos Sorteo</th>
-                                                            <th>Cantidad Tickets</th>
-                                                            <th>Tickets</th>
+                                                            <th>Puntos</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="registro in periodo.registros track by $index">
-                                                            <td>{{registro.concepto}}</td>
-                                                            <td>{{registro.descripcion}}</td>
-                                                            <td>{{registro.puntos| number}}</td>
-                                                            <td>{{registro.cantidad| number}}</td>
-                                                            <td>
-                                                                <a ng-show="registro.id_concepto == 3"
-                                                                    data-toggle="modal" data-target="#tickets_usuario"
-                                                                    href="#" ng-click="ObtenerTicketsUsuario()"><i
-                                                                        class="fa fa-eye"></i> Ver Tickets</a>
-                                                            </td>
+                                                        <tr>
+                                                            <td>Solicitud</td>
+                                                            <td>Redencion de bono</td>
+                                                            <td>40</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ventas</td>
+                                                            <td>Reporte de ventas</td>
+                                                            <td>400</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -295,54 +232,17 @@
                                 <th>Venta Almacen</th>
                                 <th>Cuota Vendedor</th>
                                 <th>Venta Vendedor</th>
-                                <th>Procentaje Prticipacion</th>
+                                <th>Procentaje Participacion</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="registro in ventas_visibles track by $index" ng-show="registro.id_vendedor==datos_usuario.id">
+                            <tr ng-repeat="registro in ventas_totales track by $index" ng-show="registro.id_vendedor==id_usuario">
                                 <td>{{registro.periodo}}</td>
                                 <td>${{registro.cuota_almacen| number}}</td>
                                 <td>${{registro.venta_almacen| number}}</td>
                                 <td>${{registro.cuota_vendedor| number}}</td>
                                 <td>${{registro.venta_vendedor| number}}</td>
                                 <td>{{registro.porcentaje_participacion | number:'2'}} % </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="tickets_usuario" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">{{titulo_detalle}}</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="col-sm-12">
-                        <input class="form-control" type='text' placeholder="Buscar Ticked"
-                            ng-model="filtros_tickets.tickets" ng-change="VerTicketsVisibles()" />
-                    </div>
-                    <table class="table" id="tdetalle">
-                        <thead>
-                            <tr>
-                                <th>N°</th>
-                                <th>Ticket</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="registro in tickets_visibles track by $index">
-                                <td>{{$index + 1}}</td>
-                                <td>{{registro.tickets}}</td>
                             </tr>
                         </tbody>
                     </table>

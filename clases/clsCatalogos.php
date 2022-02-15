@@ -87,6 +87,10 @@ class clsCatalogos {
                     $query = $query . " where visible = 1";
                 };
                 break;
+            case "almacenes": {
+                    $query = $query . " where estado = 1 and id_visitador =". $parametros->id_visitador;
+                };
+                break;
             case "redenciones_almacen": {
                     $query = " call sp_informacion_redenciones_almacen(" . $parametros->id_almacen . "); ";
                     $order = " ";

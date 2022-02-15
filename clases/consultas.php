@@ -987,14 +987,21 @@ class Consultas
         SELECT
             afi.id,
             afi.nombre,
+            afi.tipo_doc,
+            afi.cedula,
             afi.cod_formas,
+            afi.nacimiento,
+            afi.direccion,
+            afi.telefono,
+            afi.celular,
+            afi.email,
+            afi.id_genero,
+            afi.id_estatus,
             afi.id_almacen,
             alm.nombre almacen,
-            cla.id id_clasificacion,
-            cla.nombre clasificacion
+            alm.id_visitador id_representante
         FROM afiliados afi
-            left JOIN almacenes alm ON alm.id = afi.ID_ALMACEN
-            INNER JOIN clasificacion cla ON cla.id = afi.id_clasificacion  
+            left JOIN almacenes alm ON alm.id = afi.id_almacen 
     ";
     public static $estado_cuenta_afiliado = "
         select
