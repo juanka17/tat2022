@@ -59,7 +59,7 @@ class clsCatalogos {
                 $query = "call sp_ventas_promedio();";
                 $order = "";
             };
-            break;
+                break;
             case "ciudad": {
                     $query = $query . " where id_departamento = " . $parametros->departamento;
                     echo $query;
@@ -413,6 +413,12 @@ class clsCatalogos {
                 break;
             case "cuotas_almacen": {
                 $query = "SELECT * FROM cuotas_almacen WHERE id_almacen =".$parametros->id_almacen." and id_periodo=".$parametros->id_periodo;
+                $order = " ";
+                }; 
+                break;
+
+            case "almacenes_usuarios": {
+                $query = "SELECT * FROM almacenes";
                 $order = " ";
                 }; 
                 break;

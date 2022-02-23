@@ -5,7 +5,7 @@ include_once('clsDDBBOperations.php');
 include_once('FECrypt.php');
 include_once('consultas.php');
 include_once('clsEstadoCuenta.php');
-//include_once('clsMailHelper.php');
+include_once('clsMailHelper.php');
 include_once('clsCatalogos.php');
 
 class clsAfiliados {
@@ -40,6 +40,8 @@ class clsAfiliados {
                 break;
             case "CrearNuevoUsuarioAdmin": return clsAfiliados::CrearNuevoUsuarioAdmin($parametros);
                 break;
+            case "cargar_lista_usuarios": return clsAfiliados::CargarListaUsuarios($parametros);
+                break;
         }
     }
 
@@ -47,7 +49,7 @@ class clsAfiliados {
         $documento = $parametros->documento;
         $clave = $parametros->clave;
 
-        $query = Consultas::$consulta_login . " where afi.email = '" . $documento . "'";
+        $query = Consultas::$consulta_login . " where afi.cedula = '" . $documento . "'";
         $resultsAfiliado = clsDDBBOperations::ExecuteUniqueRowNoParams($query);
         $query = Consultas::$consulta_cambio_clave;
         $resultsClave = clsDDBBOperations::ExecuteUniqueRow($query, $resultsAfiliado["id"]);
@@ -447,6 +449,48 @@ class clsAfiliados {
         }
     }
 
+    private static function CargarListaUsuarios($parametros)
+    {
+        if($parametros->id_rol==2){
+            if ($parametros->cedula != "") {
+                $cedula = $parametros->cedula == "" ? "%" : $parametros->cedula;
+                $query = Consultas::$consulta_afiliados . " where afi.cedula = '" . $cedula . "' order by afi.ID_ESTATUS desc";
+                $listado = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+                return array('ok' => true, 'listado' => $listado);
+            } else if ($parametros->almacen != "" || $parametros->nombre != "" || $parametros->cod_formas != "") {
+                $almacen = $parametros->almacen == "" ? "%" : $parametros->almacen; 
+                $nombre = $parametros->nombre == "" ? "%" : "%" . $parametros->nombre . "%";
+                $codfomas = $parametros->cod_formas == "" ? "%" : "%" . $parametros->cod_formas . "%";
+                $query = Consultas::$consulta_afiliados . " where (afi.ID_ALMACEN IS NULL || afi.ID_ALMACEN LIKE '" . $almacen . "') and afi.nombre like '" . $nombre . "' and afi.COD_FORMAS like '". $codfomas . "' order by afi.ID_ESTATUS desc";
+                $listado = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+                return array('ok' => true, 'listado' => $listado);
+            } else {
+                return array('ok' => false, 'error' => "Debe indicarse un valor");
+            }
+        }
+
+        if($parametros->id_rol==1){
+            if ($parametros->cedula != "") {
+                $cedula = $parametros->cedula == "" ? "%" : $parametros->cedula;
+                $query = Consultas::$consulta_afiliados . " where afi.cedula = '" . $cedula . "' order by afi.ID_ESTATUS desc";
+                $listado = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+                return array('ok' => true, 'listado' => $listado);
+            } else if ($parametros->almacen != "" || $parametros->nombre != "") {
+                $almacen = $parametros->almacen == "" ? "%" : $parametros->almacen; 
+                $nombre = $parametros->nombre == "" ? "%" : "%" . $parametros->nombre . "%";
+                $nombre = $parametros->cod_formas == "" ? "%" : "%" . $parametros->cod_formas . "%";
+                $query = Consultas::$consulta_afiliados . " where (afi.ID_ALMACEN IS NULL || afi.ID_ALMACEN LIKE '" . $almacen . "') and afi.nombre like '" . $nombre . "' order by afi.ID_ESTATUS desc";
+                $listado = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+                return array('ok' => true, 'listado' => $listado);
+            } else {
+                return array('ok' => false, 'error' => "Debe indicarse un valor");
+            }
+        }
+    }
 }
 
 ?>

@@ -4,62 +4,66 @@ class Consultas
 {
 
     public static $consulta_afiliados = '
-    SELECT 
-        afi.ID, 
-        afi.NOMBRE, 
-        afi.CEDULA, 
-        afi.DIRECCION, 
-        afi.TELEFONO, 
-        afi.CELULAR, 
-        afi.NACIMIENTO, 
-        afi.EMAIL,  
-        gen.ID ID_GENERO,
-        gen.NOMBRE GENERO,
-        eci.ID ID_ESTADO_CIVIL,
-        eci.NOMBRE ESTADO_CIVIL,
-        ciu.ID ID_CIUDAD,
-        ciu.NOMBRE CIUDAD,
-        dep.ID ID_DEPARTAMENTO,
-        dep.NOMBRE DEPARTAMENTO,
-        afi.FECHA_INSCRIPCION, 
-        afi.ULTIMA_ACTUALIZACION,
-        alm.id ID_ALMACEN,
-        alm.nombre ALMACEN,
-        mar.id ID_MARCA,
-        mar.nombre MARCA,
-        cla.id ID_CLASIFICACION,
-        cla.nombre CLASIFICACION,
-        rol.es_administrador,
-        est.nombre estatus
-    FROM
-        afiliados afi
-        left join clasificacion cla on cla.id = afi.id_clasificacion and cla.id <> 2
-        left join roles rol on rol.id = afi.id_rol
-        left join almacen alm on alm.id = afi.id_almacen
-        left join marcas mar on mar.id = afi.id_marca
-        left join genero gen on gen.id = afi.id_genero
-        left join estado_civil eci on eci.id = afi.id_estado_civil
-        left join ciudad ciu on ciu.id = afi.id_ciudad
-        left join departamento dep on dep.id = ciu.id_departamento
-        left join estatus est on est.id = afi.ID_ESTATUS
+        SELECT 
+            afi.ID, 
+            afi.NOMBRE, 
+            afi.CEDULA, 
+            afi.DIRECCION, 
+            afi.TELEFONO, 
+            afi.CELULAR, 
+            afi.NACIMIENTO, 
+            afi.EMAIL,  
+            gen.ID ID_GENERO,
+            gen.NOMBRE GENERO,
+            eci.ID ID_ESTADO_CIVIL,
+            eci.NOMBRE ESTADO_CIVIL,
+            ciu.ID ID_CIUDAD,
+            ciu.NOMBRE CIUDAD,
+            dep.ID ID_DEPARTAMENTO,
+            dep.NOMBRE DEPARTAMENTO,
+            afi.FECHA_INSCRIPCION, 
+            afi.ULTIMA_ACTUALIZACION,
+            alm.id ID_ALMACEN,
+            alm.nombre ALMACEN,
+            mar.id ID_MARCA,
+            mar.nombre MARCA,
+            cla.id ID_CLASIFICACION,
+            cla.nombre CLASIFICACION,
+            rol.ID id_rol,
+            rol.NOMBRE rol,
+            rol.es_administrador,
+            est.nombre estatus
+        FROM
+            afiliados afi
+            left join clasificacion cla on cla.id = afi.id_clasificacion and cla.id <> 2
+            left join roles rol on rol.id = afi.id_rol
+            left join almacen alm on alm.id = afi.id_almacen
+            left join marcas mar on mar.id = afi.id_marca
+            left join genero gen on gen.id = afi.id_genero
+            left join estado_civil eci on eci.id = afi.id_estado_civil
+            left join ciudad ciu on ciu.id = afi.id_ciudad
+            left join departamento dep on dep.id = ciu.id_departamento
+            left join estatus est on est.id = afi.ID_ESTATUS
         ';
     public static $consulta_login = '
-    SELECT 
-	afi.id,
-	afi.nombre,
-	afi.cedula,
-	afi.acepto_terminos,
-	afi.email,
-        afi.clave,
-        afi.id_marca,
-	rol.es_administrador,
-	cla.id id_clasificacion,
-	cla.nombre clasificacion,
-        (select count(distinct aux.id) from almacenes aux where aux.nombre like "%incauca%" and aux.id_visitador = afi.id) incauca
-    FROM
-	afiliados afi
-	inner join roles rol on rol.id = afi.ID_ROL 
-	inner join clasificacion cla on cla.id = afi.id_clasificacion
+        SELECT 
+            afi.id,
+            afi.nombre,
+            afi.cedula,
+            afi.acepto_terminos,
+            afi.email,
+            afi.clave,
+            afi.id_marca,
+            rol.es_administrador,
+            cla.id id_clasificacion,
+            cla.nombre clasificacion,
+            afi.ID_ROL,
+            rol.NOMBRE rol,
+            (select count(distinct aux.id) from almacenes aux where aux.nombre like "%incauca%" and aux.id_visitador = afi.id) incauca
+        FROM
+            afiliados afi
+            inner join roles rol on rol.id = afi.ID_ROL 
+            inner join clasificacion cla on cla.id = afi.id_clasificacion
         ';
     public static $consulta_cambio_clave = '
         SELECT 

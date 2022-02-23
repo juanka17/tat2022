@@ -1,20 +1,16 @@
 angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController', function($scope, $http) {
 
-    $scope.datos_vendedor = {
-        cedula: "",
-        cod_formas: "",
-        nombre: "",
-        telefono: "",
-        celular: "",
-        fecha_nacimiento: "",
-        direccion: "",
-        email: "",
-        id_almacen: "",
-        representante: "",
-        id_genero: "",
-        ciudad: "",
-        id_estatus: ""
-    };
+    $scope.datos_vendedor = { cedula: "", cod_formas: "", nombre: "", telefono: "", celular: "", fecha_nacimiento: "", direccion: "", email: "", id_almacen: "", representante: "", id_genero: "", ciudad: "", id_estatus: "" };
+
+    var categorias_llamada = null;
+    $scope.subCategoria = 0;
+    $scope.subcategorias = Array();
+    $scope.anteriores = Array();
+    $scope.categorias_anteriores = Array();
+    $scope.subCategoriaSeleccionada = 0;
+    $scope.comentarioLlamadas = '';
+    $scope.llamadas_usuario = null;
+    $scope.llamada = { COMENTARIO: "", id_subcategoria: 0 };
 
     $scope.CargarRepresentantes = function() {
         var parametros = {
@@ -42,7 +38,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     };
 
     $scope.CargarAlmacenesRepresentante = function(data) {
-        console.log(data)
+        //console.log(data)
         var parametros = {
             catalogo: "almacenes",
             id_visitador: data
@@ -83,6 +79,86 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         alert("Datos modificados");
     };
 
+    $scope.ObtenerCategoriasLlamada = function() {
+        var parametros = {
+            catalogo: "categorias_llamada"
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.CargarSubCategorias);
+        $scope.ObtenerLlamadas();
+    };
+
+    $scope.CargarSubCategorias = function(data) {
+        categoriasLlamada = data;
+        console.log(categoriasLlamada);
+        $scope.ObtenerSubcategorias(0);
+    };
+
+    $scope.ObtenerSubcategorias = function(idParam) {
+        $scope.llamada.id_subcategoria = $scope.subCategoria;
+        var id = idParam;
+        $scope.subCategoriaSeleccionada = id;
+        if (idParam == -1) {
+            id = $scope.categoriasAnteriores[$scope.categoriasAnteriores.length - 1].ID_PADRE;
+            $scope.categoriasAnteriores.pop();
+            $scope.anteriores.pop();
+            $scope.categoriasAnteriores.pop();
+            $scope.anteriores.pop();
+        }
+
+        if (idParam == 0) {
+            $scope.categoriasAnteriores = Array();
+            $scope.anteriores = Array();
+        }
+
+        $scope.subCategorias = Array();
+        angular.forEach(categoriasLlamada, function(subCategoria) {
+            if (id == subCategoria.ID_PADRE)
+                $scope.subCategorias.push(subCategoria);
+
+            if (id != 0 && id == subCategoria.ID) {
+                $scope.categoriasAnteriores.push(subCategoria);
+                $scope.anteriores.push(subCategoria.NOMBRE);
+            }
+        });
+    };
+
+    $scope.ObtenerLlamadas = function() {
+        var parametros = {
+            catalogo: "llamadas_usuarios",
+            id_usuario: $scope.datos_usuario.id
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarLlamadas);
+    };
+
+    $scope.MostrarLlamadas = function(data) {
+        $scope.subCategoria = 0;
+        $scope.subcategorias = Array();
+        $scope.anteriores = Array();
+        $scope.categorias_anteriores = Array();
+        $scope.subCategoriaSeleccionada = 0;
+        $scope.comentarioLlamadas = '';
+        $scope.llamadas_usuarios = null;
+        $scope.llamada = { comentario: "", id_subcategoria: 0 };
+        categorias_llamada = null;
+
+        $scope.llamadas_usuarios = data;
+    };
+
+    $scope.RegistraLlamada = function() {
+        $scope.llamada.id_usuario = id_usuario;
+        $scope.llamada.fecha = moment().format("YYYY-MM-DD HH:mm:ss");
+        $scope.llamada.id_usuario_registra = datos_usuario.id;
+        var parametros = {
+            catalogo: "llamadas_usuarios",
+            id_usuario: id_usuario,
+            datos: $scope.llamada
+        };
+        console.log(parametros);
+        //$scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
+    };
+
+
+
     $scope.EjecutarLlamado = function(modelo, operacion, parametros, CallBack) {
         $http({
             method: "POST",
@@ -98,6 +174,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         });
     };
 
-    $scope.datos_usuario = datos_usuario;
+    $scope.usuario_en_sesion = usuario_en_sesion;
+    $scope.id_usuario = id_usuario;
     $scope.CargarRepresentantes();
 });

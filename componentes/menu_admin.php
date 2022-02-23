@@ -16,6 +16,12 @@
                             </span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mis_datos_vendedor.php?id_usuario={{datos_usuario.id}}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            Mis Datos
+                        </a>
+                    </li>
                     <?php
                     if ($_SESSION["usuario"]["id_clasificacion"] == 2) {
                     ?>
@@ -32,6 +38,10 @@
                             <a class="dropdown-item" href="autorizacion_entregas.php">
                                 <i class="fa fa-file-excel-o"></i>
                                 Autorizar Entregas
+                            </a>
+                            <a class="dropdown-item" href="listado_usuarios.php">
+                                <i class="fa fa-list" aria-hidden="true"></i>
+                                Buscar Usuario
                             </a>
                         </div>
                     </li>
