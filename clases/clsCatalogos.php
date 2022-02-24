@@ -194,7 +194,7 @@ class clsCatalogos {
                 };
                 break;
             case "consulta_cuotas_vendedor_supervisor": {
-                    $query = " call sp_cuotas_vendedores(" . $parametros->id_almacen . ")";
+                    $query = " call sp_cuotas_vendedores(" . $parametros->id_almacen . ",".$parametros->id_periodo ." )";
                     $order = " ";
                 };
                 break;

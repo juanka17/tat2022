@@ -56,7 +56,10 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     // <editor-fold defaultstate="collapsed" desc="Informacion Almacen">    
 
     $scope.ObtenerInformacionAlmacen = function() {
-        var parametros = { catalogo: "almacen_informacion", id_almacen: id_almacen };
+        var parametros = {
+            catalogo: "almacen_informacion",
+            id_almacen: id_almacen
+        };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarInformacionAlmacen);
     };
 
@@ -119,7 +122,11 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     /*-----------Cuotas Distribuidora---------*/
 
     $scope.CargarCuotasAlmacen = function(data) {
-        var parametros = { catalogo: "cuotas_almacen", id_almacen: id_almacen, id_periodo: data };
+        var parametros = {
+            catalogo: "cuotas_almacen",
+            id_almacen: id_almacen,
+            id_periodo: data
+        };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCuotasDistribuidora);
     };
 
@@ -131,12 +138,14 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             $scope.crear_nueva_cuota = 1;
             $scope.ResultadoCreacionNuevoCuota();
         }
-
     };
 
     $scope.MostrarCuotaAumentada = function() {
-        $scope.cuota_aumentada = Math.round(($("#cuota_ventas").val().replace(/\./g, '') * 1.08));
-        $("#cuota_aumentada").html($scope.cuota_aumentada);
+        var margen1 = $scope.almacen.margen / 100;
+        var margen2 = 1 + $scope.almacen.margen / 100;
+        $scope.cuota_aumentada = Math.round(($("#cuota_ventas").val().replace(/\./g, '') * margen1));
+        $scope.margen = Math.round(($("#cuota_ventas").val().replace(/\./g, '') * margen2));
+        $("#cuota_aumentada").html($scope.margen);
     }
 
     $scope.GuardarCuotasDistribuidora = function(cuota, impactos, mes) {
@@ -145,7 +154,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             id_periodo: mes,
             cuota: $("#cuota_ventas").val().replace(/\./g, ''),
             impactos: $("#cuota_impactos").val().replace(/\./g, ''),
-            cuota_aumentada: $scope.cuota_aumentada
+            cuota_aumentada: $scope.margen
         }
 
         if ($scope.crear_nueva_cuota == 0) {
@@ -173,10 +182,10 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     };
 
     $scope.ResultadoCreacionNuevoCuota = function(data) {
-
         var parametros = {
             catalogo: "consulta_cuotas_vendedor_supervisor",
-            id_almacen: $scope.almacen.id_drogueria
+            id_almacen: $scope.almacen.id_drogueria,
+            id_periodo: $scope.mes_cuota_seleccionado
         };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.CargarCuotas);
     };

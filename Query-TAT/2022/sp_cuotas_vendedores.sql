@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS sp_cuotas_vendedores;
 DELIMITER //
-CREATE PROCEDURE sp_cuotas_vendedores(IN tmp_almacen INT)
+CREATE PROCEDURE sp_cuotas_vendedores(IN tmp_almacen INT, IN tmp_periodo INT)
 LANGUAGE SQL
 DETERMINISTIC
 SQL SECURITY DEFINER
@@ -51,7 +51,7 @@ BEGIN
 				end cuota_vendedor
 			FROM t_ventas_vendedores tv
 			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
-			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen
+			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen AND ca.id_periodo=tmp_periodo
 		);
 		
 		DROP TEMPORARY TABLE IF EXISTS t_supervisor_almacen;
@@ -87,6 +87,7 @@ BEGIN
 		SELECT * FROM t_ventas_almacen;
 		SELECT * FROM t_ventas_vendedores;	
 		SELECT * FROM t_supervisor_almacen;
+		SELECT * FROM t_participacion_vendedores;
 		
 		DROP TEMPORARY TABLE t_participacion_vendedores;
 		DROP TEMPORARY TABLE t_ventas_almacen;
@@ -97,4 +98,4 @@ BEGIN
 END//
 DELIMITER ;
 
-call sp_cuotas_vendedores(3919);
+call sp_cuotas_vendedores(3920, 14);

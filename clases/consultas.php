@@ -373,6 +373,7 @@ class Consultas
         dep.ID id_departamento,
         dep.nombre departamento,
         alm.encuestas_periodo,
+        alm.margen,
         (SELECT supervisores FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) supervisores,
         (SELECT cupos_diamante FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) cupos_diamante,
         (SELECT cupos_oro FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) cupos_oro,

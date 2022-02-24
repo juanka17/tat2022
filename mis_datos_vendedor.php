@@ -4,26 +4,27 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/mis_datos_vendedor.js?reload=2" type="text/javascript"></script>
+    <script src="js/mis_datos_vendedor.js?reload=3" type="text/javascript"></script>
+    <script src="js/app"></script>
     <script type="text/javascript">
-        var id_usuario = 0;
-        var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
-        if (typeof getParameterByName("id_usuario") !== 'undefined' && getParameterByName("id_usuario") != "") {
-            id_usuario = getParameterByName("id_usuario");
-        } else {
-            alert("No hay usuario seleccionado.");
-            document.location.href = "listado_usuarios.php";
-        }
+    var id_usuario = 0;
+    var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
+    if (typeof getParameterByName("id_usuario") !== 'undefined' && getParameterByName("id_usuario") != "") {
+        id_usuario = getParameterByName("id_usuario");
+    } else {
+        alert("No hay usuario seleccionado.");
+        document.location.href = "listado_usuarios.php";
+    }
     </script>
     <style>
-        .fondo_datos {
-            border: 2px solid #ff7e06;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 14px;
-            background-color: #ffffffd1;
-            font-size: 1.3rem;
-        }
+    .fondo_datos {
+        border: 2px solid #ff7e06;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 14px;
+        background-color: #ffffffd1;
+        font-size: 1.3rem;
+    }
     </style>
 </head>
 
@@ -168,7 +169,7 @@
 
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary" ng-click="RegistraLlamada()"
+                    <button type="button" class="btn btn-primary" ng-click="RegistraLlamada(id_usuario)"
                         ng-disabled=" !(subCategorias.length == 0 && llamada.comentario.length > 0)">
                         Registrar llamada
                     </button>

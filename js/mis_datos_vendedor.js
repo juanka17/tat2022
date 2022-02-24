@@ -1,6 +1,20 @@
 angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController', function($scope, $http) {
 
-    $scope.datos_vendedor = { cedula: "", cod_formas: "", nombre: "", telefono: "", celular: "", fecha_nacimiento: "", direccion: "", email: "", id_almacen: "", representante: "", id_genero: "", ciudad: "", id_estatus: "" };
+    $scope.datos_vendedor = {
+        cedula: "",
+        cod_formas: "",
+        nombre: "",
+        telefono: "",
+        celular: "",
+        fecha_nacimiento: "",
+        direccion: "",
+        email: "",
+        id_almacen: "",
+        representante: "",
+        id_genero: "",
+        ciudad: "",
+        id_estatus: ""
+    };
 
     var categorias_llamada = null;
     $scope.subCategoria = 0;
@@ -27,13 +41,15 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     $scope.CargarVendedor = function() {
         var parametros = {
             catalogo: "afiliados",
-            id: $scope.datos_usuario.id
+            id: $scope.id_usuario
         };
+        console.log(parametros);
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarVendedor);
     };
 
     $scope.MostrarVendedor = function(data) {
         $scope.datos_vendedor = data[0];
+        console.log($scope.datos_vendedor);
         $scope.CargarAlmacenesRepresentante($scope.datos_vendedor.id_representante)
     };
 
@@ -89,7 +105,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
 
     $scope.CargarSubCategorias = function(data) {
         categoriasLlamada = data;
-        console.log(categoriasLlamada);
+        //console.log(categoriasLlamada);
         $scope.ObtenerSubcategorias(0);
     };
 
@@ -144,20 +160,20 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         $scope.llamadas_usuarios = data;
     };
 
-    $scope.RegistraLlamada = function() {
+    $scope.RegistraLlamada = function(data) {
+        console.log(data);
+        console.log($scope.id_usuario);
         $scope.llamada.id_usuario = id_usuario;
         $scope.llamada.fecha = moment().format("YYYY-MM-DD HH:mm:ss");
-        $scope.llamada.id_usuario_registra = datos_usuario.id;
+        $scope.llamada.id_usuario_registra = $scope.datos_usuario.id;
         var parametros = {
             catalogo: "llamadas_usuarios",
-            id_usuario: id_usuario,
+            id_usuario: $scope.id_usuario,
             datos: $scope.llamada
         };
         console.log(parametros);
-        //$scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
+        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
     };
-
-
 
     $scope.EjecutarLlamado = function(modelo, operacion, parametros, CallBack) {
         $http({
@@ -174,7 +190,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         });
     };
 
-    $scope.usuario_en_sesion = usuario_en_sesion;
+    $scope.datos_usuario = datos_usuario;
     $scope.id_usuario = id_usuario;
     $scope.CargarRepresentantes();
 });

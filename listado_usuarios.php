@@ -7,7 +7,7 @@
     <script src="js/listado_usuarios.js?ver=1" type="text/javascript"></script>
     <script type="text/javascript">
     var id_usuario = 0;
-    var usuario_en_sesion = <?php echo json_encode($_SESSION["usuario"]); ?>;
+    var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
     if (typeof getParameterByName("id_usuario") !== 'undefined' && getParameterByName("id_usuario") != "") {
         id_usuario = getParameterByName("id_usuario");
     } else {
@@ -107,7 +107,7 @@
                                     <td>
                                         <button class="btn btn-sm btn-primary"
                                             ng-click="RedireccionarUsuario(usuario.ID)">
-                                            <i class="fa fa-search"></i>{{usuario.ID}}
+                                            <i class="fa fa-search"></i>
                                         </button>
                                     </td>
                                     <td class="hide-for-small-only">{{usuario.CEDULA}}</td>

@@ -49,7 +49,7 @@ class clsAfiliados {
         $documento = $parametros->documento;
         $clave = $parametros->clave;
 
-        $query = Consultas::$consulta_login . " where afi.cedula = '" . $documento . "'";
+        $query = Consultas::$consulta_login . " where afi.cedula = '" . $documento . "'  OR afi.EMAIL = '". $documento ."'";
         $resultsAfiliado = clsDDBBOperations::ExecuteUniqueRowNoParams($query);
         $query = Consultas::$consulta_cambio_clave;
         $resultsClave = clsDDBBOperations::ExecuteUniqueRow($query, $resultsAfiliado["id"]);

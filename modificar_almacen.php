@@ -241,7 +241,8 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide"
+                                ng-click="seccion = 2;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-trophy"></i>
@@ -254,7 +255,8 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide"
+                                ng-click="seccion = 3;CargarTemporadasVentasAlmacen()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-yellow">
                                         <i class="fa fa-child"></i>
@@ -267,7 +269,8 @@ hr {
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-click="seccion = 4;CargaRedencionesAlmacen();">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide"
+                                ng-click="seccion = 4;CargaRedencionesAlmacen();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red">
                                         <i class="fa fa-truck"></i>
@@ -294,7 +297,8 @@ hr {
                                 <!-- /.info-box -->
                             </div>
 
-                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-show="datos_usuario.es_administrador == 1" ng-click="seccion = 7;CargarCuposAlmacenes();">
+                            <div class="col-md-12 col-sm-6 col-xs-12 hide" ng-show="datos_usuario.es_administrador == 1"
+                                ng-click="seccion = 7;CargarCuposAlmacenes();">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-green">
                                         <i class="fa fa-info-circle"></i>
@@ -429,6 +433,7 @@ hr {
                                     <select class="form-control" name="cuota_mes_distribuidora"
                                         ng-model="mes_cuota_seleccionado" id="cuota_mes_distribuidora">
                                         <option value="14">Febrero</option>
+                                        <option value="15">Marzo</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -455,7 +460,7 @@ hr {
                                         onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
-                                    <small>Cuota con Margen 8%</small><br>
+                                    <small>Cuota con Margen {{almacen.margen}}%</small><br>
                                     <spam>{{cuota_aumentada | number:0}}</spam>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -482,7 +487,7 @@ hr {
                                         onchange="format(this)">
                                 </div>
                                 <div class="col-sm-12 col-md-3">
-                                    <small>Cuota con Margen 8%</small><br>
+                                    <small>Cuota con Margen {{almacen.margen}}%</small><br>
                                     <spam>{{cuota_aumentada | number:0}}</spam>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -1674,7 +1679,7 @@ hr {
 
 
 
-    <script src="js/almacenes.js?ver=45" type="text/javascript"></script>
+    <script src="js/almacenes.js?ver=46" type="text/javascript"></script>
     <script src="js/signature.js?reload=true"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="dev_x/lib/js/jszip.js"></script>
