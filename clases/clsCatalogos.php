@@ -427,6 +427,12 @@ class clsCatalogos {
                 $order = " ";
                 }; 
                 break;
+
+            case "llamadas_usuarios": {
+                $query = Consultas::$consulta_llamadas_usuarios . " where la.id_usuario = " . $parametros->id_usuario;
+                $order = " order by la.fecha desc ";
+            };
+                break;
         }
         $query = $query . $order;
 

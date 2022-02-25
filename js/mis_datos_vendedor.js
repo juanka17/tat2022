@@ -171,7 +171,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     $scope.ObtenerLlamadas = function() {
         var parametros = {
             catalogo: "llamadas_usuarios",
-            id_usuario: $scope.datos_usuario.id
+            id_usuario: $scope.id_usuario
         };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarLlamadas);
     };

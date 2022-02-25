@@ -1269,4 +1269,18 @@ class Consultas
             alm.id NOT IN (SELECT id_almacen FROM habeas_data)         
                 
             ";
+    public static $consulta_llamadas_usuarios = "
+        SELECT
+            la.id,
+            la.fecha,
+            concat(tp.NOMBRE,'-',sc.NOMBRE,'-',cl.NOMBRE) categoria,
+            usr.NOMBRE registro,
+            comentario
+        FROM
+            llamadas_usuarios la
+            inner join categorias_llamada cl on la.ID_SUBCATEGORIA = cl.ID
+            inner join categorias_llamada sc on sc.ID = cl.ID_PADRE
+            inner join categorias_llamada tp on tp.ID = sc.ID_PADRE
+            left join afiliados usr on usr.id = la.id_usuario_registra
+    ";
 }

@@ -48,14 +48,8 @@
                                 <tr>
                                     <th></th>
                                     <th class="hide-for-small-only" ng-show="datos_usuario.es_administrador == 1 || datos_usuario.es_administrador == 4">Ejecutivo</th>
-                                    <th class="hide-for-medium-only hide-for-small-only">Ciudad</th>
                                     <th>Nombre</th>
                                     <th>Territorio</th>
-                                    <th class="hide-for-small-only">Cupos Diamante</th>
-                                    <th class="hide-for-small-only">Cupos Oro</th>
-                                    <th class="hide-for-small-only">Cupos Plata</th>
-                                    <th class="hide-for-small-only">Cupos Super</th>
-                                    <th class="hide-for-small-only">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,14 +60,8 @@
                                         </button>
                                     </td>
                                     <td class="text-left hide-for-small-only" ng-show="datos_usuario.es_administrador == 1 || datos_usuario.es_administrador == 4">{{almacen.visitador}}</td>
-                                    <td class="text-left hide-for-medium-only hide-for-small-only">{{almacen.ciudad}}</td>
                                     <td class="text-left">{{almacen.drogueria}}</td>
                                     <td class="text-left">{{almacen.territorio}}</td>
-                                    <td class="text-left hide-for-small-only">{{almacen.cupos_diamante}}</td>
-                                    <td class="text-left hide-for-small-only">{{almacen.cupos_oro}}</td>
-                                    <td class="text-left hide-for-small-only">{{almacen.cupos_plata}}</td>
-                                    <td class="text-left hide-for-small-only">{{almacen.supervisores}}</td>
-                                    <td class="text-left hide-for-small-only">{{almacen.total_premiados}}</td>
                                 </tr>
                             </tbody>
                         </table>
