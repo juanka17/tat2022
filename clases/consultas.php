@@ -996,6 +996,8 @@ class Consultas
             afi.cedula,
             afi.cod_formas,
             afi.nacimiento,
+            ciu.ID id_ciudad,
+            ciu.ID_DEPARTAMENTO id_departamento,
             afi.direccion,
             afi.telefono,
             afi.celular,
@@ -1007,6 +1009,7 @@ class Consultas
             alm.id_visitador id_representante
         FROM afiliados afi
             left JOIN almacenes alm ON alm.id = afi.id_almacen 
+            left JOIN ciudad ciu ON ciu.ID = afi.ID_CIUDAD 
     ";
     public static $estado_cuenta_afiliado = "
         select

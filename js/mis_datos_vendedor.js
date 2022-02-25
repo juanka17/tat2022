@@ -12,7 +12,8 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         id_almacen: "",
         representante: "",
         id_genero: "",
-        ciudad: "",
+        id_departamento: "",
+        id_ciudad: "",
         id_estatus: ""
     };
 
@@ -35,6 +36,18 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
 
     $scope.MostrarRepresentantes = function(data) {
         $scope.representante = data;
+        $scope.CargarDepartamentos();
+    };
+
+    $scope.CargarDepartamentos = function() {
+        var parametros = {
+            catalogo: "departamento"
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarDepartamento);
+    };
+
+    $scope.MostrarDepartamento = function(data) {
+        $scope.departamento = data;
         $scope.CargarVendedor();
     };
 
@@ -43,18 +56,16 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
             catalogo: "afiliados",
             id: $scope.id_usuario
         };
-        console.log(parametros);
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarVendedor);
     };
 
     $scope.MostrarVendedor = function(data) {
         $scope.datos_vendedor = data[0];
-        console.log($scope.datos_vendedor);
         $scope.CargarAlmacenesRepresentante($scope.datos_vendedor.id_representante)
+        $scope.CargarCiudades(0, $scope.datos_vendedor.id_ciudad)
     };
 
     $scope.CargarAlmacenesRepresentante = function(data) {
-        //console.log(data)
         var parametros = {
             catalogo: "almacenes",
             id_visitador: data
@@ -64,6 +75,26 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
 
     $scope.MostrarAlmacenesRepresentante = function(data) {
         $scope.almacenes = data;
+    };
+
+    $scope.CargarCiudades = function(carga, data) {
+        if (carga == 1) {
+            var parametros = {
+                catalogo: "ciudad",
+                departamento: data
+            };
+            $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCiudades);
+        } else {
+            var parametros = {
+                catalogo: "ciudad_guardada",
+                ciudad: data
+            };
+            $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCiudades);
+        }
+    };
+
+    $scope.MostrarCiudades = function(data) {
+        $scope.ciudades = data;
     };
 
     $scope.ActualizarDatosVendedores = function() {
@@ -105,7 +136,6 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
 
     $scope.CargarSubCategorias = function(data) {
         categoriasLlamada = data;
-        //console.log(categoriasLlamada);
         $scope.ObtenerSubcategorias(0);
     };
 
@@ -161,8 +191,6 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     };
 
     $scope.RegistraLlamada = function(data) {
-        console.log(data);
-        console.log($scope.id_usuario);
         $scope.llamada.id_usuario = id_usuario;
         $scope.llamada.fecha = moment().format("YYYY-MM-DD HH:mm:ss");
         $scope.llamada.id_usuario_registra = $scope.datos_usuario.id;
@@ -171,7 +199,6 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
             id_usuario: $scope.id_usuario,
             datos: $scope.llamada
         };
-        console.log(parametros);
         $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
     };
 

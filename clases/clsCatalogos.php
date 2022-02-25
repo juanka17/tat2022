@@ -62,7 +62,12 @@ class clsCatalogos {
                 break;
             case "ciudad": {
                     $query = $query . " where id_departamento = " . $parametros->departamento;
-                    echo $query;
+                    $order = " order by 2";
+                };
+                break;
+            case "ciudad_guardada": {
+                    $query = "SELECT * FROM ciudad where id = " . $parametros->ciudad;
+                    $order = " order by 2";
                 };
                 break;
             case "familiares_afiliado": {
