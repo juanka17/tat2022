@@ -111,14 +111,15 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
             id_almacen: $scope.datos_vendedor.id_almacen,
             representante: $scope.datos_vendedor.representante,
             id_genero: $scope.datos_vendedor.id_genero,
-            id_estatus: $scope.datos_vendedor.id_estatus
+            id_estatus: $scope.datos_vendedor.id_estatus,
+            id_actualiza: $scope.datos_usuario.id
         }
         var parametros = {
             catalogo: "afiliados",
             datos: data,
-            id: $scope.datos_usuario.id
+            id: $scope.id_usuario
         };
-
+        console.log(parametros);
         $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoEdicionVendedor);
     };
 

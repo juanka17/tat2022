@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/mis_datos_vendedor.js?reload=4" type="text/javascript"></script>
+    <script src="js/mis_datos_vendedor.js?reload=5" type="text/javascript"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript">
     var id_usuario = 0;
@@ -47,7 +47,8 @@
                     Mis Datos
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Mis datos</a></li>
+                    <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
+                    <li class="active">Mis datos</li>
                 </ol>
             </section>
             <section class="">

@@ -10,7 +10,8 @@ class Consultas
             afi.CEDULA, 
             afi.DIRECCION, 
             afi.TELEFONO, 
-            afi.CELULAR, 
+            afi.CELULAR,
+            afi.COD_FORMAS,
             afi.NACIMIENTO, 
             afi.EMAIL,  
             gen.ID ID_GENERO,
@@ -37,7 +38,7 @@ class Consultas
             afiliados afi
             left join clasificacion cla on cla.id = afi.id_clasificacion and cla.id <> 2
             left join roles rol on rol.id = afi.id_rol
-            left join almacen alm on alm.id = afi.id_almacen
+            inner join almacenes alm on afi.id_almacen = alm.id
             left join marcas mar on mar.id = afi.id_marca
             left join genero gen on gen.id = afi.id_genero
             left join estado_civil eci on eci.id = afi.id_estado_civil

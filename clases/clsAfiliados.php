@@ -481,7 +481,6 @@ class clsAfiliados {
             } else if ($parametros->almacen != "" || $parametros->nombre != "") {
                 $almacen = $parametros->almacen == "" ? "%" : $parametros->almacen; 
                 $nombre = $parametros->nombre == "" ? "%" : "%" . $parametros->nombre . "%";
-                $nombre = $parametros->cod_formas == "" ? "%" : "%" . $parametros->cod_formas . "%";
                 $query = Consultas::$consulta_afiliados . " where (afi.ID_ALMACEN IS NULL || afi.ID_ALMACEN LIKE '" . $almacen . "') and afi.nombre like '" . $nombre . "' order by afi.ID_ESTATUS desc";
                 $listado = clsDDBBOperations::ExecuteSelectNoParams($query);
 

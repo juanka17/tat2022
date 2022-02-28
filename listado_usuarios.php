@@ -8,12 +8,6 @@
     <script type="text/javascript">
     var id_usuario = 0;
     var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
-    if (typeof getParameterByName("id_usuario") !== 'undefined' && getParameterByName("id_usuario") != "") {
-        id_usuario = getParameterByName("id_usuario");
-    } else {
-        alert("No hay usuario seleccionado.");
-        document.location.href = "listado_usuarios.php";
-    }
     </script>
 </head>
 
@@ -85,12 +79,44 @@
                             Buscar Usuarios</button>
                     </div>
                     <div class="col-sm-6">
-                        <a class="btn btn-primary btn-block" href="../../modulos/crear_usuario/crear_usuario.php"><i
+                        <a class="btn btn-primary btn-block" "../../modulos/crear_usuario/crear_usuario.php"><i
                                 class="fa fa-user-plus"></i> Crear Usuario</a>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" ng-show="datos_usuario.ID_ROL==2">
+                    <div class="col-sm-12" style="overflow-x: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="hide-for-small-only">Cédula</th>
+                                    <th>Nombre</th>
+                                    <th>Cod Formas</th>
+                                    <th>Estado</th>
+                                    <th class="hide-for-small-only">Almacen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="usuario in listado_usuarios track by $index">
+                                    <td>
+                                        <button class="btn btn-sm btn-primary"
+                                            ng-click="RedireccionarUsuario(usuario.ID)">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </td>
+                                    <td class="hide-for-small-only">{{usuario.CEDULA}}</td>
+                                    <td>{{usuario.NOMBRE}}</td>
+                                    <td class="hide-for-small-only">{{usuario.COD_FORMAS}}</td>
+                                    <td>{{usuario.estatus}}</td>
+                                    <td class="hide-for-small-only">{{usuario.ALMACEN}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="datos_usuario.ID_ROL==1">
                     <div class="col-sm-12" style="overflow-x: auto;">
                         <table class="table">
                             <thead>
