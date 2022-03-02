@@ -5,45 +5,42 @@ class Consultas
 
     public static $consulta_afiliados = '
         SELECT 
-            afi.ID, 
-            afi.NOMBRE, 
-            afi.CEDULA, 
-            afi.DIRECCION, 
-            afi.TELEFONO, 
-            afi.CELULAR, 
-            afi.NACIMIENTO, 
-            afi.EMAIL,  
-            gen.ID ID_GENERO,
-            gen.NOMBRE GENERO,
-            eci.ID ID_ESTADO_CIVIL,
-            eci.NOMBRE ESTADO_CIVIL,
-            ciu.ID ID_CIUDAD,
-            ciu.NOMBRE CIUDAD,
-            dep.ID ID_DEPARTAMENTO,
-            dep.NOMBRE DEPARTAMENTO,
-            afi.FECHA_INSCRIPCION, 
-            afi.ULTIMA_ACTUALIZACION,
-            alm.id ID_ALMACEN,
-            alm.nombre ALMACEN,
-            mar.id ID_MARCA,
-            mar.nombre MARCA,
-            cla.id ID_CLASIFICACION,
-            cla.nombre CLASIFICACION,
-            rol.ID id_rol,
-            rol.NOMBRE rol,
-            rol.es_administrador,
-            est.nombre estatus
-        FROM
-            afiliados afi
-            left join clasificacion cla on cla.id = afi.id_clasificacion and cla.id <> 2
-            left join roles rol on rol.id = afi.id_rol
-            left join almacen alm on alm.id = afi.id_almacen
-            left join marcas mar on mar.id = afi.id_marca
-            left join genero gen on gen.id = afi.id_genero
-            left join estado_civil eci on eci.id = afi.id_estado_civil
-            left join ciudad ciu on ciu.id = afi.id_ciudad
-            left join departamento dep on dep.id = ciu.id_departamento
-            left join estatus est on est.id = afi.ID_ESTATUS
+        afi.ID, 
+        afi.NOMBRE, 
+        afi.CEDULA, 
+        afi.DIRECCION, 
+        afi.TELEFONO, 
+        afi.CELULAR, 
+        afi.NACIMIENTO, 
+        afi.EMAIL,  
+        gen.ID ID_GENERO,
+        gen.NOMBRE GENERO,
+        eci.ID ID_ESTADO_CIVIL,
+        eci.NOMBRE ESTADO_CIVIL,
+        ciu.ID ID_CIUDAD,
+        ciu.NOMBRE CIUDAD,
+        dep.ID ID_DEPARTAMENTO,
+        dep.NOMBRE DEPARTAMENTO,
+        afi.FECHA_INSCRIPCION, 
+        afi.ULTIMA_ACTUALIZACION,
+        alm.id ID_ALMACEN,
+        alm.nombre ALMACEN,
+        cla.id ID_CLASIFICACION,
+        cla.nombre CLASIFICACION,
+        rol.ID id_rol,
+        rol.NOMBRE rol,
+        rol.es_administrador,
+        est.nombre estatus
+    FROM
+        afiliados afi
+        left join clasificacion cla on cla.id = afi.id_clasificacion and cla.id <> 2
+        left join roles rol on rol.id = afi.id_rol
+        left join almacen alm on alm.id = afi.id_almacen
+        left join genero gen on gen.id = afi.id_genero
+        left join estado_civil eci on eci.id = afi.id_estado_civil
+        left join ciudad ciu on ciu.id = afi.id_ciudad
+        left join departamento dep on dep.id = ciu.id_departamento
+        left join estatus est on est.id = afi.ID_ESTATUS
         ';
     public static $consulta_login = '
         SELECT 
@@ -53,7 +50,6 @@ class Consultas
             afi.acepto_terminos,
             afi.email,
             afi.clave,
-            afi.id_marca,
             rol.es_administrador,
             cla.id id_clasificacion,
             cla.nombre clasificacion,
@@ -373,17 +369,10 @@ class Consultas
         dep.ID id_departamento,
         dep.nombre departamento,
         alm.encuestas_periodo,
-        alm.margen,
-        (SELECT supervisores FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) supervisores,
-        (SELECT cupos_diamante FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) cupos_diamante,
-        (SELECT cupos_oro FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) cupos_oro,
-        (SELECT cupos_plata FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) cupos_plata,
-        (SELECT total_premiados FROM cupos_almacenes WHERE id_almacen = alm.id AND id_temporada = 5) total_premiados
+        alm.margen
     from
         almacenes alm
         left join afiliados vis on vis.id = alm.id_visitador
-        left join afiliados ger on ger.id = vis.id_gerente
-        left join afiliados asi on asi.id = vis.id_asistente
         left join ciudad ciu on ciu.id = alm.id_ciudad
         left join departamento dep on dep.id = ciu.id_departamento
         INNER JOIN territorios ter ON ter.id = alm.id_territorio

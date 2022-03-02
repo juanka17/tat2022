@@ -6,11 +6,9 @@ if (count($_SESSION) > 0) {
         include 'componentes/menu_vendedor.php';
     } else if ($_SESSION["usuario"]["ID_ROL"] == 4) {//vendedor
         include 'componentes/menu_vendedor.php';
-    }
-    else if ($_SESSION["usuario"]["ID_ROL"] == 2) {//admin
+    } else if ($_SESSION["usuario"]["ID_ROL"] == 2) {//admin
         include 'componentes/menu_admin.php';
-    }
-    else if ($_SESSION["usuario"]["ID_ROL"] == 1) {//representante o visitador
+    } else if ($_SESSION["usuario"]["ID_ROL"] == 1) {//representante o visitador
         include 'componentes/menu_visitador.php';
     }
 }
