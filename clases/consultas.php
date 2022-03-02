@@ -985,6 +985,8 @@ class Consultas
             afi.cedula,
             afi.cod_formas,
             afi.nacimiento,
+            ciu.ID id_ciudad,
+            ciu.ID_DEPARTAMENTO id_departamento,
             afi.direccion,
             afi.telefono,
             afi.celular,
@@ -996,6 +998,7 @@ class Consultas
             alm.id_visitador id_representante
         FROM afiliados afi
             left JOIN almacenes alm ON alm.id = afi.id_almacen 
+            left JOIN ciudad ciu ON ciu.ID = afi.ID_CIUDAD 
     ";
     public static $estado_cuenta_afiliado = "
         select
@@ -1255,4 +1258,18 @@ class Consultas
             alm.id NOT IN (SELECT id_almacen FROM habeas_data)         
                 
             ";
+    public static $consulta_llamadas_usuarios = "
+        SELECT
+            la.id,
+            la.fecha,
+            concat(tp.NOMBRE,'-',sc.NOMBRE,'-',cl.NOMBRE) categoria,
+            usr.NOMBRE registro,
+            comentario
+        FROM
+            llamadas_usuarios la
+            inner join categorias_llamada cl on la.ID_SUBCATEGORIA = cl.ID
+            inner join categorias_llamada sc on sc.ID = cl.ID_PADRE
+            inner join categorias_llamada tp on tp.ID = sc.ID_PADRE
+            left join afiliados usr on usr.id = la.id_usuario_registra
+    ";
 }

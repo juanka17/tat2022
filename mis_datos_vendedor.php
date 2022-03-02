@@ -4,8 +4,8 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/mis_datos_vendedor.js?reload=3" type="text/javascript"></script>
-    <script src="js/app"></script>
+    <script src="js/mis_datos_vendedor.js?reload=5" type="text/javascript"></script>
+    <script src="js/app.js"></script>
     <script type="text/javascript">
     var id_usuario = 0;
     var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
@@ -25,6 +25,13 @@
         background-color: #ffffffd1;
         font-size: 1.3rem;
     }
+
+    .container {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: 7%;
+    }
     </style>
 </head>
 
@@ -40,88 +47,159 @@
                     Mis Datos
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Mis datos</a></li>
+                    <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
+                    <li class="active">Mis datos</li>
                 </ol>
             </section>
-            <section class="container">
+            <section class="">
                 <div class="row fondo_datos">
-                    <div class="col-sm-12 col-md-4">
-                        <label for="cedula">Cedula</label>
-                        <input type="text" id="cedula" class="form-control" ng-model="datos_vendedor.cedula">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="cod_formas">Codigo Formas</label>
-                        <input type="text" id="cod_formas" disabled class="form-control"
-                            ng-model="datos_vendedor.cod_formas">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" class="form-control" ng-model="datos_vendedor.nombre">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="telefono">Telefono</label>
-                        <input type="number" id="telefono" class="form-control" ng-model="datos_vendedor.telefono">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="celular">Celular</label>
-                        <input type="number" id="celular" class="form-control" ng-model="datos_vendedor.celular">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="nacimiento">Fecha Nacimiento</label>
-                        <input type="date" id="nacimiento" class="form-control" ng-model="datos_vendedor.nacimiento">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="direccion">Dirección</label>
-                        <input type="text" id="direccion" class="form-control" ng-model="datos_vendedor.direccion">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="email">Correo</label>
-                        <input type="email" id="email" class="form-control" ng-model="datos_vendedor.email">
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="id_representante">Representante</label>
-                        <select name="id_representante" id="id_representante" class="form-control"
-                            ng-model="datos_vendedor.id_representante"
-                            ng-change="CargarAlmacenesRepresentante(datos_vendedor.id_representante)">
-                            <option ng-repeat="r in representante" value="{{r.id}}">{{r.nombre}}</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="id_almacen">Almacen</label>
-                        <select name="id_almacen" id="id_almacen" class="form-control"
-                            ng-model="datos_vendedor.id_almacen">
-                            <option ng-repeat="a in almacenes" value="{{a.id}}">{{a.nombre}}</option>
-                        </select>
-                    </div>
+                    <div class="col sm-12 col-md-8">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="cedula">Cedula</label>
+                                <input type="text" id="cedula" class="form-control" ng-model="datos_vendedor.cedula">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="cod_formas">Codigo Formas</label>
+                                <input type="text" id="cod_formas" disabled class="form-control"
+                                    ng-model="datos_vendedor.cod_formas">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" class="form-control" ng-model="datos_vendedor.nombre">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="telefono">Telefono</label>
+                                <input type="number" id="telefono" class="form-control"
+                                    ng-model="datos_vendedor.telefono">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="celular">Celular</label>
+                                <input type="number" id="celular" class="form-control"
+                                    ng-model="datos_vendedor.celular">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="nacimiento">Fecha Nacimiento</label>
+                                <input type="date" id="nacimiento" class="form-control"
+                                    ng-model="datos_vendedor.nacimiento">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="id_departamento">Departamento</label>
+                                <select name="id_departamento" id="id_departamento" class="form-control"
+                                    ng-model="datos_vendedor.id_departamento"
+                                    ng-change="CargarCiudades(1,datos_vendedor.id_departamento)">
+                                    <option ng-repeat="d in departamento" value="{{d.ID}}">{{d.NOMBRE}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="id_ciudad">Ciudad</label>
+                                <select name="id_ciudad" id="id_ciudad" class="form-control"
+                                    ng-model="datos_vendedor.id_ciudad">
+                                    <option ng-repeat="c in ciudades" value="{{c.ID}}">{{c.NOMBRE}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" id="direccion" class="form-control"
+                                    ng-model="datos_vendedor.direccion">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="email">Correo</label>
+                                <input type="email" id="email" class="form-control" ng-model="datos_vendedor.email">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="id_representante">Representante</label>
+                                <select name="id_representante" id="id_representante" class="form-control"
+                                    ng-model="datos_vendedor.id_representante"
+                                    ng-change="CargarAlmacenesRepresentante(datos_vendedor.id_representante)">
+                                    <option ng-repeat="r in representante" value="{{r.id}}">{{r.nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="id_almacen">Almacen</label>
+                                <select name="id_almacen" id="id_almacen" class="form-control"
+                                    ng-model="datos_vendedor.id_almacen">
+                                    <option ng-repeat="a in almacenes" value="{{a.id}}">{{a.nombre}}</option>
+                                </select>
+                            </div>
 
-                    <div class="col-sm-12 col-md-4">
-                        <label for="id_genero">Genero</label>
-                        <select name="id_genero" id="id_genero" class="form-control"
-                            ng-model="datos_vendedor.id_genero">
-                            <option value="1">Masculino</option>
-                            <option value="2">Femenio</option>
-                        </select>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="id_genero">Genero</label>
+                                <select name="id_genero" id="id_genero" class="form-control"
+                                    ng-model="datos_vendedor.id_genero">
+                                    <option value="1">Masculino</option>
+                                    <option value="2">Femenio</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <label for="estado">Estado</label>
+                                <select name="estado" id="estado" class="form-control"
+                                    ng-model="datos_vendedor.id_estatus">
+                                    <option value="4">Vendedor Activo</option>
+                                    <option value="5">Vendedor Inactivo</option>
+                                    <option value="6">Pendiente Aprobar</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12 text-center">
+                                <br>
+                                <button ng-click="ActualizarDatosVendedores();" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
-                        <label for="estado">Estado</label>
-                        <select name="estado" id="estado" class="form-control" ng-model="datos_vendedor.id_estatus">
-                            <option value="4">Vendedor Activo</option>
-                            <option value="5">Vendedor Inactivo</option>
-                            <option value="6">Pendiente Aprobar</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-12 text-center">
-                        <br>
-                        <button ng-click="ActualizarDatosVendedores();" class="btn btn-primary">Guardar</button>
+                    <div class="col sm-12 col-md-4" >
+                        <div class="info-box">
+                            <a href="estado_cuenta.php?id_usuario={{id_usuario}}">
+                                <span class="info-box-icon bg-aqua">
+                                    <i class="fa fa-pie-chart"></i>
+
+                                </span>
+                                <div class="info-box-content">
+                                    <br />
+                                    <span class="info-box-text">Estado De Cuenta</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box">
+                            <a href="catalogo.php?id_usuario={{id_usuario}}">
+                                <span class="info-box-icon bg-aqua">
+                                    <i class="fa fa-gift"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <br />
+                                    <span class="info-box-text">Catalogo</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box" data-toggle="modal" data-target="#modal_llamadas"
+                            ng-click="ObtenerCategoriasLlamada()" ng-show="datos_usuario.ID_ROL==2">
+                            <span class="info-box-icon bg-aqua">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <br />
+                                <span class="info-box-text">Llamadas</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <div class="info-box">
+                            <a href="redenciones.php?id_usuario={{id_usuario}}">
+                                <span class="info-box-icon bg-aqua">
+                                    <i class="fa fa-bell"></i>
+                                </span>
+                                <div class="info-box-content">
+                                    <br />
+                                    <span class="info-box-text">Redenciones</span>
+                                </div>
+                            </a>
+                            <!-- /.info-box-content -->
+                        </div>
                     </div>
                 </div>
             </section>
-            <section class="container">
-                <button class="btn btn-sm btn-block btn-primary" data-toggle="modal" data-target="#modal_llamadas"
-                    ng-click="ObtenerCategoriasLlamada()">Capturar Llamada</button>
-            </section>
         </div>
-        <footer class="main-footer">
+        <footer class=" main-footer">
             <?php include 'componentes/footer.php'; ?>
             <?php include 'componentes/coponentes_js.php'; ?>
         </footer>
