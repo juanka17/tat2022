@@ -688,15 +688,15 @@ class Consultas
             eje.id id_ejecutivo,
             eje.nombre ejecutivo,
             dis.id id_distribuidora_madre,
-				dis.nombre distribuidora_madre,
+                dis.nombre distribuidora_madre,
             (SELECT afi.nombre FROM vendedores_supervisor sup
-				INNER JOIN afiliados afi ON sup.id_supervisor = afi.id
-				 WHERE sup.id_vendedor = ven.ID LIMIT 1)supervisor,
+                INNER JOIN afiliados afi ON sup.id_supervisor = afi.id
+                WHERE sup.id_vendedor = ven.ID LIMIT 1)supervisor,
             ciu.nombre ciudad,
             alm.encuestas_periodo,
             ven.id id_vendedor,
             ven.nombre vendedor,
-            cat.nombre categoria,
+            ven.CEDULA,
             cla.nombre clasificacion,
             ven.COD_FORMAS,
             est.nombre estatus,
@@ -704,15 +704,13 @@ class Consultas
             cre.nombre regista,
             ina.NOMBRE inactiva
         from
-            almacenes alm      
-            LEFT JOIN afiliado_almacen afia ON afia.id_almacen = alm.ID                 
-            LEFT join afiliados ven on ven.id = afia.id_afiliado
+            almacenes alm                     
+            LEFT join afiliados ven on ven.id_almacen = alm.id
             LEFT join afiliados eje on eje.id = alm.id_visitador
             LEFT join ciudad ciu on ciu.id = alm.id_ciudad
             LEFT join clasificacion cla on cla.id = ven.id_clasificacion
             LEFT join estatus est on est.id = ven.ID_ESTATUS
             LEFT JOIN territorios ter ON ter.id = alm.id_territorio
-            left JOIN categorias cat ON cat.id = ven.ID_CATEGORIA
             left JOIN distribuidora_madre dis ON dis.id = alm.id_madre
             LEFT JOIN afiliados cre ON cre.id = ven.ID_REGISTRA
             LEFT JOIN afiliados ina ON ina.ID = ven.ID_INACTIVA

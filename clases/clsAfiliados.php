@@ -49,12 +49,12 @@ class clsAfiliados {
         $documento = $parametros->documento;
         $clave = $parametros->clave;
 
-        $query = Consultas::$consulta_login . " where afi.cedula = '" . $documento . "'  OR afi.EMAIL = '". $documento ."'";
+        $query = Consultas::$consulta_login . " where (afi.cedula = '" . $documento . "'  OR afi.EMAIL = '". $documento ."') AND id_estatus = 1";
         $resultsAfiliado = clsDDBBOperations::ExecuteUniqueRowNoParams($query);
         $query = Consultas::$consulta_cambio_clave;
         $resultsClave = clsDDBBOperations::ExecuteUniqueRow($query, $resultsAfiliado["id"]);
 
-        if (count($resultsAfiliado) > 0 && is_array($resultsAfiliado)) {
+        if (is_array($resultsAfiliado)) {
             //print_r(1);
             if ($resultsAfiliado["acepto_terminos"] == 0 && $resultsClave["clave"] == $clave) {
                 return clsAfiliados::CrearSesionesUsuario($resultsAfiliado);
