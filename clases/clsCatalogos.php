@@ -96,6 +96,10 @@ class clsCatalogos {
                     $query = $query . " where estado = 1 and id_visitador =". $parametros->id_visitador;
                 };
                 break;
+            case "almacene_propio": {
+                    $query = "SELECT * FROM almacenes where id =". $parametros->id_visitador;
+                };
+                break;
             case "redenciones_almacen": {
                     $query = " call sp_informacion_redenciones_almacen(" . $parametros->id_almacen . "); ";
                     $order = " ";
@@ -381,11 +385,11 @@ class clsCatalogos {
                 };
                 break;
 
-            case "clasificacion_afiliados_temporada": {
+            /*case "clasificacion_afiliados_temporada": {
                     $query = consultas::$clasificacion_afiliados_temporada . "where id_afiliado = " . $parametros->id_afiliado;
                     $order = " ";
                 };
-                break;
+                break;*/
 
             case "visitadores_almacen": {
                     $query = "SELECT id,nombre FROM afiliados WHERE id IN (SELECT id_visitador FROM almacenes)";
@@ -399,8 +403,8 @@ class clsCatalogos {
                 };
                 break;
 
-            case "temporadas_creacion_usuario": {
-                    $query = "SELECT * FROM temporada";
+            case "roles_creacion_usuario": {
+                    $query = "SELECT * FROM roles where id not in (2,5)";
                     $order = " order by 1 ";
                 };
                 break;

@@ -53,16 +53,6 @@ BEGIN
 			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
 			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen AND ca.id_periodo=tmp_periodo
 		);
-		
-		DROP TEMPORARY TABLE IF EXISTS t_supervisor_almacen;
-		CREATE TEMPORARY TABLE IF NOT EXISTS t_supervisor_almacen AS (
-			SELECT id id_supervisor, 
-			nombre, 
-			id_almacen
-			FROM afiliados WHERE id_almacen=tmp_almacen
-			AND id_clasificacion=4 and id_estatus=4
-		);
-
 
 	
 		SELECT
@@ -86,16 +76,14 @@ BEGIN
 		
 		SELECT * FROM t_ventas_almacen;
 		SELECT * FROM t_ventas_vendedores;	
-		SELECT * FROM t_supervisor_almacen;
 		SELECT * FROM t_participacion_vendedores;
 		
 		DROP TEMPORARY TABLE t_participacion_vendedores;
 		DROP TEMPORARY TABLE t_ventas_almacen;
 		DROP TEMPORARY TABLE t_ventas_vendedores;
-		DROP TEMPORARY TABLE t_supervisor_almacen;
 
 
 END//
 DELIMITER ;
 
-call sp_cuotas_vendedores(3920, 14);
+call sp_cuotas_vendedores(3924, 15);

@@ -61,16 +61,25 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
 
     $scope.MostrarVendedor = function(data) {
         $scope.datos_vendedor = data[0];
-        $scope.CargarAlmacenesRepresentante($scope.datos_vendedor.id_representante)
+        $scope.CargarAlmacenesRepresentante(0, $scope.datos_vendedor.id_representante)
         $scope.CargarCiudades(0, $scope.datos_vendedor.id_ciudad)
     };
 
-    $scope.CargarAlmacenesRepresentante = function(data) {
-        var parametros = {
-            catalogo: "almacenes",
-            id_visitador: data
-        };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarAlmacenesRepresentante);
+    $scope.CargarAlmacenesRepresentante = function(alm, data) {
+        if (alm == 1) {
+            var parametros = {
+                catalogo: "almacenes",
+                id_visitador: data
+            };
+            $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarAlmacenesRepresentante);
+        } else {
+            var parametros = {
+                catalogo: "almacene_propio",
+                id_visitador: $scope.datos_vendedor.id_almacen
+            };
+            $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarAlmacenesRepresentante);
+
+        }
     };
 
     $scope.MostrarAlmacenesRepresentante = function(data) {
@@ -105,11 +114,11 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
             nombre: $scope.datos_vendedor.nombre,
             telefono: $scope.datos_vendedor.telefono,
             celular: $scope.datos_vendedor.celular,
-            nacimiento: $("#fecha_nacimiento").val(),
+            nacimiento: $("#datepicker").val(),
             direccion: $scope.datos_vendedor.direccion,
             email: $scope.datos_vendedor.email,
+            id_ciudad: $scope.datos_vendedor.id_ciudad,
             id_almacen: $scope.datos_vendedor.id_almacen,
-            representante: $scope.datos_vendedor.representante,
             id_genero: $scope.datos_vendedor.id_genero,
             id_estatus: $scope.datos_vendedor.id_estatus,
             id_actualiza: $scope.datos_usuario.id
@@ -123,7 +132,8 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoEdicionVendedor);
     };
 
-    $scope.ResultadoEdicionVendedor = function() {
+    $scope.ResultadoEdicionVendedor = function(data) {
+        $scope.datos_vendedor = data[0];
         alert("Datos modificados");
     };
 

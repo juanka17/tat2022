@@ -2,6 +2,7 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
 
     $scope.filtros = {
         nombre: "",
+        cedula: "",
         cod_formas: "",
         distribuidora: ""
     };
@@ -9,16 +10,13 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
     $scope.vendedor_seleccionado = {
         id: 0,
         nombre: "",
+        cedula: "",
         cod_formas: 0,
         id_almacen: 0,
-        id_clasificacion: 6,
-        id_categoria: 0,
+        id_rol: 0,
         id_visitador: 0,
         id_supervisor: 0,
-        cuota_minima: 0,
-        imp_minimos: 0,
-        id_registra: datos_usuario.id,
-        id_temporada: 0,
+        id_registra: datos_usuario.id
     };
 
     $scope.CargarVendedores = function() {
@@ -103,58 +101,19 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
 
     $scope.MostrarRangosCategorias = function(data) {
         $scope.categorias_rangos = data;
-        $scope.ObtenerTemporadas();
+        $scope.ObtenerRoles();
     };
 
-    $scope.ObtenerTemporadas = function() {
+    $scope.ObtenerRoles = function() {
         var parametros = {
-            catalogo: "temporadas_creacion_usuario"
+            catalogo: "roles_creacion_usuario"
         };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarTemporadas);
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarRoles);
     };
 
-    $scope.MostrarTemporadas = function(data) {
-        $scope.temporadas = data;
+    $scope.MostrarRoles = function(data) {
+        $scope.roles = data;
     };
-
-    $scope.MostrarCuotaMinima = function(data) {
-        if (data == 1) {
-            $scope.vendedor_seleccionado.cuota_minima = $scope.categorias_rangos[0].cuota_minima;
-            $scope.vendedor_seleccionado.imp_minimos = $scope.categorias_rangos[0].impactos_minimos;
-        } else if (data == 2) {
-            $scope.vendedor_seleccionado.cuota_minima = $scope.categorias_rangos[1].cuota_minima;
-            $scope.vendedor_seleccionado.imp_minimos = $scope.categorias_rangos[1].impactos_minimos;
-        } else if (data == 3) {
-            $scope.vendedor_seleccionado.cuota_minima = $scope.categorias_rangos[2].cuota_minima;
-            $scope.vendedor_seleccionado.imp_minimos = $scope.categorias_rangos[2].impactos_minimos;
-        } else if (data == 4) {
-            $scope.vendedor_seleccionado.cuota_minima = $scope.categorias_rangos[3].cuota_minima;
-            $scope.vendedor_seleccionado.imp_minimos = $scope.categorias_rangos[3].impactos_minimos;
-        } else {
-            $scope.vendedor_seleccionado.cuota_minima = $scope.categorias_rangos[4].cuota_minima;
-            $scope.vendedor_seleccionado.imp_minimos = $scope.categorias_rangos[4].impactos_minimos;
-        }
-    }
-
-
-
-    $scope.ObtenerCategorias = function(data) {
-        var parametros = {
-            catalogo: "clasificacion_afiliados_temporada",
-            id_afiliado: data
-        };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCategorias);
-    };
-
-    $scope.MostrarCategorias = function(data) {
-        $scope.categorias = data;
-        $('#modalCategoriasVendedor').modal('show', {
-            backdrop: 'static',
-            keyboard: false
-        });
-    };
-
-
 
     $scope.CrearNuevoAfiliado = function() {
 
@@ -172,7 +131,7 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
             catalogo_real: "afiliados",
             datos: $scope.vendedor_seleccionado
         };
-
+        console.log($scope.vendedor_seleccionado)
         $scope.EjecutarLlamado("afiliados", "CrearNuevoUsuarioAdmin", parametros, $scope.ResultadoEdicionVendedor);
 
     };
@@ -182,12 +141,14 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
         $scope.vendedor_seleccionado = {
             id: $scope.lista_vendedores[index].id,
             nombre: $scope.lista_vendedores[index].nombre,
+            cedula: $scope.lista_vendedores[index].cedula,
             cod_formas: $scope.lista_vendedores[index].cod_formas,
             id_almacen: $scope.lista_vendedores[index].id_almacen,
             id_almacen_old: $scope.lista_vendedores[index].id_almacen,
-            id_clasificacion: $scope.lista_vendedores[index].id_clasificacion,
+            id_rol: $scope.lista_vendedores[index].id_rol,
+            id_visitador: $scope.lista_vendedores[index].id_visitador,
+            id_supervisor: $scope.lista_vendedores[index].id_supervisor,
             id_estatus: $scope.lista_vendedores[index].id_estatus,
-            id_categoria: $scope.lista_vendedores[index].id_categoria,
         };
 
         $('#modalEditarVendedor').modal('show', {
@@ -206,7 +167,7 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
             $scope.CargarAlmacenes();
             if (response.success) {
                 $('#modalEditarVendedor').modal('hide');
-
+                location.reload();
             }
         });
 

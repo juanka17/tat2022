@@ -635,23 +635,20 @@ class Consultas
         select 
             afi.id,
             afi.nombre,
+            afi.cedula,
             afi.cod_formas,
             afi.id_almacen,
             alm.nombre distribuidora,
             afi.id_estatus,
             est.nombre estatus,
             afi.id_clasificacion,
-            cla.nombre clasificacion,
-            cat.id id_categoria,
-            cat.nombre categoria
+            rol.nombre rol
         from 
             afiliados afi
             left join almacenes alm on alm.id = afi.id_almacen
             left join estatus est on est.id = afi.id_estatus
-            left join clasificacion cla on cla.id = afi.id_clasificacion
-            LEFT JOIN categorias cat ON cat.id = afi.ID_CATEGORIA
-        where
-            id_clasificacion in (4,6) 
+            left join roles rol on rol.id = afi.id_rol
+        WHERE rol.id != 2
     ";
     public static $consulta_promotores = "
         select 
@@ -681,39 +678,38 @@ class Consultas
             INNER JOIN almacenes alm ON alm.id = pro.id_almacen
     ";
     public static $estructira_fdv = "
-        SELECT
+        SELECT 
             alm.id id_distribuidora,
             alm.nombre distribuidora, 
             ter.nombre territorio,
             eje.id id_ejecutivo,
             eje.nombre ejecutivo,
             dis.id id_distribuidora_madre,
-                dis.nombre distribuidora_madre,
-            (SELECT afi.nombre FROM vendedores_supervisor sup
-                INNER JOIN afiliados afi ON sup.id_supervisor = afi.id
-                WHERE sup.id_vendedor = ven.ID LIMIT 1)supervisor,
+            ven.NOMBRE supervisor,
             ciu.nombre ciudad,
             alm.encuestas_periodo,
-            ven.id id_vendedor,
-            ven.nombre vendedor,
-            ven.CEDULA,
-            cla.nombre clasificacion,
-            ven.COD_FORMAS,
+            afi.id id_vendedor,
+            afi.nombre vendedor,
+            afi.CEDULA,
+            afi.COD_FORMAS,
+            rol.nombre rol,
             est.nombre estatus,
-            ven.FECHA_INSCRIPCION creacion,
+            afi.fecha_inscripcion creacion,
             cre.nombre regista,
             ina.NOMBRE inactiva
-        from
-            almacenes alm                     
-            LEFT join afiliados ven on ven.id_almacen = alm.id
-            LEFT join afiliados eje on eje.id = alm.id_visitador
+        FROM 
+            afiliados afi
+            LEFT JOIN almacenes alm ON alm.id = afi.id_almacen
+            LEFT join roles rol on rol.id = afi.id_rol
             LEFT join ciudad ciu on ciu.id = alm.id_ciudad
-            LEFT join clasificacion cla on cla.id = ven.id_clasificacion
-            LEFT join estatus est on est.id = ven.ID_ESTATUS
+            LEFT join estatus est on est.id = afi.ID_ESTATUS
             LEFT JOIN territorios ter ON ter.id = alm.id_territorio
             left JOIN distribuidora_madre dis ON dis.id = alm.id_madre
-            LEFT JOIN afiliados cre ON cre.id = ven.ID_REGISTRA
-            LEFT JOIN afiliados ina ON ina.ID = ven.ID_INACTIVA
+            LEFT JOIN vendedores_supervisor sup ON sup.id_vendedor = afi.id
+            LEFT JOIN afiliados cre ON cre.id = afi.ID_REGISTRA
+            LEFT JOIN afiliados ina ON ina.ID = afi.ID_INACTIVA
+            LEFT JOIN afiliados ven ON ven.ID = sup.id_supervisor
+            LEFT join afiliados eje on eje.id = alm.id_visitador
     ";
     public static $consulta_actas = "
         select

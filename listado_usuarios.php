@@ -39,7 +39,8 @@
                     </div>
                     <div class="col-ms-12 col-md-3 form-group">
                         <label>Codigo Formas</label>
-                        <input class="form-control" type="text" placeholder="Codigo Formas" ng-model="filtros.cod_formas" />
+                        <input class="form-control" type="text" placeholder="Codigo Formas"
+                            ng-model="filtros.cod_formas" />
                     </div>
                     <div class="col-ms-12 col-md-3 form-group">
                         <label>Nombre</label>
@@ -49,8 +50,8 @@
                         <label>Almacen</label>
                         <select class="form-control" ng-model='filtros.almacen'>
                             <option value="">Almacenes</option>
-                            <option ng-repeat="operacion in almacen track by $index"
-                                value='{{operacion.id}}'>{{operacion.nombre}}</option>
+                            <option ng-repeat="operacion in almacen track by $index" value='{{operacion.id}}'>
+                                {{operacion.nombre}}</option>
                         </select>
                     </div>
                 </div>
@@ -67,20 +68,16 @@
                         <label>Almacen</label>
                         <select class="form-control" ng-model='filtros.almacen'>
                             <option value="">Almacenes</option>
-                            <option ng-repeat="operacion in almacen track by $index"
-                                value='{{operacion.id_drogueria}}'>{{operacion.drogueria}}</option>
+                            <option ng-repeat="operacion in almacen track by $index" value='{{operacion.id_drogueria}}'>
+                                {{operacion.drogueria}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <button class="btn btn-success btn-block" ng-click="BuscarUsuarios()"><i
                                 class="fa fa-search"></i>
                             Buscar Usuarios</button>
-                    </div>
-                    <div class="col-sm-6">
-                        <a class="btn btn-primary btn-block" "../../modulos/crear_usuario/crear_usuario.php"><i
-                                class="fa fa-user-plus"></i> Crear Usuario</a>
                     </div>
                 </div>
 
@@ -146,12 +143,12 @@
                     </div>
                 </div>
             </section>
-        </div>
-        <footer class="main-footer">
-            <?php include 'componentes/footer.php'; ?>
-        </footer>
-        <?php include 'componentes/coponentes_js.php'; ?>
 
+            <footer class="main-footer">
+                <?php include 'componentes/footer.php'; ?>
+            </footer>
+            <?php include 'componentes/coponentes_js.php'; ?>
+        </div>
     </div>
 </body>
 

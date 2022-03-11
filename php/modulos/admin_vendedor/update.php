@@ -18,28 +18,27 @@ try {
 
     $sql_afiliados = " UPDATE afiliados  SET
             NOMBRE = '$requestData->nombre',
+            CEDULA = '$requestData->cedula',
             COD_FORMAS = '$requestData->cod_formas',
             ID_ALMACEN= '$requestData->id_almacen',
-            ID_ESTATUS = '$requestData->id_estatus',
-            ID_CLASIFICACION = '$requestData->id_clasificacion',
-            ID_CATEGORIA = '$requestData->id_categoria'
+            ID_ESTATUS = '$requestData->id_estatus'
             WHERE ID = '$requestData->id'";
 
 
     $conexion->prepare($sql_afiliados)->execute();
 
  
-    $sql_almance_afiliados = "UPDATE afiliado_almacen SET  ID_ALMACEN = '$requestData->id_almacen'
+    /*$sql_almance_afiliados = "UPDATE afiliado_almacen SET  ID_ALMACEN = '$requestData->id_almacen'
         WHERE id_afiliado = '$requestData->id' and ID_ALMACEN = '$requestData->id_almacen_old'  ;";
     
-    $conexion->prepare($sql_almance_afiliados)->execute();
+    $conexion->prepare($sql_almance_afiliados)->execute();*/
 
     $mensaje = [];
     $mensaje['request'] = $_REQUEST;
     $mensaje['success'] = true;
     $mensaje['msj'] = "se consulto registros";
     $mensaje['sql_afiliados'] = $sql_afiliados;
-    $mensaje['afiliado_almacen'] = $sql_almance_afiliados;
+    /*$mensaje['afiliado_almacen'] = $sql_almance_afiliados;*/
 
     echo json_encode($mensaje);
 

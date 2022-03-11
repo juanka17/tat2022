@@ -398,51 +398,26 @@ class clsAfiliados {
     private static function CrearNuevoUsuarioAdmin($parametros) {
         $insert = Array();
         $insert["NOMBRE"] = $parametros->datos->nombre;
+        $insert["TIPO_DOC"] = 1;
+        $insert["CEDULA"] = $parametros->datos->cedula;
         $insert["COD_FORMAS"] = $parametros->datos->cod_formas;
+        $insert["CLAVE"] = $parametros->datos->cedula;
         $insert["ID_ALMACEN"] = $parametros->datos->id_almacen;
-        $insert["ID_ESTATUS"] = 4;
-        $insert["ID_CLASIFICACION"] = 6;
-        $insert["ID_CATEGORIA"] = $parametros->datos->id_categoria;
+        $insert["ID_ESTATUS"] = 1;
+        $insert["ID_ROL"] = $parametros->datos->id_rol;
         $insert["ID_REGISTRA"] = $parametros->datos->id_registra;
         
         $insertResult = clsDDBBOperations::ExecuteInsert($insert, "afiliados");
         if (is_array($insertResult)) {
             $id_afiliado = clsDDBBOperations::GetLastInsertedId();
 
-            $insert_cuotas = Array();
-            $insert_cuotas["ID_USUARIO"] = $id_afiliado;
-            $insert_cuotas["ID_TEMPORADA"] = $parametros->datos->id_temporada;
-            $insert_cuotas["CUOTA_MINIMA"] = $parametros->datos->cuota_minima;
-            $insert_cuotas["CUOTA_1"] = $parametros->datos->cuota_minima;
-            $insert_cuotas["CUOTA_2"] = $parametros->datos->cuota_minima;
-            $insert_cuotas["IMPACTOS"] = $parametros->datos->imp_minimos;
-            
-            $insertResultCuotas = clsDDBBOperations::ExecuteInsert($insert_cuotas, "cuotas");
-            
             $insert_supervisor = Array();
             
             $insert_supervisor["ID_SUPERVISOR"] = $parametros->datos->id_supervisor;
             $insert_supervisor["ID_VENDEDOR"] = $id_afiliado;
-            $insert_supervisor["ID_TEMPORADA"] = $parametros->datos->id_temporada;
             
             $insertResultSupervisor = clsDDBBOperations::ExecuteInsert($insert_supervisor, "vendedores_supervisor");
             
-            $insert_categoria = Array();
-            
-            $insert_categoria["ID_AFILIADO"] = $id_afiliado;
-            $insert_categoria["ID_TEMPORADA"] = $parametros->datos->id_temporada;
-            $insert_categoria["ID_CATEGORIA"] = $parametros->datos->id_categoria;
-            
-            $insertResultCategoria = clsDDBBOperations::ExecuteInsert($insert_categoria, "nueva_clasificacion_usuario");
-            
-            $insert_nuevo_vendedor = Array();
-            
-            $insert_nuevo_vendedor["ID_AFILIADO"] = $id_afiliado;
-            $insert_nuevo_vendedor["ID_ALMACEN"] = $parametros->datos->id_almacen;
-            
-            $insertResultCategoria = clsDDBBOperations::ExecuteInsert($insert_nuevo_vendedor, "afiliado_almacen");
-
-
             return array('ok' => true);
         } else {
             return array('ok' => false, 'error' => "Error en la creación, por favor comuniquese con la linea de atención.");

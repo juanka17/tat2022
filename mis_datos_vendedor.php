@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/mis_datos_vendedor.js?reload=5" type="text/javascript"></script>
+    <script src="js/mis_datos_vendedor.js?reload=8" type="text/javascript"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript">
     var id_usuario = 0;
@@ -15,7 +15,14 @@
         alert("No hay usuario seleccionado.");
         document.location.href = "listado_usuarios.php";
     }
+
+    $(function() {
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+    });
     </script>
+    
     <style>
     .fondo_datos {
         border: 2px solid #ff7e06;
@@ -80,7 +87,7 @@
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <label for="nacimiento">Fecha Nacimiento</label>
-                                <input type="date" id="nacimiento" class="form-control"
+                                <input type="text" id="datepicker" class="form-control"
                                     ng-model="datos_vendedor.nacimiento">
                             </div>
                             <div class="col-sm-12 col-md-6">
@@ -111,7 +118,7 @@
                                 <label for="id_representante">Representante</label>
                                 <select name="id_representante" id="id_representante" class="form-control"
                                     ng-model="datos_vendedor.id_representante"
-                                    ng-change="CargarAlmacenesRepresentante(datos_vendedor.id_representante)">
+                                    ng-change="CargarAlmacenesRepresentante(1,datos_vendedor.id_representante)">
                                     <option ng-repeat="r in representante" value="{{r.id}}">{{r.nombre}}</option>
                                 </select>
                             </div>
@@ -135,9 +142,9 @@
                                 <label for="estado">Estado</label>
                                 <select name="estado" id="estado" class="form-control"
                                     ng-model="datos_vendedor.id_estatus">
-                                    <option value="4">Vendedor Activo</option>
-                                    <option value="5">Vendedor Inactivo</option>
-                                    <option value="6">Pendiente Aprobar</option>
+                                    <option value="1">Activo</option>
+                                    <option value="2">Inactivo</option>
+                                    <option value="3">Pendiente Aprobar</option>
                                 </select>
                             </div>
                             <div class="col-sm-12 text-center">

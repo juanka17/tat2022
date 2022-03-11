@@ -120,17 +120,12 @@
                             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
+                                        <img src="images/banner/bienvenida.png" class="d-block w-100" alt="...">
+                                    </div>
+                                    <div class="carousel-item">
                                         <img src="images/banner/Banner-2022.png" class="d-block w-100" alt="...">
                                     </div>
-                                    <div class="carousel-item ">
-                                        <img src="images/banner/5q_diamante.png" class="d-block w-100" alt="...">
-                                    </div>
-                                    <div class="carousel-item ">
-                                        <img src="images/banner/5q_oro.png" class="d-block w-100" alt="...">
-                                    </div>
-                                    <div class="carousel-item ">
-                                        <img src="images/banner/5q_plata.png" class="d-block w-100" alt="...">
-                                    </div>
+
                                 </div>
                                 <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
                                     data-slide="prev">
