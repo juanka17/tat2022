@@ -534,7 +534,7 @@ class clsReportes {
     }
 
     private static function ObtenerReporteCuotasVendedor($parametros) {
-        $query = Consultas::$reporte_cuotas_vendedor;
+        $query = "call sp_reporte_cuotas_vendedores()";
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
 
         return $results;

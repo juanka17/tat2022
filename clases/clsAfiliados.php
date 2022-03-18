@@ -62,7 +62,9 @@ class clsAfiliados {
                 //print_r(3);
                 return clsAfiliados::CrearSesionesUsuario($resultsAfiliado);
             } else {
-                return "Acceso incorrecto";
+                $response = array();
+                $response["login"] = 2; 
+                return $response;
             }
         } else {
             $response = array();
@@ -296,12 +298,12 @@ class clsAfiliados {
     private static function ReiniciarClave($parametros) {
         $query = "select id,email,nombre from afiliados where EMAIL = '" . $parametros->email . "'";
         $results = clsDDBBOperations::ExecuteUniqueRowNoParams($query);
-
+        
         if (count($results) > 0) {
             $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
             $pass = array(); //remember to declare $pass as an array
             $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 10; $i++) {
                 $n = rand(0, $alphaLength);
                 $pass[] = $alphabet[$n];
             }

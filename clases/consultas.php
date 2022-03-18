@@ -916,20 +916,14 @@ class Consultas
             alm.id id_almacen,
             alm.nombre Distribuidora,
             ter.nombre territorio,
-            ciu.nombre Ciudad,
-            tem.nombre temporada,
-            cup.cupos_diamante,
-            cup.cupos_oro,
-            cup.cupos_plata,
-            cup.supervisores,
-            cup.total_premiados
-        FROM almacenes alm
+            ciu.nombre ciudad,
+            alm.margen
+        FROM 
+            almacenes alm
             left JOIN afiliados afi ON afi.ID = alm.id_visitador
             left JOIN ciudad ciu ON ciu.ID = alm.id_ciudad
             inner JOIN territorios ter ON ter.id = alm.id_territorio
-            INNER JOIN cupos_almacenes cup ON cup.id_almacen = alm.id
-            INNER JOIN temporada tem ON tem.id = cup.id_temporada
-            ORDER BY alm.id,tem.id
+            ORDER BY alm.id
     ";
     public static $reporte_ventas_distribuidora = "
         SELECT
@@ -1078,37 +1072,6 @@ class Consultas
 				INNER JOIN vendedores_supervisor sup ON sup.id_supervisor = cuo.id_afiliado   
 				INNER JOIN afiliados afi ON afi.ID = sup.id_supervisor        
     ";
-    public static $reporte_cuotas_vendedor = "
-         select
-            ter.id,
-            ter.nombre territorio,
-            alm.id id_distribuidora,
-            alm.nombre distribuidora,
-            vis.ID id_ejecutivo,
-            vis.nombre ejecutivo,
-            (SELECT id FROM vendedores_supervisor WHERE id_vendedor = afia.id_afiliado ORDER BY 1 DESC LIMIT 1) id_supervisor,
-            (SELECT sunom.nombre FROM vendedores_supervisor asd INNER JOIN afiliados sunom ON sunom.ID = asd.id_supervisor WHERE id_vendedor = afia.id_afiliado ORDER BY 1 DESC LIMIT 1) supervisor,
-            afi.id id_afiliado,
-            afi.NOMBRE,
-            nue.id_categoria,
-            cla.nombre clasificacion,
-            tem.id id_temporada,
-            tem.nombre temporada,
-            cuo.cuota_1, 
-            cuo.cuota_2,
-            cuo.impactos
-      from 
-        cuotas cuo
-        INNER JOIN afiliados afi ON afi.ID = cuo.id_usuario
-        INNER join temporada tem on tem.id = cuo.id_temporada			
-        INNER JOIN afiliado_almacen afia ON afia.id_afiliado = afi.id 
-        INNER JOIN almacenes alm ON alm.id = afia.ID_ALMACEN
-        INNER JOIN territorios ter ON ter.id = alm.id_territorio
-        INNER JOIN afiliados vis ON vis.ID = alm.id_visitador
-        left JOIN nueva_clasificacion_usuario nue ON nue.id_afiliado = afi.ID AND nue.id_temporada = tem.id
-        left JOIN categorias cla ON cla.id = nue.id_categoria
-        ORDER BY 10,13    
-    ";
     public static $reporte_estado_cuenta_total = "
                 SELECT
                     per.id id_periodo,
@@ -1156,30 +1119,31 @@ class Consultas
                 
             ";
     public static $reporte_cuotas_actualizadas = "
-            SELECT 				
-                alm.id id_distribuidora,
-                alm.nombre distribuidora,
-                ter.nombre territorio,
-                vis.id id_ejecutivo,
-                vis.nombre ejecutivo,
-                afi.ID id_vendedor,
-                afi.nombre vendedor,
-                lo.id_cuota,
-                tem. nombre temporada,
-                lo.cuota_1_anterior,
-                lo.cuota_2_anterior,
-                lo.cuota_1_nueva,
-                lo.cuota_2_nueva,
-                lo.fecha,
-                reg.NOMBRE actualiza
-                FROM log_cuotas lo
-                INNER JOIN cuotas cuo ON cuo.id = lo.id_cuota
-                INNER JOIN afiliados afi ON afi.id = cuo.id_usuario
-                INNER JOIN temporada tem ON tem.id = cuo.id_temporada
-                INNER JOIN almacenes alm ON alm.id = afi.ID_ALMACEN
-                INNER JOIN afiliados vis ON vis.id = alm.id_visitador
-                INNER JOIN territorios ter ON ter.id = alm.id_territorio
-                INNER JOIN afiliados reg ON reg.ID = lo.id_actualiza                   
+        SELECT 				
+            alm.id id_distribuidora,
+            alm.nombre distribuidora,
+            ter.nombre territorio,
+            vis.id id_ejecutivo,
+            vis.nombre ejecutivo,
+            afi.ID id_vendedor,
+            afi.nombre vendedor,
+            lo.id_cuota,
+            per. nombre periodo,
+            lo.cuota_1_anterior,
+            lo.cuota_2_anterior,
+            lo.cuota_1_nueva,
+            lo.cuota_2_nueva,
+            lo.fecha,
+            reg.NOMBRE actualiza
+        FROM 
+            log_cuotas lo
+            INNER JOIN cuotas cuo ON cuo.id = lo.id_cuota
+            INNER JOIN afiliados afi ON afi.id = cuo.id_usuario
+            INNER JOIN periodo per ON per.id = cuo.id_periodo
+            INNER JOIN almacenes alm ON alm.id = afi.ID_ALMACEN
+            INNER JOIN afiliados vis ON vis.id = alm.id_visitador
+            INNER JOIN territorios ter ON ter.id = alm.id_territorio
+            INNER JOIN afiliados reg ON reg.ID = lo.id_actualiza                   
                 
             ";
     public static $consulta_cupos_almacenes_temporadas = "

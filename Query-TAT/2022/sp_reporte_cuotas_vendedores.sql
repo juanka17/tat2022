@@ -1,6 +1,6 @@
-DROP PROCEDURE IF EXISTS sp_cuotas_vendedores;
+DROP PROCEDURE IF EXISTS sp_reporte_cuotas_vendedores;
 DELIMITER //
-CREATE PROCEDURE sp_cuotas_vendedores(IN tmp_almacen INT, IN tmp_periodo INT)
+CREATE PROCEDURE sp_reporte_cuotas_vendedores()
 LANGUAGE SQL
 DETERMINISTIC
 SQL SECURITY DEFINER
@@ -13,7 +13,7 @@ BEGIN
 				SUM(ve.valor) venta_almacen
 			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
-				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
+				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN 
 			WHERE ve.id_periodo IN (9,10,11)
 			GROUP BY alm.id
 			);
@@ -27,7 +27,7 @@ BEGIN
 				round(SUM(ve.valor)/3) venta_vendedor
 			FROM formases_pfizer_tat_2021.ventas ve
 				INNER JOIN afiliados af ON ve.id_vendedor=af.ID
-				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN AND alm.id=tmp_almacen
+				INNER JOIN almacenes alm ON alm.id=af.ID_ALMACEN 
 			WHERE ve.id_periodo IN (9,10,11)
 			GROUP BY af.ID
 			);
@@ -51,7 +51,7 @@ BEGIN
 				end cuota_vendedor
 			FROM t_ventas_vendedores tv
 			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
-			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen AND ca.id_periodo=tmp_periodo
+			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen 
 		);
 
 	
@@ -73,7 +73,7 @@ BEGIN
 		FROM t_participacion_vendedores par
 		left JOIN vendedores_supervisor ven ON ven.id_vendedor = par.id_vendedor
 		left JOIN afiliados sup ON sup.ID = ven.id_supervisor
-		ORDER BY porcentaje_participacion desc;
+		ORDER BY 1,2;
 		
 		SELECT * FROM t_ventas_almacen;
 		SELECT * FROM t_ventas_vendedores;	
@@ -82,9 +82,10 @@ BEGIN
 		DROP TEMPORARY TABLE t_participacion_vendedores;
 		DROP TEMPORARY TABLE t_ventas_almacen;
 		DROP TEMPORARY TABLE t_ventas_vendedores;
-
+		
+		
 
 END//
 DELIMITER ;
 
-call sp_cuotas_vendedores(30, 15);
+call sp_reporte_cuotas_vendedores();

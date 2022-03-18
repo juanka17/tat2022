@@ -1,6 +1,6 @@
 angular.module('afiliadosApp', []).controller('afiliadosController', function($scope, $http) {
 
-    var catalogos = ["departamento", "genero", "estado_civil", "nivel_educativo", "parentesco", "intereses", "almacen", "marcas"];
+    var catalogos = ["departamento"];
     var indexAsist = 0;
     var tempSeleccionado = null;
 
@@ -112,164 +112,6 @@ angular.module('afiliadosApp', []).controller('afiliadosController', function($s
         }
     };
 
-    $scope.VerificarMarca = function() {
-        if ($scope.seleccionado.ID_MARCA) {
-            $scope.MARCA_NUEVA = "Nueva marca";
-        } else {
-            $scope.MARCA_NUEVA = null;
-        }
-    };
-
-    // <editor-fold defaultstate="collapsed" desc="Familiares">
-
-    $scope.ObtenerFamiliares = function() {
-        var parametros = { catalogo: "familiares_afiliado", id_afiliado: $scope.seleccionado.ID };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarFamiliares);
-    };
-
-    $scope.MostrarFamiliares = function(data) {
-        $scope.familiar = {};
-        $scope.familiares = data;
-    };
-
-    $scope.RegistraFamiliar = function() {
-        $scope.familiar.ID_AFILIADO = $scope.seleccionado.ID;
-        var parametros = { catalogo: "familiares_afiliado", id_afiliado: $scope.seleccionado.ID, datos: $scope.familiar };
-        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarFamiliares);
-    };
-
-    $scope.EliminarFamiliar = function(index) {
-        var parametros = { catalogo: "familiares_afiliado", id_afiliado: $scope.seleccionado.ID, identificador: $scope.familiares[index].ID };
-        $scope.EjecutarLlamado("catalogos", "EliminaCatalogoSimple", parametros, $scope.MostrarFamiliares);
-    };
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Intereses">
-
-    $scope.ObtenerIntereses = function() {
-        var parametros = { catalogo: "intereses_afiliado", id_afiliado: $scope.seleccionado.ID };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarIntereses);
-    };
-
-    $scope.MostrarIntereses = function(data) {
-        $scope.interes = {};
-        $scope.intereses_afiliado = data;
-    };
-
-    $scope.RegistraInteres = function() {
-        $scope.interes.ID_AFILIADO = $scope.seleccionado.ID;
-        var parametros = { catalogo: "intereses_afiliado", id_afiliado: $scope.seleccionado.ID, datos: $scope.interes };
-        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarIntereses);
-    };
-
-    $scope.EliminarInteres = function(index) {
-        var parametros = { catalogo: "intereses_afiliado", id_afiliado: $scope.seleccionado.ID, identificador: $scope.intereses_afiliado[index].ID };
-        $scope.EjecutarLlamado("catalogos", "EliminaCatalogoSimple", parametros, $scope.MostrarIntereses);
-    };
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Llamadas">
-
-    $scope.subCategoria = 0;
-    $scope.subcategorias = Array();
-    $scope.anteriores = Array();
-    $scope.categorias_anteriores = Array();
-    $scope.subCategoriaSeleccionada = 0;
-    $scope.comentarioLlamadas = '';
-    $scope.llamadas_afiliado = null;
-    $scope.llamada = { COMENTARIO: "", ID_SUBCATEGORIA: 0 };
-    var categorias_llamada = null;
-
-    $scope.ObtenerCategoriasLlamada = function() {
-        var parametros = { catalogo: "categorias_llamada" };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.CargarSubCategorias);
-        $scope.ObtenerLlamadas();
-    };
-
-    $scope.CargarSubCategorias = function(data) {
-        categoriasLlamada = data;
-        $scope.ObtenerSubcategorias(0);
-    };
-
-    $scope.ObtenerSubcategorias = function(idParam) {
-        $scope.llamada.ID_SUBCATEGORIA = $scope.subCategoria;
-        var id = idParam;
-        $scope.subCategoriaSeleccionada = id;
-        if (idParam == -1) {
-            id = $scope.categoriasAnteriores[$scope.categoriasAnteriores.length - 1].ID_PADRE;
-            $scope.categoriasAnteriores.pop();
-            $scope.anteriores.pop();
-            $scope.categoriasAnteriores.pop();
-            $scope.anteriores.pop();
-        }
-
-        if (idParam == 0) {
-            $scope.categoriasAnteriores = Array();
-            $scope.anteriores = Array();
-        }
-
-        $scope.subCategorias = Array();
-        angular.forEach(categoriasLlamada, function(subCategoria) {
-            if (id == subCategoria.ID_PADRE)
-                $scope.subCategorias.push(subCategoria);
-
-            if (id != 0 && id == subCategoria.ID) {
-                $scope.categoriasAnteriores.push(subCategoria);
-                $scope.anteriores.push(subCategoria.NOMBRE);
-            }
-        });
-    };
-
-    $scope.ObtenerLlamadas = function() {
-        var parametros = { catalogo: "llamadas_afiliado", id_afiliado: $scope.seleccionado.ID };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarLlamadas);
-    };
-
-    $scope.MostrarLlamadas = function(data) {
-        $scope.subCategoria = 0;
-        $scope.subcategorias = Array();
-        $scope.anteriores = Array();
-        $scope.categorias_anteriores = Array();
-        $scope.subCategoriaSeleccionada = 0;
-        $scope.comentarioLlamadas = '';
-        $scope.llamadas_afiliado = null;
-        $scope.llamada = { COMENTARIO: "", ID_SUBCATEGORIA: 0 };
-        categorias_llamada = null;
-
-        $scope.llamadas_afiliado = data;
-    };
-
-    $scope.RegistraLlamada = function() {
-        $scope.llamada.ID_AFILIADO = $scope.seleccionado.ID;
-        $scope.llamada.FECHA = moment().format("YYYY-MM-DD HH:mm:ss");
-        $scope.llamada.ID_USUARIO = datos_usuario.id;
-        var parametros = { catalogo: "llamadas_afiliado", id_afiliado: $scope.seleccionado.ID, datos: $scope.llamada };
-        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
-    };
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Estado de cuenta">
-
-    $scope.transacciones = {};
-    $scope.ObtenerEstadoCuenta = function() {
-        var parametros = { id_afiliado: afiliado_seleccionado.id };
-        $scope.EjecutarLlamado("afiliados", "ObtenerEstadoCuenta", parametros, $scope.MostrarEstadoCuenta);
-    };
-
-    $scope.MostrarEstadoCuenta = function(data) {
-        angular.forEach(data, function(periodo, key) {
-            $scope.estado_cuenta_ultimo = key;
-        });
-
-        $scope.estado_cuenta = data;
-        $scope.ObtenerPremiosRecomendados();
-    };
-
-    // </editor-fold>
-
     // <editor-fold defaultstate="collapsed" desc="Aceptar terminos">
 
     $scope.claveNueva = "";
@@ -345,7 +187,6 @@ angular.module('afiliadosApp', []).controller('afiliadosController', function($s
 
         if (typeof datos_usuario !== 'undefined' && typeof mis_datos !== 'undefined' && mis_datos) {
             $scope.datos_usuario = datos_usuario;
-            console.log($scope.datos_usuario);
             $scope.busqueda.documento = datos_usuario.cedula;
             $scope.BuscarAfiliados(true);
         } else {

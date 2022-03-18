@@ -92,7 +92,7 @@
                             </div>
                             <div class="box-body">
                                 <img style="height: 100%; width: 100%"
-                                    src="images/mecanica/como-participan-supervisores.jpg" class="img-responsive" />
+                                    src="images/mecanica/como-participan-supervisores_2.jpg" class="img-responsive" />
                             </div>
                         </div>
                     </div>
