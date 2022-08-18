@@ -1,9 +1,11 @@
 <?php
 
+
 include_once('clases/clsDDBBOperations.php');
-include_once('clases/consultas.php');
+
 
 require_once __DIR__ . '../../vendor/autoload.php';
+
 
 $id_almacen = $_GET["id_almacen"];
 

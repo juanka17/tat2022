@@ -17,7 +17,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mis_datos_vendedor.php?id_usuario={{datos_usuario.id}}">
+                        <a class="nav-link" href="mis_datos_vendedor.php?id_usuario=<?php echo $_SESSION["usuario"]["id"]; ?>">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             Mis Datos
                         </a>
@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="catalogo.php?id_usuario={{datos_usuario.id}}">
+                        <a class="nav-link" href="catalogo.php?id_usuario=<?php echo $_SESSION["usuario"]["id"]; ?>">
                             <i class="fa fa-gift" aria-hidden="true"></i>
                             Catalogo
                         </a>
@@ -77,10 +77,6 @@
                             <a class="dropdown-item" href="reporte_graficasv3.php">
                                 <i class="fa fa-bar-chart "></i>
                                 Indicadores ventas
-                            </a>
-                            <a class="dropdown-item" href="reporte_graficas_cupos.php">
-                                <i class="fa fa-pie-chart "></i>
-                                Indicadores cupos
                             </a>
 
                         </div>

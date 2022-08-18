@@ -1,61 +1,61 @@
 angular.module('estadoCuentaApp', []).controller('estadoCuentaController', function($scope, $http, $document) {
 
-    $scope.filtros_ventas = {
-        temporada: ""
-    };
-    $scope.filtros_tickets = {
-        tickets: ""
-    };
+    // <editor-fold defaultstate="collapsed" desc="Datos Usuarios">
 
     $scope.CargarDatosUsuario = function() {
         var parametros = {
             catalogo: "afiliados",
-            id: $scope.usuario_en_sesion.id
+            id: $scope.id_usuario
         };
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarDatosUsuario);
     };
 
     $scope.MostrarDatosUsuario = function(data) {
         $scope.datos_usuario = data[0];
-        $scope.ObtenerEstadoCuenta();
+        if ($scope.datos_usuario.id_rol == 4) {
+            $scope.ObtenerEstadoCuenta();
+        } else if ($scope.datos_usuario.id_rol == 6) {
+            $scope.ObtenerEstadoCuentaSupervisores();
+        } else if ($scope.datos_usuario.id_rol == 7) {
+            $scope.ObtenerEstadoCuentaInformatico();
+        }
     };
 
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Estado de Cuenta">
-
-    $scope.filtros = {
-        cedula: "",
-        nombre: ""
-    };
-
+    // <editor-fold defaultstate="collapsed" desc="Estado de Cuenta Vendedores">
     $scope.ObtenerEstadoCuenta = function() {
         var parametros = {
-            catalogo: "estado_cuenta_afiliado",
-            id_usuario: $scope.usuario_en_sesion.id
+            catalogo: "estado_cuenta_vendedores",
+            id_vendedor: $scope.id_usuario
         };
-        //console.log(parametros);
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEstadoCuenta);
+
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEcuEmpleadosAlmacen);
     };
 
-    $scope.MostrarEstadoCuenta = function(data) {
-        var periodos = Array();
-        var periodo_actual = {
-            id_periodo: 0,
-            periodo: "",
-            registros: []
-        };
+    $scope.MostrarEcuEmpleadosAlmacen = function(data) {
+        $scope.puntos_empleados = data;
+        $scope.VerDetalleEstadoCuenta($scope.id_usuario);
+    };
 
+    $scope.VerDetalleEstadoCuenta = function(data) {
+
+        var parametros = {
+            catalogo: "estado_cuenta_vendedor_detallado",
+            id_vendedor: data
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEstadoCuentaDetalle);
+    };
+
+    $scope.MostrarEstadoCuentaDetalle = function(data) {
+        var periodos = Array();
+        var periodo_actual = { id_periodo: 0, periodo: "", registros: [] };
         angular.forEach(data, function(registro) {
+
             if (periodo_actual.id_periodo != registro.id_periodo) {
                 if (periodo_actual.id_periodo > 0) {
-                    console.log(periodo_actual);
                     periodos.push(periodo_actual);
-                    periodo_actual = {
-                        id_periodo: 0,
-                        periodo: "",
-                        registros: []
-                    };
+                    periodo_actual = { id_periodo: 0, periodo: "", registros: [] };
                 }
 
                 periodo_actual.id_periodo = registro.id_periodo;
@@ -63,76 +63,207 @@ angular.module('estadoCuentaApp', []).controller('estadoCuentaController', funct
                 periodo_actual.registros = [];
             }
             periodo_actual.registros.push(registro);
-        });
 
+        });
         periodos.push(periodo_actual);
-        console.log(periodo_actual);
-        $scope.estado_cuenta = periodos;
-        console.log($scope.estado_cuenta);
-        $scope.ObtenerVentasUsuario();
+        $scope.estado_cuenta_premio = periodos;
+        $scope.ObtenerGraficaEstadoCuenta();
     };
 
-    $scope.ObtenerGrafica = function() {
+    $scope.ObtenerGraficaEstadoCuenta = function() {
         var parametros = {
             catalogo: "grafica_usuario_ecu",
-            id_usuario: id_usuario
+            id_vendedor: $scope.id_usuario
         };
+
         $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarGrafica);
     };
 
     $scope.MostrarGrafica = function(data) {
-        $scope.grafica = data;
-        grafica = $scope.grafica;
-        $scope.ObtenerPuntosUsuario();
+        const dataSource = data;
+
+        $(() => {
+            $('#chart').dxChart({
+                dataSource,
+                commonSeriesSettings: {
+                    argumentField: 'periodo',
+                    type: 'bar',
+                    hoverMode: 'allArgumentPoints',
+                    selectionMode: 'allArgumentPoints',
+                    label: {
+                        visible: true,
+                        format: {
+                            type: 'fixedPoint',
+                            precision: 0,
+                        },
+                    },
+                },
+                series: [
+                    { valueField: 'cuota', name: 'Cuota' },
+                    { valueField: 'venta', name: 'Venta' },
+                ],
+                title: 'Gráfica de cuotas/ventas',
+                legend: {
+                    verticalAlignment: 'bottom',
+                    horizontalAlignment: 'center',
+                },
+                export: {
+                    enabled: false,
+                },
+                onPointClick(e) {
+                    e.target.select();
+                },
+            });
+        });
+        $scope.ObtenerGraficaEstadoCuentaPie();
     };
 
-    $scope.ObtenerPuntosUsuario = function() {
-        var parametros = { catalogo: "puntos_usuario", id_usuario: id_usuario };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarPuntosUsuario);
+    $scope.ObtenerGraficaEstadoCuentaPie = function() {
+        var parametros = {
+            catalogo: "grafica_usuario_ecu_pie",
+            id_vendedor: $scope.id_usuario
+        };
+
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarGraficaPie);
     };
 
-    $scope.MostrarPuntosUsuario = function(data) {
-        $scope.puntos_usuario = data;
-    };
+    $scope.MostrarGraficaPie = function(data) {
+        const dataSource = data;
 
-    $scope.ObtenerVentasUsuario = function() {
-        var parametros = { catalogo: "ventas_usuario", id_usuario: id_usuario };
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarVentasUsuario);
-    };
+        $(() => {
+            $('#pie').dxPieChart({
+                size: {
+                    width: 400,
+                },
+                palette: 'bright',
+                dataSource,
+                series: [{
+                    argumentField: 'portafolio',
+                    valueField: 'ventas',
+                    label: {
+                        format: {
+                            type: 'fixedPoint',
+                            precision: 0,
+                        },
+                        visible: true,
+                        customizeText: function(pointInfo) {
+                            return pointInfo.argument + ': $' + pointInfo.valueText;
+                        },
+                        connector: {
+                            visible: true,
+                            width: 1,
+                        },
+                    },
+                }, ],
+                title: 'Ventas Advil/Dolex',
+                export: {
+                    enabled: false,
+                },
+                onPointClick(e) {
+                    const point = e.target;
 
-    $scope.ventas_totales = [];
-    $scope.ventas = [];
-    $scope.MostrarVentasUsuario = function(data) {
-        $scope.ventas_totales = data
-        $scope.ventas = $scope.ventas_totales;
-        //$scope.ObtenerVentasUsuarioLS();
-    };
+                    toggleVisibility(point);
+                },
+                onLegendClick(e) {
+                    const arg = e.target;
 
-    $scope.ventas_visibles = [];
-    $scope.VerDetalles = function(id_temporada) {
-        console.log(id_temporada);
-        $scope.ventas_visibles = [];
-        var ventas_arr = $scope.ventas_totales;
-        console.log(ventas_arr)
-        $scope.titulo_detalle = "Detalle ventas generales";
+                    toggleVisibility(this.getAllSeries()[0].getPointsByArg(arg)[0]);
+                },
+            });
 
-        angular.forEach(ventas_arr, function(venta) {
-            if ($scope.filtros_ventas.temporada.length == 0 || venta.temporada.toLowerCase().indexOf($scope.filtros_ventas.temporada) > -1) {
-                if (venta.id_temporada == id_temporada || id_temporada == 0) {
-                    $scope.ventas_visibles.push(venta);
+            function toggleVisibility(item) {
+                if (item.isVisible()) {
+                    item.hide();
+                } else {
+                    item.show();
                 }
             }
         });
 
-        setTimeout(function() {
-            $("#tdetalle tr").each(function(index, row) {
-                if ($(row).first().children().eq(1).html().toLowerCase().indexOf("total") >= 0) {
-                    $(row).css("font-weight", "bold");
-                }
-            });
-        }, 100);
+    };
+
+    $scope.ObtenerCuotasVentasEstadoCuenta = function() {
+        var parametros = {
+            catalogo: "estado_cuentas_ventas_estado_cuenta",
+            id_vendedor: $scope.id_usuario
+        };
+
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCuotas);
+    };
+
+    $scope.MostrarCuotas = function(data) {
+        $scope.cuotas_ventas = data;
+        $("#detalleEstadoCuenta").modal("show");
+    };
+
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Estado de Cuenta Supervisores">
+    $scope.ObtenerEstadoCuentaSupervisores = function() {
+
+        var parametros = {
+            catalogo: "estado_cuenta_supervisores",
+            id_vendedor: $scope.id_usuario
+        };
+
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEcuSupervisores);
 
     };
+
+    $scope.MostrarEcuSupervisores = function(data) {
+        $scope.puntos_supervisores = data;
+        $scope.VerDetalleEstadoCuentaSupervisor($scope.id_usuario)
+    }
+
+    $scope.VerDetalleEstadoCuentaSupervisor = function(data) {
+
+        var parametros = {
+            catalogo: "estado_cuenta_vendedor_detallado_supervisor",
+            id_vendedor: data
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEstadoCuentaDetalleSupervisor);
+    };
+
+    $scope.MostrarEstadoCuentaDetalleSupervisor = function(data) {
+        var periodos = Array();
+        var periodo_actual = { id_periodo: 0, periodo: "", registros: [] };
+        angular.forEach(data, function(registro) {
+
+            if (periodo_actual.id_periodo != registro.id_periodo) {
+                if (periodo_actual.id_periodo > 0) {
+                    periodos.push(periodo_actual);
+                    periodo_actual = { id_periodo: 0, periodo: "", registros: [] };
+                }
+
+                periodo_actual.id_periodo = registro.id_periodo;
+                periodo_actual.periodo = registro.periodo;
+                periodo_actual.registros = [];
+            }
+            periodo_actual.registros.push(registro);
+
+        });
+        periodos.push(periodo_actual);
+        $scope.estado_cuenta_premio = periodos;
+
+    };
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Estado de Cuenta Informaticos">
+    $scope.ObtenerEstadoCuentaInformatico = function() {
+
+        var parametros = {
+            catalogo: "estado_cuenta_informatico",
+            id_vendedor: $scope.id_usuario
+        };
+
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarEcuInformatico);
+
+    };
+
+    $scope.MostrarEcuInformatico = function(data) {
+        $scope.puntos_informaticos = data;
+    };
+    // </editor-fold>
 
     $scope.EjecutarLlamado = function(modelo, operacion, parametros, CallBack) {
         $http({

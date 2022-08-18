@@ -11,16 +11,13 @@ class clsReportes {
         switch ($operacion) {
             case "estado_cuenta": $datos = clsReportes::ReporteEstadoCuenta($parametros);
                 break;
+
             case "estructura_almacenes": $datos = clsReportes::ReporteEstructuraAlmacenes($parametros);
+                break;
+            case "estructura_almacenes_2022": $datos = clsReportes::ReporteEstructuraAlmacenes_2022($parametros);
                 break;
 
             case "Redenciones": $datos = clsReportes::ReporteRedenciones($parametros);
-                break;
-            case "RankingSupervisores": $datos = clsReportes::ReporteRankingSupervisores($parametros);
-                break;
-            case "RankingVendedores1": $datos = clsReportes::ReporteRankingVendedoresPrimerBimestre($parametros);
-                break;
-            case "RankingVendedores2": $datos = clsReportes::ReporteRankingVendedoresSegundoBimestre($parametros);
                 break;
 
             case "VendedorPerfectoIncauca": $datos = clsReportes::VendedorPerfectoIncauca($parametros);
@@ -32,69 +29,24 @@ class clsReportes {
             case "VendedorPerfectoOtrosNuevo": $datos = clsReportes::VendedorPerfectoOtrosNuevo($parametros);
                 break;
 
-            case "AvanceEntregas1": $datos = clsReportes::AvanceEntregas1($parametros);
-                break;
-            case "AvanceEntregas2": $datos = clsReportes::AvanceEntregas2($parametros);
-                break;
-            case "AvanceEntregas3": $datos = clsReportes::AvanceEntregas3($parametros);
-                break;
-            case "AvanceEntregas4": $datos = clsReportes::AvanceEntregas4($parametros);
-                break;
-            case "AvanceEntregas5": $datos = clsReportes::AvanceEntregas5($parametros);
-                break;
-            case "AvanceEntregas6": $datos = clsReportes::AvanceEntregas6($parametros);
-                break;
-
-            case "ConsolidadoEntregas": $datos = clsReportes::ConsolidadoEntregas($parametros);
-                break;
             case "RankingFinal": $datos = clsReportes::RankingFinal($parametros);
                 break;
 
             case "supervisor_lider": $datos = clsReportes::SupervisorLider($parametros);
                 break;
 
-            case "Cupos_almacen": $datos = clsReportes::CuposAlmacen($parametros);
-                break;
             case "ventas_distribuidora": $datos = clsReportes::VentasDistribuidora($parametros);
                 break;
 
-            case "ventas_primer_bimestre_2021": $datos = clsReportes::VentasPrimerBimestre2021($parametros);
-            break;
-            case "ventas_segundo_bimestre_2021": $datos = clsReportes::VentasSegundoBimestre2021($parametros);
-            break;
-            case "ventas_tercer_bimestre_2021": $datos = clsReportes::VentasTercerBimestre2021($parametros);
-            break;      
-            case "ventas_cuarto_bimestre_2021": $datos = clsReportes::VentasCuartoBimestre2021($parametros);
-            break;
-            case "ventas_quinto_bimentre_2021": $datos = clsReportes::VentasQuintoBimestre2021($parametros);
-            break;
-
             case "ventas_primer_bimestre_sku": $datos = clsReportes::ventas_primer_bimestre_sku($parametros);
-            break;
+                break;
             case "ventas_segundo_bimestre_sku": $datos = clsReportes::ventas_segundo_bimestre_sku($parametros);
-            break;
+                break;
             case "ventas_tercer_bimestre_sku": $datos = clsReportes::ventas_tercer_bimestre_sku($parametros);
-            break;           
+                break;           
             case "ventas_cuarto_bimestre_sku": $datos = clsReportes::ventas_cuarto_bimestre_sku($parametros);
-            break;
+                break;
             case "ventas_quinto_bimestre_sku": $datos = clsReportes::ventas_quinto_bimestre_sku($parametros);
-            break;
-
-
-            case "cuotas_supervisores1": $datos = clsReportes::CuotasSupervisor1($parametros);
-                break;
-            case "cuotas_supervisores2": $datos = clsReportes::CuotasSupervisor2($parametros);
-                break;
-            case "cuotas_supervisores3": $datos = clsReportes::CuotasSupervisor3($parametros);
-                break;
-            case "cuotas_supervisores4": $datos = clsReportes::CuotasSupervisor4($parametros);
-                break;
-            case "cuotas_supervisores5": $datos = clsReportes::CuotasSupervisor5($parametros);
-                break;
-            case "cuotas_supervisores6": $datos = clsReportes::CuotasSupervisor6($parametros);
-                break;
-
-            case "estructura_supervisores": $datos = clsReportes::ReporteEstructuraSupervisores($parametros);
                 break;
 
             case "obtener_indicadores_territorio": $datos = clsReportes::ObtenerIndicadoresTerritorio($parametros);
@@ -161,6 +113,11 @@ class clsReportes {
 
             case "log_cambios": $datos = clsReportes::ReporteLogCambios($parametros);
                 break;
+
+            case "reporte_llamadas": $datos = clsReportes::ReporteLlamadas($parametros);
+                break;
+
+            
         }
         return clsReportes::ProcesarDatos($datos);
     }
@@ -188,6 +145,12 @@ class clsReportes {
 
     private static function ReporteEstructuraAlmacenes($parametros) {
         $query = Consultas::$estructira_fdv;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
+
+    private static function ReporteEstructuraAlmacenes_2022($parametros) {
+        $query = Consultas::$estructira_fdv. " WHERE afi.id IN (SELECT id_vendedor FROM t_estado_cuenta WHERE id_periodo >= 14)";
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
         return $results;
     }
@@ -231,25 +194,7 @@ class clsReportes {
     }
 
     private static function ReporteRedenciones($parametros) {
-        $query = "call sp_redenciones()";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function ReporteRankingSupervisores($parametros) {
-        $query = "call sp_ranking_supervisores()";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function ReporteRankingVendedoresPrimerBimestre($parametros) {
-        $query = "call sp_ganadores_ciclo(1,-1);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function ReporteRankingVendedoresSegundoBimestre($parametros) {
-        $query = "call sp_ganadores_ciclo(2,-1);";
+        $query = "call sp_redenciones_2022()";
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
         return $results;
     }
@@ -278,47 +223,6 @@ class clsReportes {
         return $results;
     }
 
-    private static function AvanceEntregas1($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(1);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function AvanceEntregas2($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(2);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function AvanceEntregas3($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(3);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function AvanceEntregas4($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(4);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function AvanceEntregas5($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(5);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-    private static function AvanceEntregas6($parametros) {
-        $query = "call sp_reporte_avance_entregas_temporada(6);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function ConsolidadoEntregas($parametros) {
-        $query = "call sp_consolidado_entregas();";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
     private static function RankingFinal($parametros) {
         $query = "call sp_reporte_ranking_anual();";
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
@@ -327,12 +231,6 @@ class clsReportes {
 
     private static function SupervisorLider($parametros) {
         $query = Consultas::$reporte_supervisor_lider;
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuposAlmacen($parametros) {
-        $query = Consultas::$reporte_cupos_almacen;
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
         return $results;
     }
@@ -350,77 +248,6 @@ class clsReportes {
       return $results;
       } */
 
-    private static function CuotasSupervisor1($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 1 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuotasSupervisor2($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 2 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuotasSupervisor3($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 3 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuotasSupervisor4($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 4 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuotasSupervisor5($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 5 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function CuotasSupervisor6($parametros) {
-        $query = Consultas::$reporte_cuotas_supervisor . " where cuo.id_temporada = 6 group by cuo.id_afiliado,cuo.id_temporada";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function VentasPrimerBimestre2021($parametros) {
-        $query = "call sp_reporte_ventas_2021(1);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function VentasSegundoBimestre2021($parametros) {
-        $query = "call sp_reporte_ventas_2021(2);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function VentasTercerBimestre2021($parametros) {
-        $query = "call sp_reporte_ventas_2021(3);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function VentasCuartoBimestre2021($parametros) {
-        $query = "call sp_reporte_ventas_2021(4);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }   
-    
-    private static function VentasQuintoBimestre2021($parametros) {
-        $query = "call sp_reporte_ventas_2021(5);";
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
-
-    private static function ReporteEstructuraSupervisores($parametros) {
-        $query = Consultas::$reporte_estructura_supervisores;
-        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
-        return $results;
-    }
 
     private static function Indicadores($parametros) {
         $query = "call sp_reporte_avance_entregas_temporada(2);";
@@ -602,6 +429,11 @@ class clsReportes {
         return $distribuidora;
     }
 
-}
+    private static function ReporteLlamadas($parametros)
+    {        
+        $query = Consultas::$reporte_llamadas_usuarios;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
 
-?>
+}

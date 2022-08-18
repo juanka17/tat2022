@@ -1,6 +1,7 @@
 <?php
-ini_set('session.cookie_httponly', 1);
 session_start();
+/*ini_set('session.cookie_httponly', 1);
+
 $currentCookieParams = session_get_cookie_params();  
 foreach( $_COOKIE as $cookie_name => $cookie_value )
 {
@@ -20,7 +21,7 @@ foreach( $_COOKIE as $cookie_name => $cookie_value )
         true, //secure,
         true
     );  
-}
+}*/
 
 if(isset($_GET["logout"]))
 {

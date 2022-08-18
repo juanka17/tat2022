@@ -21,12 +21,11 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Almacenes
-                    <small>Buscar la distribuidora por nombre</small>
+                    Distribuidoras
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="bienvenida.php"><i class="fa fa-dashboard"></i> Inicio</a></li>
-                    <li class="active">Almacenes</li>
+                    <li class="active">Distribuidora</li>
                 </ol>
             </section>
 

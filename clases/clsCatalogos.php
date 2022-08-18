@@ -3,44 +3,60 @@
 include_once('clsDDBBOperations.php');
 include_once('consultas.php');
 
-class clsCatalogos {
+class clsCatalogos
+{
 
-    public static function EjecutarOperacion($operacion, $parametros) {
+    public static function EjecutarOperacion($operacion, $parametros)
+    {
         switch ($operacion) {
-            case "CargaCatalogo": return clsCatalogos::EjecutarConsulta($parametros);
+            case "CargaCatalogo":
+                return clsCatalogos::EjecutarConsulta($parametros);
                 break;
-            case "RegistraCatalogoSimple": return clsCatalogos::EjecutarInsercion($parametros);
+            case "RegistraCatalogoSimple":
+                return clsCatalogos::EjecutarInsercion($parametros);
                 break;
-            case "RegistraCatalogoMixto": return clsCatalogos::EjecutarInsercionMixta($parametros);
+            case "RegistraCatalogoMixto":
+                return clsCatalogos::EjecutarInsercionMixta($parametros);
                 break;
-            case "RegistraCatalogoMixtoMasivo": return clsCatalogos::EjecutarInsercionMixtaMasiva($parametros);
+            case "RegistraCatalogoMixtoMasivo":
+                return clsCatalogos::EjecutarInsercionMixtaMasiva($parametros);
                 break;
-            case "RegistraCatalogoDesdeArrayJSON": return clsCatalogos::EjecutarInsercionDesdeArrayJSON($parametros);
+            case "RegistraCatalogoDesdeArrayJSON":
+                return clsCatalogos::EjecutarInsercionDesdeArrayJSON($parametros);
                 break;
-            case "ModificaCatalogoSimple": return clsCatalogos::EjecutarModificacion($parametros);
+            case "ModificaCatalogoSimple":
+                return clsCatalogos::EjecutarModificacion($parametros);
                 break;
-            case "ModificaCatalogoMixto": return clsCatalogos::EjecutarModificacionMixta($parametros);
+            case "ModificaCatalogoMixto":
+                return clsCatalogos::EjecutarModificacionMixta($parametros);
                 break;
-            case "EliminaCatalogoSimple": return clsCatalogos::EjecutarEliminacion($parametros);
+            case "EliminaCatalogoSimple":
+                return clsCatalogos::EjecutarEliminacion($parametros);
                 break;
         }
     }
 
-    private static function EjecutarConsulta($parametros) {
+    private static function EjecutarConsulta($parametros)
+    {
         $query = "SELECT * FROM " . $parametros->catalogo;
         $order = " ORDER BY 2";
         switch ($parametros->catalogo) {
             case "premios": {
                     $query = Consultas::$consulta_premios;
-                    $order = " ORDER BY cap.id ";
+                    $order = "  ";
                 };
                 break;
             case "afiliados": {
-                    $query = Consultas::$datos_afiliado . " where afi.id = " . $parametros->id;
+                    $query = Consultas::$consulta_afiliados . " where afi.id = " . $parametros->id;
                 };
                 break;
             case "grafica_usuario_ecu": {
-                    $query = str_replace("_id_usuario_", $parametros->id_usuario, Consultas::$grafica_usuario_ecu);
+                    $query = str_replace("_id_usuario_", $parametros->id_vendedor, Consultas::$grafica_usuario_ecu);
+                    $order = "";
+                };
+                break;
+            case "grafica_usuario_ecu_pie": {
+                    $query = str_replace("_id_usuario_", $parametros->id_vendedor, Consultas::$grafica_usuario_ecu_pie);
                     $order = "";
                 };
                 break;
@@ -56,9 +72,9 @@ class clsCatalogos {
                 break;
 
             case "cuotas_usuario": {
-                $query = "call sp_ventas_promedio();";
-                $order = "";
-            };
+                    $query = "call sp_ventas_promedio();";
+                    $order = "";
+                };
                 break;
             case "ciudad": {
                     $query = $query . " where id_departamento = " . $parametros->departamento;
@@ -93,11 +109,11 @@ class clsCatalogos {
                 };
                 break;
             case "almacenes": {
-                    $query = $query . " where estado = 1 and id_visitador =". $parametros->id_visitador;
+                    $query = $query . " where estado = 1 and id_visitador =" . $parametros->id_visitador;
                 };
                 break;
             case "almacene_propio": {
-                    $query = "SELECT * FROM almacenes where id =". $parametros->id_visitador;
+                    $query = "SELECT * FROM almacenes where id =" . $parametros->id_visitador;
                 };
                 break;
             case "redenciones_almacen": {
@@ -156,10 +172,36 @@ class clsCatalogos {
                     $order = " GROUP BY est.id_vendedor ORDER BY venta desc";
                 };
                 break;
-            case "estado_cuenta_vendedor_detallado": {
-                    $query = Consultas::$consulta_estado_cuenta__detallado;
+            case "estado_cuenta_vendedores": {
+                    $query = Consultas::$consulta_estado_cuenta_vendedores;
                     $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
-                    $order = " group by per.id";
+                    $order = " GROUP BY est.id_vendedor ORDER BY venta DESC)a";
+                };
+                break;
+            case "estado_cuenta_supervisores": {
+                    $query = Consultas::$consulta_estado_cuenta_supervisores;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
+                    $order = " GROUP BY est.id_vendedor ORDER BY venta desc)a";
+                };
+                break;
+            case "estado_cuenta_vendedor_detallado": {
+                    $query = Consultas::$consulta_estado_cuenta_detallado;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
+                    $order = " order by per.id";
+                };
+                break;
+            case "estado_cuenta_vendedor_detallado_supervisor": {
+                    //$query = Consultas::$consulta_estado_cuenta_detallado_supervisor;
+                    $query = Consultas::$consulta_estado_cuenta_detallado;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
+                    $order = " order by per.id";
+                };
+                break;
+
+            case "estado_cuenta_informatico": {
+                    $query = Consultas::$consulta_estado_cuenta_informatico;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor . " and est.id_concepto = 3";
+                    $order = " group by est.id_periodo";
                 };
                 break;
             case "datos_redencion": {
@@ -203,7 +245,7 @@ class clsCatalogos {
                 };
                 break;
             case "consulta_cuotas_vendedor_supervisor": {
-                    $query = " call sp_cuotas_vendedores(" . $parametros->id_almacen . ",".$parametros->id_periodo ." )";
+                    $query = " call sp_cuotas_vendedores(" . $parametros->id_almacen . "," . $parametros->id_periodo . ",0 )";
                     $order = " ";
                 };
                 break;
@@ -354,7 +396,7 @@ class clsCatalogos {
                 };
                 break;
             case "supervisores_almacen": {
-                    $query = "SELECT id,nombre FROM afiliados WHERE id_almacen = " . $parametros->id_almacen . " AND id_clasificacion = 4 AND acepto_terminos = 0";
+                    $query = "SELECT id,nombre FROM afiliados WHERE id_almacen = " . $parametros->id_almacen . " AND id_clasificacion = 4 AND id_estatus = 1";
                     $order = " ";
                 };
                 break;
@@ -385,7 +427,7 @@ class clsCatalogos {
                 };
                 break;
 
-            /*case "clasificacion_afiliados_temporada": {
+                /*case "clasificacion_afiliados_temporada": {
                     $query = consultas::$clasificacion_afiliados_temporada . "where id_afiliado = " . $parametros->id_afiliado;
                     $order = " ";
                 };
@@ -414,28 +456,82 @@ class clsCatalogos {
                     $order = " order by 1 ";
                 };
                 break;
-            
+
             case "representantes": {
-                $query = "SELECT id,nombre FROM afiliados WHERE id IN (SELECT id_visitador FROM almacenes)";
-                $order = " ";
-                }; 
+                    $query = "SELECT id,nombre FROM afiliados WHERE id IN (SELECT id_visitador FROM almacenes)";
+                    $order = " ";
+                };
                 break;
             case "cuotas_almacen": {
-                $query = "SELECT * FROM cuotas_almacen WHERE id_almacen =".$parametros->id_almacen." and id_periodo=".$parametros->id_periodo;
-                $order = " ";
-                }; 
+                    $query = "SELECT * FROM cuotas_almacen WHERE id_almacen =" . $parametros->id_almacen . " and id_periodo=" . $parametros->id_periodo;
+                    $order = " ";
+                };
                 break;
 
             case "almacenes_usuarios": {
-                $query = "SELECT * FROM almacenes";
-                $order = " ";
-                }; 
+                    $query = "SELECT * FROM almacenes";
+                    $order = " ";
+                };
                 break;
 
             case "llamadas_usuarios": {
-                $query = Consultas::$consulta_llamadas_usuarios . " where la.id_usuario = " . $parametros->id_usuario;
-                $order = " order by la.fecha desc ";
-            };
+                    $query = Consultas::$consulta_llamadas_usuarios . " where la.id_usuario = " . $parametros->id_usuario;
+                    $order = " order by la.fecha desc ";
+                };
+                break;
+
+            case "categoria_premio": {
+                    $query = "SELECT * FROM categoria_premio WHERE estado = 1";
+                    $order = " order by 1";
+                };
+                break;
+
+            case "redenciones_usuario": {
+                    $query = " call sp_obtener_redenciones_usuario_2022(" . $parametros->id_usuario . "); ";
+                    $order = "";
+                };
+                break;
+
+            case "verificar_cedula_afiliado": {
+                    $query = "SELECT cedula FROM afiliados WHERE cedula =" . $parametros->cedula;
+                    $order = "";
+                };
+                break;
+
+            case "redencion": {
+                    $query = " call sp_obtener_redencion_2022(" . $parametros->id . "); ";
+                    $order = "";
+                };
+                break;
+
+            case "seguimiento_redencion": {
+                    $query = Consultas::$consulta_seguimiento_redencion . " where seg.id_redencion = " . $parametros->id_redencion;
+                    $order = " order by seg.id";
+                };
+                break;
+
+            case "impactos_supervisores": {
+                    $query = "SELECT * FROM impactos WHERE id_afiliado = " . $parametros->id_afiliado . " AND id_periodo = " . $parametros->id_periodo;
+                    $order = " ";
+                };
+                break;
+
+            case "vendedores_reemplazo": {
+                    $query = Consultas::$vendedores_reemplazo . " WHERE id_vendedor IN (SELECT id FROM afiliados WHERE id_almacen = " . $parametros->id_almacen . " AND id_rol = 4 AND id_estatus = 1) AND id_periodo IN " . $parametros->id_periodo . "";
+                    $order = "GROUP BY id_vendedor; ";
+                };
+                break;
+
+            case "estado_cuentas_ventas_estado_cuenta": {
+                    $query = "call sp_cuotas_vendedores_estado_cuenta(" . $parametros->id_vendedor . "); ";
+                    $order = " ";
+                };
+                break;
+
+            case "total_puntos_estado_cuenta": {
+                    $query = "SELECT SUM(total_puntos) puntos FROM t_estado_cuenta t WHERE t.id_vendedor = " . $parametros->id_vendedor ;
+                    $order = " ";
+                };
                 break;
         }
         $query = $query . $order;
@@ -443,12 +539,14 @@ class clsCatalogos {
         return clsDDBBOperations::ExecuteSelectNoParams($query);
     }
 
-    private static function EjecutarInsercion($parametros) {
+    private static function EjecutarInsercion($parametros)
+    {
         $result = clsDDBBOperations::ExecuteInsert((array) $parametros->datos, $parametros->catalogo);
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarInsercionDesdeArrayJSON($parametros) {
+    private static function EjecutarInsercionDesdeArrayJSON($parametros)
+    {
 
         $valores = [];
         foreach ($parametros->datos as $filtro) {
@@ -463,12 +561,14 @@ class clsCatalogos {
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarInsercionMixta($parametros) {
+    private static function EjecutarInsercionMixta($parametros)
+    {
         $result = clsDDBBOperations::ExecuteInsert((array) $parametros->datos, $parametros->catalogo_real);
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarInsercionMixtaMasiva($parametros) {
+    private static function EjecutarInsercionMixtaMasiva($parametros)
+    {
         foreach ($parametros->lista_datos as $datos) {
             $result = clsDDBBOperations::ExecuteInsert((array) $datos, $parametros->catalogo_real);
         }
@@ -476,19 +576,21 @@ class clsCatalogos {
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarModificacion($parametros) {
+    private static function EjecutarModificacion($parametros)
+    {
         clsDDBBOperations::ExecuteUpdate((array) $parametros->datos, $parametros->catalogo, $parametros->id);
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarModificacionMixta($parametros) {
+    private static function EjecutarModificacionMixta($parametros)
+    {
         clsDDBBOperations::ExecuteUpdate((array) $parametros->datos, $parametros->catalogo_real, $parametros->id);
         return clsCatalogos::EjecutarConsulta($parametros);
     }
 
-    private static function EjecutarEliminacion($parametros) {
+    private static function EjecutarEliminacion($parametros)
+    {
         clsDDBBOperations::ExecuteDelete($parametros->catalogo, $parametros->identificador);
         return clsCatalogos::EjecutarConsulta($parametros);
     }
-
 }

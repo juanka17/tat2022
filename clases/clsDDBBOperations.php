@@ -90,7 +90,7 @@ class clsDDBBOperations
         }
         catch(MeekroDBException $e) {
             $result = "Error: " . $e->getMessage(); // something about duplicate keys
-            //echo "SQL Query: " . $e->getQuery() . "<br>\n"; // INSERT INTO accounts...
+            echo "SQL Query: " . $e->getQuery() . "<br>\n"; // INSERT INTO accounts...
         }
         return $result;
     }

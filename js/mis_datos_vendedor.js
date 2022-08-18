@@ -1,21 +1,6 @@
 angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController', function($scope, $http) {
 
-    $scope.datos_vendedor = {
-        cedula: "",
-        cod_formas: "",
-        nombre: "",
-        telefono: "",
-        celular: "",
-        fecha_nacimiento: "",
-        direccion: "",
-        email: "",
-        id_almacen: "",
-        representante: "",
-        id_genero: "",
-        id_departamento: "",
-        id_ciudad: "",
-        id_estatus: ""
-    };
+
 
     var categorias_llamada = null;
     $scope.subCategoria = 0;
@@ -62,7 +47,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     $scope.MostrarVendedor = function(data) {
         $scope.datos_vendedor = data[0];
         $scope.CargarAlmacenesRepresentante(0, $scope.datos_vendedor.id_representante)
-        $scope.CargarCiudades(0, $scope.datos_vendedor.id_ciudad)
+        $scope.CargarCiudades(0, $scope.datos_vendedor.ID_CIUDAD)
     };
 
     $scope.CargarAlmacenesRepresentante = function(alm, data) {
@@ -75,7 +60,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         } else {
             var parametros = {
                 catalogo: "almacene_propio",
-                id_visitador: $scope.datos_vendedor.id_almacen
+                id_visitador: $scope.datos_vendedor.ID_ALMACEN
             };
             $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarAlmacenesRepresentante);
 
@@ -87,6 +72,7 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     };
 
     $scope.CargarCiudades = function(carga, data) {
+        console.log(data)
         if (carga == 1) {
             var parametros = {
                 catalogo: "ciudad",
@@ -109,18 +95,19 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
     $scope.ActualizarDatosVendedores = function() {
 
         let data = {
-            cedula: $scope.datos_vendedor.cedula,
-            cod_formas: $scope.datos_vendedor.cod_formas,
-            nombre: $scope.datos_vendedor.nombre,
-            telefono: $scope.datos_vendedor.telefono,
-            celular: $scope.datos_vendedor.celular,
+            cedula: $scope.datos_vendedor.CEDULA,
+            cod_formas: $scope.datos_vendedor.COD_FORMAS,
+            nombre: $scope.datos_vendedor.NOMBRE,
+            telefono: $scope.datos_vendedor.TELEFONO,
+            celular: $scope.datos_vendedor.CELULAR,
             nacimiento: $("#datepicker").val(),
-            direccion: $scope.datos_vendedor.direccion,
-            email: $scope.datos_vendedor.email,
-            id_ciudad: $scope.datos_vendedor.id_ciudad,
-            id_almacen: $scope.datos_vendedor.id_almacen,
-            id_genero: $scope.datos_vendedor.id_genero,
+            direccion: $scope.datos_vendedor.DIRECCION,
+            email: $scope.datos_vendedor.EMAIL,
+            id_ciudad: $scope.datos_vendedor.ID_CIUDAD,
+            id_almacen: $scope.datos_vendedor.ID_ALMACEN,
+            id_genero: $scope.datos_vendedor.ID_GENERO,
             id_estatus: $scope.datos_vendedor.id_estatus,
+            id_rol: $scope.datos_vendedor.id_rol,
             id_actualiza: $scope.datos_usuario.id
         }
         var parametros = {
@@ -212,6 +199,32 @@ angular.module('misdatosVendedorApp', []).controller('misdatosVendedorController
         };
         $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.MostrarLlamadas);
     };
+
+    // <editor-fold defaultstate="collapsed" desc="Redenciones">
+
+    $scope.ObtenerRedenciones = function() {
+        var parametros = { catalogo: "redenciones_usuario", id_usuario: id_usuario };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarRedenciones);
+    };
+    $scope.MostrarRedenciones = function(data) {
+        $scope.redenciones = data;
+    };
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Restaurar Clave">
+
+    $scope.RestaurarClaveUsuario = function() {
+        var parametros = {
+            id_usuario: $scope.id_usuario
+        };
+        $scope.EjecutarLlamado("afiliados", "restaurar_clave", parametros, $scope.ResultadoActualizacionClave);
+    };
+
+    $scope.ResultadoActualizacionClave = function(data) {
+        alert(data.resultado)
+    }
+
+    // </editor-fold>
 
     $scope.EjecutarLlamado = function(modelo, operacion, parametros, CallBack) {
         $http({

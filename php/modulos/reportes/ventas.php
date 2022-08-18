@@ -26,6 +26,7 @@ try {
                 per.nombre 
                 FROM ventas ven
                 INNER JOIN periodo per ON per.id = ven.id_periodo
+                where per.id >= 14
                 GROUP BY id ";
 
         $stmt = $conexion->prepare($sql);

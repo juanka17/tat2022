@@ -28,7 +28,7 @@ if ($url[(count($url) - 1)] != "index.php") {
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/afiliados.js?reload=2" type="text/javascript"></script>
+    <script src="js/afiliados.js?reload=3" type="text/javascript"></script>
     <script type="text/javascript">
     var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
     var mis_datos = true;

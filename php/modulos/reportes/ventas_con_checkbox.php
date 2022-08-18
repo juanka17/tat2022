@@ -17,11 +17,12 @@ try {
     if ($search == 'periodos_ventas') {
 
         $sql = "SELECT
-                per.id,
-                per.nombre 
-                FROM ventas ven
-                INNER JOIN periodo per ON per.id = ven.id_periodo
-                GROUP BY id ";
+        per.id,
+        per.nombre 
+        FROM ventas ven
+        INNER JOIN periodo per ON per.id = ven.id_periodo
+        where per.id >= 14
+        GROUP BY id";
 
         $stmt = $conexion->prepare($sql);
 

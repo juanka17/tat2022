@@ -17,24 +17,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="mis_datos_vendedor.php?id_usuario={{datos_usuario.id}}">
+                        <a class="nav-link" href="mis_datos_vendedor.php?id_usuario=<?php echo $_SESSION["usuario"]["id"]; ?>">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             Mis Datos
                         </a>
-                    </li><li class="nav-item">
-                        <a class="nav-link" href="almacenes.php">
-                            <i class="fa fa-users"></i>
-                            Almacenes
-                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="catalogo.php?id_usuario={{datos_usuario.id}}">
+                        <a class="nav-link" href="catalogo.php?id_usuario=<?php echo $_SESSION["usuario"]["id"]; ?>">
                             <i class="fa fa-gift" aria-hidden="true"></i>
                             Catalogo
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="estado_cuenta.php?id_usuario={{datos_usuario.id}}">
+                        <a class="nav-link" href="estado_cuenta.php?id_usuario=<?php echo $_SESSION["usuario"]["id"]; ?>">
                             <i class="fa fa-address-card" aria-hidden="true"></i>
                             Estado de cuenta
                         </a>
@@ -44,13 +39,7 @@
                             <i class="fa fa-plus-square"></i>
                             Mecánica
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://sociosyamigos.com.co/tat_2021/bienvenida.php">
-                            <i class="fa fa-plus-square"></i>
-                            Tat 2021
-                        </a>
-                    </li>
+                    </li>                    
                     <li class="nav-item">
                         <a class="nav-link" href="?logout">
                             <i class="fa fa-sign-out"></i>

@@ -6,7 +6,7 @@ angular.module('afiliadosApp', []).controller('afiliadosController', function($s
 
     $scope.buscando = true;
     $scope.editando = false;
-    $scope.busqueda = { documento: "", nombre: "" };
+    $scope.busqueda = { documento: "", nombre: "", id_afiliado: datos_usuario.id };
     $scope.afiliadosEncontrados = [];
     $scope.acepto_terminos_y_condiciones = false;
 
@@ -27,7 +27,7 @@ angular.module('afiliadosApp', []).controller('afiliadosController', function($s
     };
 
     $scope.BuscarNuevoAfiliado = function() {
-        $scope.busqueda = { documento: "", nombre: "" };
+        $scope.busqueda = { documento: "", nombre: "", id_afiliado: datos_usuario.id };
         $scope.afiliadosEncontrados = [];
         $scope.seleccionado = {};
         $scope.ToggleMode();

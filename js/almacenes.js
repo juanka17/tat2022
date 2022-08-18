@@ -122,6 +122,8 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     /*-----------Cuotas Distribuidora---------*/
 
     $scope.CargarCuotasAlmacen = function(data) {
+        $scope.periodo_seleccionado = data;
+
         var parametros = {
             catalogo: "cuotas_almacen",
             id_almacen: id_almacen,
@@ -152,20 +154,20 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
         var datos = {
             id_almacen: id_almacen,
             id_periodo: mes,
-            cuota: $("#cuota_ventas").val().replace(/\./g, ''),
-            impactos: $("#cuota_impactos").val().replace(/\./g, ''),
-            cuota_aumentada: $scope.margen
+            cuota: $("#cuota_ventas").val().replace(/\./g, '')
+                //impactos: $("#cuota_impactos").val().replace(/\./g, ''),
+                //cuota_aumentada: $scope.margen
         }
 
         if ($scope.crear_nueva_cuota == 0) {
             var parametros = {
-                catalogo: "cuotas_almacen",
+                catalogo: "actualizar_cuotas_kam",
                 datos: datos,
                 id_almacen: id_almacen,
                 id_periodo: mes
             };
             $scope.crear_nueva_cuota = 1;
-            $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoCuota);
+            $scope.EjecutarLlamado("afiliados", "actualizar_cuotas_kam", parametros, $scope.ResultadoCreacionNuevoCuota);
             alert("Cuota creada satisfactoriamente");
         } else if ($scope.crear_nueva_cuota == 1) {
             var parametros = {
@@ -175,13 +177,14 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 id_periodo: mes,
                 id: $scope.cuotas_distribuidora[0].id
             };
-            console.log(parametros);
-            $scope.EjecutarLlamado("catalogos", "ModificaCatalogoSimple", parametros, $scope.ResultadoCreacionNuevoCuota);
-            alert("Cuota creada satisfactoriamente");
+            $scope.EjecutarLlamado("afiliados", "actualizar_cuotas_kam", parametros, $scope.ResultadoCreacionNuevoCuota);
+
         }
     };
 
     $scope.ResultadoCreacionNuevoCuota = function(data) {
+        document.getElementById("overlay").style.display = "block";
+        $scope.total = 0;
         var parametros = {
             catalogo: "consulta_cuotas_vendedor_supervisor",
             id_almacen: $scope.almacen.id_drogueria,
@@ -191,108 +194,414 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     };
 
     $scope.CargarCuotas = function(data) {
-
+        $scope.cuota_supervisor = [];
         $scope.datos_vendedores = data;
+        var periodos = Array();
+        var periodo_actual = { id_supervisor: 0, supervisor: "", cuota_supervisor: 0, registros: [] };
 
+        angular.forEach(data, function(registro) {
 
-        $(() => {
-            const dataGrid = $('#gridContainer').dxDataGrid({
-                dataSource: data,
-                keyExpr: 'id_vendedor',
-                allowColumnReordering: true,
-                showBorders: true,
-                grouping: {
-                    autoExpandAll: false,
-                },
-                searchPanel: {
-                    visible: true,
-                    width: 240,
-                    placeholder: 'Buscar...',
-                },
-                headerFilter: {
-                    visible: true,
-                },
-                paging: {
-                    pageSize: 10,
-                },
-                groupPanel: {
-                    visible: true,
-                },
-                export: {
-                    enabled: true,
-                    allowExportSelectedData: true,
-                },
-                columns: [{
-                        dataField: 'vendedor',
-                        caption: 'vendedor',
-                    }, {
-                        dataField: 'venta_ultimo_q_vendedor',
-                        caption: 'Venta ultimo Q',
-                        format: 'currency',
-                    }, {
-                        dataField: 'venta_vendedor',
-                        caption: 'Venta promedio',
-                        format: 'currency',
-                    }, {
-                        dataField: 'porcentaje_participacion',
-                        caption: '% Participación',
-                    }, {
-                        dataField: 'cuota_vendedor',
-                        caption: 'Cuota',
-                        format: 'currency',
-                    },
-                    {
-                        dataField: 'supervisor',
-                        groupIndex: 0,
-                    },
-                ],
-                sortByGroupSummaryInfo: [{
-                    summaryItem: 'count',
-                }],
-                summary: {
-                    groupItems: [{
-                        column: 'supervisor',
-                        summaryType: 'count',
-                        displayFormat: '{0} Vendedor',
-                    }, {
-                        column: 'SaleAmount',
-                        summaryType: 'max',
-                        valueFormat: 'currency',
-                        showInGroupFooter: false,
-                        alignByColumn: true,
-                    }, {
-                        column: 'cuota_vendedor',
-                        summaryType: 'sum',
-                        displayFormat: 'Cuota Total {0}',
-                        valueFormat: 'currency',
-                        showInGroupFooter: false,
-                        alignByColumn: true,
-                    }],
-                }
-            }).dxDataGrid('instance');
+            if (periodo_actual.id_supervisor != registro.id_supervisor) {
+                periodos.push(periodo_actual);
+                periodo_actual = { id_supervisor: 0, supervisor: "", registros: [] };
+                periodo_actual.id_supervisor = registro.id_supervisor;
+                periodo_actual.supervisor = registro.supervisor;
+                periodo_actual.registros = [];
+            }
+            periodo_actual.registros.push(registro);
 
-            $('#autoExpand').dxCheckBox({
-                value: false,
-                text: 'Expandir Todo',
-                onValueChanged(data) {
-                    dataGrid.option('grouping.autoExpandAll', data.value);
-                },
-            });
+            $scope.cuota_supervisor.push({
+                "id_supervisor": registro.id_supervisor,
+                "cuota": registro.cuota_vendedor,
+                "cuota_impactos": registro.cuota_impactos
+            })
+
         });
+
+
+        //Obtenemos solo las claves. 
+        let claves = $scope.cuota_supervisor.map(x => x.id_supervisor)
+            //Quitamos repetidos
+        claves = Array.from(new Set(claves))
+
+        //Unimos todos los objetos. 
+        let todoParaSumarse = $scope.cuota_supervisor
+        let resultados = []
+
+        //Recorremos las claves para crear los nuevos valores. 
+        claves.forEach(clave => {
+            //Sumamos todo lo que coincida con la clave. 
+            let sumaPorClave = todoParaSumarse.filter(x => x.id_supervisor === clave)
+                .reduce((pre, cur) => pre + cur.cuota, 0)
+
+            let sumaPorimpactos = todoParaSumarse.filter(x => x.id_supervisor === clave)
+                .reduce((pree, curr) => pree + curr.cuota_impactos, 0)
+
+            //Creamos el nuevo objeto de la clave
+            let objeto = {
+                    id_supervisor: clave,
+                    cuota: sumaPorClave,
+                    cuota_impactos: sumaPorimpactos
+                }
+                //Lo agregamos a nuestra pila
+            resultados.push(objeto)
+        })
+
+        $scope.resultados_suma = resultados;
+        periodos.push(periodo_actual);
+        console.log($scope.datos_vendedores)
+        $scope.estado_cuenta = periodos;
         $scope.cuota_total = 0;
+        $scope.cuota_impactos = 0;
         $scope.datos_vendedores.forEach(element => {
             $scope.cuota_total += element.cuota_vendedor;
+            $scope.cuota_impactos += element.cuota_impactos;
 
         });
 
+        $scope.porcentaje_costo = $scope.cuota_total * ($scope.almacen.margen / 100);
+        $scope.total_costo = $scope.cuota_total - $scope.porcentaje_costo
+
         //$scope.MostrarCuotasVendedorSupervisor();
+        document.getElementById("overlay").style.display = "none";
+    };
+
+    $scope.CargarImpactosSupervisor = function(data) {
+
+        $scope.supervisor_seleccionado = data;
+        var parametros = {
+            catalogo: "impactos_supervisores",
+            id_afiliado: data,
+            id_periodo: $scope.periodo_seleccionado
+        };
+        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarDatosImpactos);
+
+    };
+
+    $scope.MostrarDatosImpactos = function(data) {
+        $scope.impactos_supervisor = data;
+        if (data.length == 0) {
+
+        } else {
+            console.log($scope.supervisor_seleccionado)
+            let c = 0
+            $scope.resultados_suma.forEach(element => {
+                if (element.id_supervisor == $scope.supervisor_seleccionado) {
+                    $scope.resultados_suma[c].cuota_impactos = $scope.impactos_supervisor[0].impactos
+                }
+                c++
+            });
+            console.log($scope.resultados_suma)
+        }
+
+    }
+
+
+    $scope.AbrirPanelSupervisor = function(id_supervisor) {
+        $('#collapse_' + id_supervisor).collapse('toggle', $("#collapse_" + id_supervisor));
+    };
+
+    $scope.ModificarCuotasVendedor = function(data) {
+
+        $scope.RegistroSeleccionado = data;
+        console.log(data)
+        $("#confirmacion_edicion_cuotas").modal("show");
+    }
+
+    $scope.ConfirmarActualizacionCuotas = function() {
+
+        $scope.Nueva_Cuota = $("#cuota_nueva").val().replace(/\./g, '');
+
+        $scope.cuota_total_vendedor = (parseInt($scope.RegistroSeleccionado.cuota_modificada) + parseInt($scope.Nueva_Cuota)) - parseInt($scope.RegistroSeleccionado.cuota_vendedor);
+
+
+        if ($scope.cuota_total_vendedor >= parseInt($scope.RegistroSeleccionado.cuota_modificada)) {
+            let diferencia = $scope.cuota_total_vendedor - parseInt($scope.RegistroSeleccionado.cuota_modificada)
+            let a = $scope.cuota_total + diferencia;
+            var opcion = confirm(`La cuota ingresada supera la cuota total distribuidora en $` + formatNumber(diferencia) + `
+            Cuota total distribuidora actualmente es de $` + formatNumber($scope.cuota_total) + `.
+            la cuota total quedaria en $` + formatNumber(a) + `
+            ¿Desea dejar está cuota total distribuidora?`);
+            if (opcion == true) {
+                var parametros = {
+                    cuota_almacen: $scope.cuota_total_vendedor,
+                    cuota_vendedor: $scope.Nueva_Cuota,
+                    id_almacen: $scope.RegistroSeleccionado.id_almacen,
+                    id_periodo: $scope.RegistroSeleccionado.id_periodo,
+                    id_vendedor: $scope.RegistroSeleccionado.id_vendedor
+                };
+
+                $scope.EjecutarLlamado("afiliados", "actualizar_cuotas", parametros, $scope.ResultadoCreacionNuevoCuota);
+                alert("Cuota actualizada satisfactoriamente");
+                $("#confirmacion_edicion_cuotas").modal("hide");
+            } else {
+                alert("Proceso Cancelado");
+                $("#confirmacion_edicion_cuotas").modal("hide");
+            }
+        } else {
+            let diferencia_menos = parseInt($scope.Nueva_Cuota) - parseInt($scope.RegistroSeleccionado.cuota_vendedor)
+            let b = $scope.cuota_total + diferencia_menos;
+            var opcion_menos = confirm(`La cuota total  distribuidora actualmente es $` + formatNumber($scope.cuota_total) +
+                `, la cuota ingresada es inferior a la cuota total distribuidora faltan, $` + formatNumber(diferencia_menos) + `
+                la cuota total quedaria en $` + formatNumber(b) + `
+            ¿Desea dejar está cuota total distribuidora?`);
+            if (opcion_menos == true) {
+                var parametros = {
+                    cuota_almacen: $scope.cuota_total_vendedor,
+                    cuota_vendedor: $scope.Nueva_Cuota,
+                    id_almacen: $scope.RegistroSeleccionado.id_almacen,
+                    id_periodo: $scope.RegistroSeleccionado.id_periodo,
+                    id_vendedor: $scope.RegistroSeleccionado.id_vendedor
+                };
+
+                $scope.EjecutarLlamado("afiliados", "actualizar_cuotas", parametros, $scope.ResultadoCreacionNuevoCuota);
+                alert("Cuota actualizada satisfactoriamente");
+                $("#confirmacion_edicion_cuotas").modal("hide");
+            } else {
+                alert("Proceso Cancelado");
+                $("#confirmacion_edicion_cuotas").modal("hide");
+            }
+        }
+
+    }
+
+    $scope.ExportarExcel = function() {
+
+        let data = $scope.datos_vendedores;
+        let wb = new ExcelJS.Workbook();
+        let workbookName = "Cuotas.xlsx";
+        let worksheetName = "Cuotas";
+        let ws = wb.addWorksheet(worksheetName, {
+            properties: {
+                tabColor: { argb: 'FFFF0000' }
+            }
+        });
+
+
+        ws.columns = [{
+                key: "id_periodo",
+                header: "Periodo",
+                width: 10
+            },
+            {
+                key: "almacen",
+                header: "Distribuidora",
+                width: 20
+            }, {
+                key: "id_vendedor",
+                header: "IDvendedor",
+                width: 20
+            },
+            /* {
+                 key: "cedula",
+                 header: "Cedula",
+                 width: 20
+             },*/
+            {
+                key: "vendedor",
+                header: "Vendedor",
+                width: 20
+            },
+            {
+                key: "cuota_vendedor",
+                header: "Cuota",
+                width: 12,
+            },
+
+        ];
+
+
+        ws.addRows(data);
+
+        console.log(ws.getRow(5).getCell(9)._address);
+        wb.xlsx.writeBuffer()
+            .then(function(buffer) {
+                saveAs(
+                    new Blob([buffer], { type: "application/octet-stream" }),
+                    workbookName
+                );
+            });
+    };
+
+
+    $scope.ArchivoSeleccionado = function() {
+        $scope.boton_ver_archivo = false;
+    };
+
+    $scope.LeerExcel = function() {
+        $scope.datos_cargados = [];
+        console.log("Inicio")
+        $scope.boton_ver_archivo = true;
+        $scope.boton_guardar = false;
+        /*Checks whether the file is a valid excel file*/
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xlsx|.xls)$/;
+        var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/
+        if ($("#ngexcelfile").val().toLowerCase().indexOf(".xlsx") > 0) {
+            xlsxflag = true;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var data = e.target.result;
+            if (xlsxflag) {
+                var workbook = XLSX.read(data, { type: 'binary' });
+            } else {
+                var workbook = XLS.read(data, { type: 'binary' });
+            }
+
+            var sheet_name_list = workbook.SheetNames;
+            var cnt = 0;
+            sheet_name_list.forEach(function(y) { /*Iterate through all sheets*/
+                if (xlsxflag) {
+                    var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                } else {
+                    var exceljson = XLS.utils.sheet_to_row_object_array(workbook.Sheets[y]);
+                }
+
+                if (exceljson.length > 0) {
+
+                    for (var i = 0; i < exceljson.length; i++) {
+                        $scope.datos_cargados.push(exceljson[i]);
+                        $scope.$apply();
+                    }
+
+                    $scope.suma_cuotas_actualizadas = 0;
+                    $("#cuota_total_actualizada").html("")
+                    $scope.datos_cargados.forEach(element => {
+                        $scope.suma_cuotas_actualizadas += parseInt(element.Cuota)
+                    });
+                }
+                $scope.MostrarDatosExcel();
+            });
+        }
+        if (xlsxflag) {
+            reader.readAsArrayBuffer($("#ngexcelfile")[0].files[0]);
+        } else {
+            reader.readAsBinaryString($("#ngexcelfile")[0].files[0]);
+        }
+
+    }
+
+
+    $scope.MostrarDatosExcel = function() {
+        $("#cuotasMasivas").modal("show")
+        $("#cuota_total_actualizada").append("<b> $" + formatNumber($scope.suma_cuotas_actualizadas) + "</b>")
+    };
+
+    $scope.ActualizarDatosCargueMasivo = function() {
+        /*$scope.cuota_a = $("#cuota_total").html().replace(/\,/g, '');
+        $scope.cuota_total = parseInt($scope.cuota_a.replace(/\$/g, ''));*/
+
+        if ($scope.suma_cuotas_actualizadas >= $scope.cuota_total) {
+            let diferencia = $scope.cuota_total - $scope.suma_cuotas_actualizadas
+            var opcion = confirm(`La cuota ingresada supera la cuota total distribuidora en $` + formatNumber(diferencia) + `
+                    Cuota total distribuidora actualmente es de $` + formatNumber($scope.cuota_total) + `.
+                    La nueva cuota es : $` + formatNumber($scope.suma_cuotas_actualizadas) + `.
+                    ¿Desea dejar esta cuota total distribuidora?`);
+            if (opcion == true) {
+                var parametros = {
+                    nueva_cuota_almacen: $scope.suma_cuotas_actualizadas,
+                    id_almacen: $scope.almacen.id_drogueria,
+                    id_periodo_seleccionado: $scope.periodo_seleccionado,
+                    cuota_vendedores: $scope.datos_cargados
+                };
+
+                $scope.EjecutarLlamado("afiliados", "actualizar_cuotas_masivas", parametros, $scope.ResultadoCreacionNuevoCuota);
+
+                alert("Cuota actualizada satisfactoriamente");
+                $("#cuotasMasivas").modal("hide");
+            } else {
+                alert("Proceso Cancelado");
+                $("#cuotasMasivas").modal("hide");
+            }
+        } else {
+            let diferencia_menos = $scope.suma_cuotas_actualizadas - $scope.cuota_total
+            var opcion_menos = confirm(`La cuota ingresada es inferior a la cuota total distribuidora, 
+                    faltan $` + formatNumber(diferencia_menos) + ` para completar la cuota inicial registrada. 
+                    La nueva cuota es : $` + formatNumber($scope.suma_cuotas_actualizadas) + `.
+                    ¿Desea dejar esta cuota total distribuidora?`);
+            if (opcion_menos == true) {
+                var parametros = {
+                    nueva_cuota_almacen: $scope.suma_cuotas_actualizadas,
+                    id_almacen: $scope.almacen.id_drogueria,
+                    id_periodo_seleccionado: $scope.periodo_seleccionado,
+                    cuota_vendedores: $scope.datos_cargados
+                };
+
+                $scope.EjecutarLlamado("afiliados", "actualizar_cuotas_masivas", parametros, $scope.ResultadoCreacionNuevoCuota);
+
+                alert("Cuota actualizada satisfactoriamente");
+                $("#cuotasMasivas").modal("hide");
+            } else {
+                alert("Proceso Cancelado");
+                $("#cuotasMasivas").modal("hide");
+            }
+        }
 
     };
     /*---------------------------------------- */
 
+    $scope.DireccionarVendedor = function(data) {
+        window.open('estado_cuenta.php?id_usuario=' + data, '_blank');
+    }
 
-    //ranking Actual y Ganadores Bimestre
+    $scope.HabilitarModificacionImpactos = function() {
 
+        $scope.modificar_impactos = 1;
+    };
+
+    $scope.GuardarCuotasImpactos = function(id_supervisor, data) {
+
+        $scope.modificar_impactos = 1;
+        $scope.c_impactos = $("#cuota_impactos_supervisor_" + data).val();
+        var datos = {
+            id_afiliado: id_supervisor,
+            id_periodo: $scope.periodo_seleccionado,
+            impactos: $scope.c_impactos
+        }
+        var parametros = {
+            catalogo: "impactos",
+            datos: datos,
+            id_almacen: id_almacen,
+            id_periodo: $scope.periodo_seleccionado
+        };
+        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoActualizacionImpactos);
+
+    };
+
+    $scope.ResultadoActualizacionImpactos = function(data) {
+        location.reload(true);
+
+    };
+
+    $scope.RazonEliminacionCuotasVendedor = function(data) {
+
+        $scope.razon_eliminacion = data;
+        $("#modalDenegarVendedorPerfecto").modal("show");
+
+    };
+
+    $scope.EliminarCuotasVendedor = function() {
+
+            console.log($scope.razon_eliminacion)
+            console.log($scope.cuota_total)
+
+            let diferencia_elminacion = $scope.cuota_total - $scope.razon_eliminacion.cuota_vendedor
+            var opcion_eliminacion = confirm("Al eliminar este vendedor su cuota seria de : $" + formatNumber(diferencia_elminacion) +
+                " ¿Desea continuar?");
+
+            if (opcion_eliminacion == true) {
+                var parametros = {
+                    id_vendedor: $scope.razon_eliminacion.id_vendedor,
+                    id_periodo: $scope.razon_eliminacion.id_periodo,
+                    razon: $scope.razon_denegacion
+                }
+
+                $scope.EjecutarLlamado("afiliados", "eliminar_cuotas_vendedor", parametros, $scope.ResultadoActualizacionImpactos);
+
+            }
+
+        }
+        //ranking Actual y Ganadores Bimestre
     $scope.CargarTemporadas = true;
     $scope.CargarTemporadasVentasAlmacen = function() {
         index_temporada_almacen = 0;
@@ -763,7 +1072,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     //crear afiliado
     // <editor-fold defaultstate="collapsed" desc="Crear Vendedores">
 
-    $scope.nuevo_afiliado = { id_supervisor: "", nombre: "", id_categoria: "", cuota_1: "", cuota_2: "" };
+    $scope.nuevo_afiliado = { id_supervisor: "", cedula: "", telefono: "", rol: "", nombre: "", cuota: "", id_periodo: "" };
     $scope.BuscarSupervisor = function() {
         var parametros = {
             catalogo: "supervisores_almacen",
@@ -776,92 +1085,90 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
     $scope.MostrarSupervisores = function(data) {
         $scope.supervisores_afiliados = data;
-        $scope.BuscarTemporadaActual();
     };
 
-    $scope.BuscarTemporadaActual = function() {
-        var parametros = {
-            catalogo: "temporada_actual"
-        };
+    $scope.ReemplazarVendedor = function() {
+        var creacion_completa = true;
+        angular.forEach($scope.nuevo_afiliado, function(dato) {
+            if (dato == "") {
+                creacion_completa = false;
+            }
+        });
+        if (creacion_completa) {
+            if ($scope.reemplazar_vendedor == 1) {
+                let periodos_reemplazo = 0;
+                $scope.btn_crear_usuario = 1
+                if ($scope.nuevo_afiliado.id_periodo == 20) {
+                    periodos_reemplazo = "(15,16,17)";
+                } else if ($scope.nuevo_afiliado.id_periodo == 21) {
+                    periodos_reemplazo = "(16,17,18)";
+                } else if ($scope.nuevo_afiliado.id_periodo == 22) {
+                    periodos_reemplazo = "(17,18,19)";
+                } else if ($scope.nuevo_afiliado.id_periodo == 23) {
+                    periodos_reemplazo = "(18,19,20)";
+                }
 
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarTemporadaActual);
+                var parametros = {
+                    catalogo: "vendedores_reemplazo",
+                    id_almacen: id_almacen,
+                    id_periodo: periodos_reemplazo
+                }
+
+                $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.VendedoresParaReemplazar);
+            } else {
+                $scope.btn_crear_usuario = 0;
+            }
+        } else {
+            $scope.reemplazar_vendedor = 0;
+            alert("Debe completar todos los datos");
+
+        }
+    };
+
+    $scope.VendedoresParaReemplazar = function(data) {
+
+        $scope.listado_vendedores_reemplazo = data;
 
     };
 
-    $scope.MostrarTemporadaActual = function(data) {
-        $scope.temporada_actual = data[0].id_temporada;
-        $scope.ObtenerCodFormas();
-    };
+    $scope.ValidarReemplazo = function(data) {
+        $scope.btn_crear_usuario = 0;
+        $scope.vendedor_reemplazo = data;
 
-    $scope.ObtenerCodFormas = function() {
-        var parametros = {
-            catalogo: "obtener_cod_formas",
-            id_clasificacion: 6
-        };
-
-        $scope.EjecutarLlamado("catalogos", "CargaCatalogo", parametros, $scope.MostrarCodFormas);
-    };
-
-    $scope.MostrarCodFormas = function(data) {
-        let id = data[0].cod_formas;
-        $scope.cod_formas = id + 1;
-    };
+    }
 
     $scope.CrearNuevoUsuario = function() {
-        $scope.actualizarinformacionnuevousuario = false;
-        if ($scope.nuevo_afiliado.id_categoria == 1) {
-            $scope.impactos = 100;
-            if ($scope.nuevo_afiliado.cuota_1 >= 5000000 && $scope.nuevo_afiliado.cuota_2 >= 5000000) {
-                $scope.actualizarinformacionnuevousuario = true;
-            }
-        }
-
-        if ($scope.nuevo_afiliado.id_categoria == 2) {
-            $scope.impactos = 75;
-            if ($scope.nuevo_afiliado.cuota_1 >= 2500000 && $scope.nuevo_afiliado.cuota_2 >= 2500000) {
-                $scope.actualizarinformacionnuevousuario = true;
-            }
-        }
-
-        if ($scope.nuevo_afiliado.id_categoria == 3) {
-            $scope.impactos = 45;
-            if ($scope.nuevo_afiliado.cuota_1 >= 1000000 && $scope.nuevo_afiliado.cuota_2 >= 1000000) {
-                $scope.actualizarinformacionnuevousuario = true;
-            }
-        }
-
-        if ($scope.nuevo_afiliado.id_categoria == 4) {
-            $scope.impactos = 20;
-            if ($scope.nuevo_afiliado.cuota_1 >= 500000 && $scope.nuevo_afiliado.cuota_2 >= 500000) {
-                $scope.actualizarinformacionnuevousuario = true;
-            }
-        }
-        if ($scope.actualizarinformacionnuevousuario) {
+        $scope.btn_crear_usuario = 1;
+        if (parseInt($scope.nuevo_afiliado.cuota) >= 500000) {
             var parametros = {
                 catalogo: "afiliados",
                 id_supervisor: $scope.nuevo_afiliado.id_supervisor,
+                cedula: $scope.nuevo_afiliado.cedula,
                 nombre: $scope.nuevo_afiliado.nombre,
-                id_categoria: $scope.nuevo_afiliado.id_categoria,
-                cuota_1: $scope.nuevo_afiliado.cuota_1,
-                cuota_2: $scope.nuevo_afiliado.cuota_2,
-                impactos: $scope.impactos,
+                telefono: $scope.nuevo_afiliado.telefono,
+                cuota: $scope.nuevo_afiliado.cuota,
+                rol: $scope.nuevo_afiliado.rol,
                 id_almacen: id_almacen,
-                id_temporada: $scope.temporada_actual,
-                cod_formas: $scope.cod_formas,
-                id_registra: datos_usuario.id
+                id_periodo: $scope.nuevo_afiliado.id_periodo,
+                id_registra: datos_usuario.id,
+                habilitar_reemplazo: $scope.reemplazar_vendedor,
+                vendedor_reemplazo: $scope.vendedor_reemplazo
             };
+
             $scope.EjecutarLlamado("afiliados", "CrearNuevoUsuario", parametros, $scope.ResultadoCreacionNuevoUsuario);
         } else {
-            alert("No cumple el valor minimo para su categoria");
+            alert("La cuota minima es de $500.000")
+            $scope.btn_crear_usuario = 0;
         }
     };
 
     $scope.ResultadoCreacionNuevoUsuario = function(data) {
         if (data.ok) {
             alert("Usuario creado satisfactoriamente");
-            location.reload();
+            $scope.btn_crear_usuario = 0;
         } else {
-            alert("Error en la creación");
+            alert(data.msj);
+            $scope.btn_crear_usuario = 0;
         }
     };
     // </editor-fold>
@@ -1336,6 +1643,11 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
     if (typeof seleccionar_almacen != 'undefined' && seleccionar_almacen) {
         $scope.ObtenerInformacionAlmacen();
     }
+
+
+    $scope.imput_subir_archivo = true;
+    $scope.boton_ver_archivo = true;
+    $scope.boton_guardar = true;
 });
 
 function ValidateIfObjectExist(array, key, new_value) {
@@ -1391,4 +1703,9 @@ function clearCanvasVendedor() {
         sigText.innerHTML = "Data URL for your signature will go here!";
         sigImage.setAttribute("src", "");
     }
+}
+
+function formatNumber(n) {
+    n = String(n).replace(/\D/g, "");
+    return n === '' ? n : Number(n).toLocaleString();
 }

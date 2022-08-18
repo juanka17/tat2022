@@ -41,7 +41,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-sm-4">
-                    <a class="btn btn-primary btn-block" href="admin_distribuidor.php">
+                    <a class="btn btn-primary btn-block hide" href="admin_distribuidor.php">
                         <i class="fa fa-industry"></i>
                         <br />
                         Distribuidores
@@ -55,7 +55,7 @@
                     </a>
                 </div>
                 <div class="col-sm-4">
-                    <a class="btn btn-primary btn-block" href="descargar_actas.php">
+                    <a class="btn btn-primary btn-block hide" href="descargar_actas.php">
                         <i class="fa fa-file-pdf-o"></i>
                         <br />
                         Actas

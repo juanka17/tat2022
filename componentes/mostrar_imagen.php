@@ -1,1 +1,1 @@
-<img id="img_logo_header" src="images/cabezote_2021.png"/>
+<img id="img_logo_header" src="images/cabezote_2022.jpg"/>

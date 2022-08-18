@@ -42,7 +42,8 @@ angular.module('adminApp', []).controller('adminController', function($scope, $h
                 if (
                     ($scope.filtros.nombre.length == 0 || vendedor.nombre.toString().toLowerCase().indexOf($scope.filtros.nombre.toLowerCase()) > -1) &&
                     ($scope.filtros.cod_formas.length == 0 || vendedor.cod_formas.toString().indexOf($scope.filtros.cod_formas.toLowerCase()) > -1) &&
-                    ($scope.filtros.distribuidora.length == 0 || vendedor.distribuidora.toString().toLowerCase().indexOf($scope.filtros.distribuidora.toString().toLowerCase()) > -1)
+                    ($scope.filtros.distribuidora.length == 0 || vendedor.distribuidora.toString().toLowerCase().indexOf($scope.filtros.distribuidora.toString().toLowerCase()) > -1) &&
+                    ($scope.filtros.cedula.length == 0 || vendedor.cedula.toString().toLowerCase().indexOf($scope.filtros.cedula.toString().toLowerCase()) > -1)
                 ) {
 
                     if ($scope.lista_vendedores.length < 50) {

@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/admin_vendedores.js?ver=10" type="text/javascript"></script>
+    <script src="js/admin_vendedores.js?ver=11" type="text/javascript"></script>
     <script type="text/javascript">
     var idAfiliado = 0;
     var idAfiliadoSeleccionado = 0;
@@ -36,24 +36,30 @@
             <!-- Main content -->
             <section class="content">
                 <div class="row">
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-12 col-md-3">
                         <input class="form-control" type='text' placeholder="Buscar por nombre"
                             ng-model="filtros.nombre" ng-change="SeleccionarListadoVendedores()" />
                     </div>
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-12 col-md-3">
                         <input class="form-control" type='text' placeholder="Buscar por Cod_formas"
                             ng-model="filtros.cod_formas" ng-change="SeleccionarListadoVendedores()" />
                     </div>
-                    <div class="col-sm-12 col-md-2">
+                    <div class="col-sm-12 col-md-3">
                         <input class="form-control" type='text' placeholder="Buscar por Distribuidora"
                             ng-model="filtros.distribuidora" ng-change="SeleccionarListadoVendedores()" />
                     </div>
                     <div class="col-sm-12 col-md-3">
+                        <input class="form-control" type='text' placeholder="Buscar por Cedula"
+                            ng-model="filtros.cedula" ng-change="SeleccionarListadoVendedores()" />
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <br>
                         <button class="btn btn-primary btn-block" ng-click="CrearNuevoAfiliado()">
                             Crear nuevo
                         </button>
                     </div>
-                    <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-12 col-md-6">
+                        <br>
                         <a class="btn btn-danger btn-block" href="menu_administracion.php">
                             Volver
                         </a>
@@ -66,6 +72,7 @@
                                     <th>Vendedor</th>
                                     <th>Id</th>
                                     <th>Cod Formas</th>
+                                    <th>Cedula</th>
                                     <th>Distribuidora</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
@@ -77,6 +84,7 @@
                                     <td class="text-left">{{vendedor.nombre}}</td>
                                     <td class="text-left">{{vendedor.id}}</td>
                                     <td class="text-left">{{vendedor.cod_formas}}</td>
+                                    <td class="text-left">{{vendedor.cedula}}</td>
                                     <td class="text-left">{{vendedor.distribuidora}}</td>
                                     <td class="text-left">{{vendedor.rol}}</td>
                                     <td class="text-left">{{vendedor.estatus}}</td>
