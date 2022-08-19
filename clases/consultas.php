@@ -1355,4 +1355,6 @@ class Consultas
             INNER JOIN afiliados a ON a.id = v.id_vendedor        
 
     ";
+
+    
 }

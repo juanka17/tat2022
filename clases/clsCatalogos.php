@@ -33,6 +33,9 @@ class clsCatalogos
             case "EliminaCatalogoSimple":
                 return clsCatalogos::EjecutarEliminacion($parametros);
                 break;
+            case "RegistraCatalogoMixtoMasivo":
+                return clsCatalogos::EjecutarInsercionMixtaMasiva($parametros);
+                break;
         }
     }
 
@@ -509,6 +512,7 @@ class clsCatalogos
                     $order = " order by seg.id";
                 };
                 break;
+                
 
             case "impactos_supervisores": {
                     $query = "SELECT * FROM impactos WHERE id_afiliado = " . $parametros->id_afiliado . " AND id_periodo = " . $parametros->id_periodo;
@@ -530,6 +534,11 @@ class clsCatalogos
 
             case "total_puntos_estado_cuenta": {
                     $query = "SELECT SUM(total_puntos) puntos FROM t_estado_cuenta t WHERE t.id_vendedor = " . $parametros->id_vendedor ;
+                    $order = " ";
+                };
+                break;
+            case "documentos_activos": {
+                    $query = "SELECT id FROM afiliados";
                     $order = " ";
                 };
                 break;

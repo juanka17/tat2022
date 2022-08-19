@@ -43,6 +43,14 @@
                                 <i class="fa fa-list" aria-hidden="true"></i>
                                 Buscar Usuario
                             </a>
+                            <a class="dropdown-item" href="estado_redenciones_masivo.php">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                Redenciones masivo
+                            </a>
+                            <a class="dropdown-item" href="llamadas_masivo.php">
+                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                Llamadas masivo
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item">

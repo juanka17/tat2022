@@ -75,6 +75,9 @@ class clsAfiliados
             case "actualizar_cuotas_kam":
                 return clsAfiliados::ActualizarCuotasKam($parametros);
                 break;
+            case "registrar_seguimiento_redencion":
+                return clsAfiliados::RegistrarOperacionRedencion($parametros);
+                break;   
         }
     }
 
@@ -713,6 +716,25 @@ class clsAfiliados
 
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
 
+    }
+
+    private static function RegistrarOperacionRedencion($parametros)
+    {
+        $id_redencion = $parametros->datos->id_redencion;
+        $id_operacion = $parametros->datos->id_operacion;
+        $comentario = $parametros->datos->comentario;
+        $id_usuario = $parametros->datos->id_usuario;
+
+        $query = "call sp_registrar_operacion_redencion_2022(" . $id_redencion . "," . $id_operacion . ",'" . $comentario . "'," . $id_usuario . ");";
+        $resultado = clsDDBBOperations::ExecuteSelectNoParams($query);
+        
+        if (is_array($resultado) && $resultado[0]["error"] == "") {
+            $query_consulta = Consultas::$consulta_seguimiento_redencion . " where seg.id_redencion = " . $id_redencion . " order by seg.id";
+            $seguimientos = clsDDBBOperations::ExecuteSelectNoParams($query_consulta);
+            return array('ok' => true, 'data' => $seguimientos);
+        } else {
+            return array('ok' => false, 'error' => $resultado[0]["error"]);
+        }
     }
 }
 
