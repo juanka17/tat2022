@@ -43,27 +43,33 @@
         }
 
         .flex-item-left {
-            background-color: #f1f1f1;
+            background-color: #5A6058;
             padding: 10px;
             flex: 50%;
         }
 
         .flex-item-right {
-            background-color: dodgerblue;
+            background-color: #5A6058;
             padding: 10px;
             flex: 50%;
         }
 
         .cate_logo {
-            border: 2px solid #ff7e06;
+            
             padding: 10px;
             margin: 0% 0% 10% 0%;
             height: auto;
             cursor: pointer;
+            transition: transform .5s;
+        }
+
+
+        .cate_logo:hover {
+            transform: scale(1.2);
         }
 
         .cate_logo_banner {
-            border: 2px solid #ff7e06;
+            border: 2px solid #D6D8D5;
             padding: 10px;
             margin: 2% 0% 5% 0%;
             height: auto;
@@ -80,7 +86,7 @@
                 grid-gap: 16px;
             }
             .cate_logo_banner {
-            border: 2px solid #ff7e06;
+            border: 2px solid #D6D8D5;
             padding: 10px;
             margin: 15% 0% 10% 0%;
             height: auto;
@@ -137,7 +143,7 @@
                     <div class="col-sm-12 col-md-10">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 " ng-repeat="premio in premios_visibles" ng-show="true">
-                                <div class="box box-danger">
+                                <div class="box" style="color: #5A6058;">
                                     <div class="box-body box-profile">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-4 text-center">
@@ -152,17 +158,17 @@
                                             </div>
                                             <div class="col-sm-12 col-md-4">
 
-                                                <h3 class="text-center" style="color: #ff7e06;">
+                                                <h3 class="text-center" style="color: #5A6058;">
                                                     {{ premio.puntos == premio.puntos_actuales ? premio.puntos : premio.puntos_actuales | number}}
                                                     Puntos
                                                 </h3>
                                                 <div class="btn-group-vertical btn-block">
                                                     <br />
-                                                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#modal_detalle_premio" ng-click="MostrarPremioSeleccionado($index)" ng-disabled=" premio.puntos_actuales > saldo_disponible " ng-show="premio.id != 2646">
+                                                    <button class="btn btn-outline-success" data-toggle="modal" data-target="#modal_detalle_premio" ng-click="MostrarPremioSeleccionado($index)" ng-disabled=" premio.puntos_actuales > saldo_disponible " ng-show="premio.id != 2646">
                                                         Ver detalle
                                                     </button>
                                                     <br>
-                                                    <button ng-show="agregar == 0" class="btn btn-warning" ng-click="ConfirmarPremioSeleccionado($index)">
+                                                    <button ng-show="agregar == 0" class="btn btn-success" ng-click="ConfirmarPremioSeleccionado($index)">
                                                         Agregar al carrito {{$index}}
                                                     </button>
                                                     <p ng-show="agregar == 1">Agregando ...</p>
@@ -187,26 +193,26 @@
 
                                 <div class="btn-group btn-block">
                                     <div class="col-sm-12 col-md-2">
-                                        <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0" ng-click="SeleccionarPaginaListaVisible(pagina_actual - pagina_actual)">
+                                        <button class="btn btn-success btn-block" ng-disabled="pagina_actual == 0" ng-click="SeleccionarPaginaListaVisible(pagina_actual - pagina_actual)">
                                             INICIO
                                         </button>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
-                                        <button class="btn btn-warning btn-block" ng-disabled="pagina_actual == 0" ng-click="SeleccionarPaginaListaVisible(pagina_actual - 1)">
+                                        <button class="btn btn-success btn-block" ng-disabled="pagina_actual == 0" ng-click="SeleccionarPaginaListaVisible(pagina_actual - 1)">
                                             <i class="fa fa-backward"></i>
                                         </button>
                                     </div>
                                     <div class="col-sm-12 col-md-2">
-                                        <button class="btn btn-warning btn-block"> {{pagina_actual + 1}} de
+                                        <button class="btn btn-success btn-block"> {{pagina_actual + 1}} de
                                             {{cantidad_paginas + 1}} </button>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
-                                        <button class="btn btn-warning btn-block" ng-disabled="pagina_actual >= cantidad_paginas" ng-click="SeleccionarPaginaListaVisible(pagina_actual + 1)">
+                                        <button class="btn btn-success btn-block" ng-disabled="pagina_actual >= cantidad_paginas" ng-click="SeleccionarPaginaListaVisible(pagina_actual + 1)">
                                             <i class="fa fa-forward"></i>
                                         </button>
                                     </div>
                                     <div class="col-sm-12 col-md-2">
-                                        <button class="btn btn-warning btn-block" ng-disabled="pagina_actual >= cantidad_paginas" ng-click="SeleccionarPaginaListaVisible(pagina_actual + (cantidad_paginas - pagina_actual))">
+                                        <button class="btn btn-success btn-block" ng-disabled="pagina_actual >= cantidad_paginas" ng-click="SeleccionarPaginaListaVisible(pagina_actual + (cantidad_paginas - pagina_actual))">
                                             FIN
                                         </button>
                                     </div>
@@ -267,12 +273,12 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
-                            <button class="btn btn-outline-warning btn-block" data-dismiss="modal">
+                            <button class="btn btn-outline-success btn-block" data-dismiss="modal">
                                 Seleccionar más
                             </button>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <button class="btn btn-warning btn-block" data-dismiss="modal" ng-click="ConfirmarRedencion()">
+                            <button class="btn btn-success btn-block" data-dismiss="modal" ng-click="ConfirmarRedencion()">
                                 Confirmar Solicitud
                             </button>
                         </div>

@@ -25,7 +25,7 @@
 
     <style>
         .fondo_datos {
-            border: 2px solid #ff7e06;
+            border: 2px solid #30E903;
             border-radius: 20px;
             padding: 20px;
             margin: 14px;
