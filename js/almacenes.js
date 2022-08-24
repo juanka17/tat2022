@@ -365,6 +365,24 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
     }
 
+    $scope.ActualizarSupervisores = function(data) {
+        console.log($scope.RegistroSeleccionado)
+        console.log(data)
+
+        var parametros = {
+            id_supervisor: data,
+            id_periodo: $scope.RegistroSeleccionado.id_periodo,
+            id_vendedor: $scope.RegistroSeleccionado.id_vendedor
+        };
+        if ($scope.RegistroSeleccionado.id_supervisor == null) {
+            $scope.EjecutarLlamado("afiliados", "actualizar_supervisores_nuevo", parametros, $scope.ResultadoCreacionNuevoCuota);
+        } else {
+            $scope.EjecutarLlamado("afiliados", "actualizar_supervisores_antiguo", parametros, $scope.ResultadoCreacionNuevoCuota);
+        }
+        $("#confirmacion_edicion_cuotas").modal("hide");
+
+    }
+
     $scope.ExportarExcel = function() {
 
         let data = $scope.datos_vendedores;
@@ -593,11 +611,13 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 var parametros = {
                     id_vendedor: $scope.razon_eliminacion.id_vendedor,
                     id_periodo: $scope.razon_eliminacion.id_periodo,
-                    razon: $scope.razon_denegacion
+                    razon: $scope.razon_denegacion,
+                    diferencia: diferencia_elminacion,
+                    id_almacen: $scope.razon_eliminacion.id_almacen
                 }
 
-                $scope.EjecutarLlamado("afiliados", "eliminar_cuotas_vendedor", parametros, $scope.ResultadoActualizacionImpactos);
-
+                $scope.EjecutarLlamado("afiliados", "eliminar_cuotas_vendedor", parametros, $scope.ResultadoCreacionNuevoCuota);
+                $("#modalDenegarVendedorPerfecto").modal("hide")
             }
 
         }
@@ -1600,7 +1620,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
         if (opcion == true) {
 
             var datos = {
-                id_estatus: 5,
+                id_estatus: 2,
                 id_inactiva: datos_usuario.id
             };
 
@@ -1618,6 +1638,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
     $scope.ResultadoInactivacionUsuario = function() {
         $("#inactivar_usuarios").modal("hide");
+        $scope.ResultadoCreacionNuevoCuota();
     };
     // </editor-fold>
 

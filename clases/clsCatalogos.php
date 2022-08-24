@@ -414,7 +414,7 @@ class clsCatalogos
                 };
                 break;
             case "vendedores_almacen": {
-                    $query = "SELECT afi.id,afi.nombre,cat.nombre categoria FROM afiliados afi inner join categorias cat on cat.id = afi.id_categoria WHERE id_almacen = " . $parametros->id_almacen . " AND id_clasificacion = 6 AND id_estatus != 5";
+                    $query = "SELECT afi.id,afi.nombre,cat.nombre categoria FROM afiliados afi inner join categorias cat on cat.id = afi.id_categoria WHERE id_almacen = " . $parametros->id_almacen . " AND id_clasificacion = 6 AND id_estatus != 2";
                     $order = " ";
                 };
                 break;

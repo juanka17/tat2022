@@ -142,17 +142,9 @@ BEGIN
 		left JOIN afiliados ai ON ai.ID = tot.id_supervisor
 		ORDER BY ai.nombre,id_supervisor;
 		
-		/*	insert into cuotas_especiales_2022(id_vendedor,id_periodo,cuota)
-			select
-				id_vendedor,
-				@id_periodo_temporal id_periodo,
-				ROUND((cuota_modificada*porcentaje_participacion)/100)
-			from
-				t_total_cuotas_vendedores
-			where
-				id_vendedor NOT IN (SELECT id_vendedor FROM cuotas_especiales_2022 WHERE id_periodo = @id_periodo_temporal);*/
-		
-		insert into cuotas_especiales_2022(id_vendedor,id_periodo,cuota)
+			
+		if@estado_variante = 0 then
+			insert into cuotas_especiales_2022(id_vendedor,id_periodo,cuota)
 			select
 				id_vendedor,
 				@id_periodo_temporal id_periodo,
@@ -161,7 +153,17 @@ BEGIN
 				t_total_cuotas_vendedores
 			where
 				id_vendedor NOT IN (SELECT id_vendedor FROM cuotas_especiales_2022 WHERE id_periodo = @id_periodo_temporal);
-				
+		else		
+				insert into cuotas_especiales_2022(id_vendedor,id_periodo,cuota)
+				select
+					id_vendedor,
+					@id_periodo_temporal id_periodo,
+					ROUND((cuota_modificada*porcentaje_participacion)/100)
+				from
+					t_total_cuotas_vendedores
+				where
+					id_vendedor NOT IN (SELECT id_vendedor FROM cuotas_especiales_2022 WHERE id_periodo = @id_periodo_temporal);
+		END IF;		
 		UPDATE cuotas_almacen 
 			SET 
 				cuota = (select SUM(cuota_vendedor) FROM t_total_cuotas_vendedores),
@@ -183,4 +185,4 @@ BEGIN
 END//
 DELIMITER ;
 
-call sp_cuotas_vendedores(91, 20,0);
+call sp_cuotas_vendedores(3924,20,0);

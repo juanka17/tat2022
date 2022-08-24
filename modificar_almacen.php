@@ -293,7 +293,7 @@
                                 </div>
                                 <!-- /.info-box -->
                             </div>
-                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 15;">
+                            <div class="col-md-12 col-sm-6 col-xs-12" ng-click="seccion = 15;BuscarSupervisor()">
                                 <div class="info-box">
                                     <span class="info-box-icon bg-red">
                                         <i class="fa fa-check"></i>
@@ -509,9 +509,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <br>
-                                    <button class="btn btn-primary" 
-                                        ng-disabled="mes_cuota_seleccionado <= 19"
-                                        ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
+                                    <button class="btn btn-primary" ng-disabled="mes_cuota_seleccionado <= 19" ng-click="GuardarCuotasDistribuidora(nueva_cuota_distribuidora,nueva_cuota_distribuidora_impactos,mes_cuota_seleccionado)">
                                         <i class="fa fa-plus"></i>
                                         Actualizar Cuota
                                     </button>
@@ -531,7 +529,7 @@
                                         <div class="cuota">
                                             <h3>Cuota Modificada</h3>
                                             <h5>Cuota: ${{datos_vendedores[0].cuota_modificada | number:0}}</h5>
-                                            <h5>Cuota costo: ${{datos_vendedores[0].cuota_costo_modificada  | number:0}}</h5>
+                                            <h5>Cuota costo: ${{datos_vendedores[0].cuota_costo_modificada | number:0}}</h5>
                                             <h5>Impactos: {{cuota_impactos | number:0}}</h5>
                                         </div>
                                     </div>
@@ -1433,13 +1431,34 @@
                                         <input type="text" required class="form-control" name="" onkeyup="format(this)" onchange="format(this)" id="cuota_nueva" ng-model="nueva_cuota">
                                         <div class="col-sm-12 col-md-4 offset-md-4 ">
                                             <br>
-                                            <button class="btn btn-primary btn-block" type="submit">Actualizar</button>
+                                            <button class="btn btn-primary btn-block" type="submit">Actualizar Cuota</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-5 offset-md-1" ng-init="actualizar_vendedor = 0">
+                                    <br />
+                                    <br />
+                                    <h5>¿Reemplazar Supervisor?</h5>
+                                    <input type="radio" id="actualizar_vendedor_si" name="reemplazar" value="1" ng-model="actualizar_vendedor">
+                                    <label for="si">Si</label>
+                                    <input type="radio" id="actualizar_vendedor_no" name="reemplazar" value="0" ng-model="actualizar_vendedor">
+                                    <label for="no">No</label>
+                                    <div ng-if="actualizar_vendedor == 1">
+                                        <label for="actualizar_supervisor">Seleccionar Supervisor</label>
+                                        <select class="form-control" name="actualizar_supervisor" ng-model="nuevo_supervisor" id="supervisor_reemplazo">
+                                            <option value="0">SELECCIONAR</option>
+                                            <option ng-repeat="l in supervisores_afiliados" value="{{l.id}}">{{l.nombre}}</option>
+                                        </select>
+                                        <div class="col-sm-12  ">
+                                            <br>
+                                            <button class="btn btn-primary btn-block" type="button" ng-click="ActualizarSupervisores(nuevo_supervisor)">Actualizar Supervisor</button>
                                         </div>
                                     </div>
 
                                 </div>
-                            </form>
-
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -1785,7 +1804,7 @@
 
 
 
-    <script src="js/almacenes.js?ver=56" type="text/javascript"></script>
+    <script src="js/almacenes.js?ver=59" type="text/javascript"></script>
     <script src="js/signature.js?reload=true"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="dev_x/lib/js/jszip.js"></script>

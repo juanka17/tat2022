@@ -78,6 +78,12 @@ class clsAfiliados
             case "registrar_seguimiento_redencion":
                 return clsAfiliados::RegistrarOperacionRedencion($parametros);
                 break;   
+            case "actualizar_supervisores_nuevo":
+                return clsAfiliados::ActualizarSupervisorNuevo($parametros);
+                break;   
+            case "actualizar_supervisores_antiguo":
+                return clsAfiliados::ActualizarSupervisorAntiguo($parametros);
+                break;   
         }
     }
 
@@ -694,6 +700,10 @@ class clsAfiliados
 
         $result = clsDDBBOperations::ExecuteSelectNoParams($query);
 
+        $query_almacen = "update cuotas_almacen set cuota_aumentada = ".$parametros->diferencia." where id_almacen = " . $parametros->id_almacen . " and id_periodo = " . $parametros->id_periodo;
+
+        $result = clsDDBBOperations::ExecuteSelectNoParams($query_almacen);
+
 
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
     }
@@ -735,6 +745,23 @@ class clsAfiliados
         } else {
             return array('ok' => false, 'error' => $resultado[0]["error"]);
         }
+    }
+
+    private static function ActualizarSupervisorNuevo($parametros)
+    {
+        $query= "insert into vendedores_supervisor (id_supervisor,id_vendedor,id_periodo) values (".$parametros->id_supervisor.",".$parametros->id_vendedor.",".$parametros->id_periodo.")";
+        $result = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+        return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
+    }
+
+    private static function ActualizarSupervisorAntiguo($parametros)
+    {
+
+        $query = "update vendedores_supervisor set id_supervisor = ".$parametros->id_supervisor." where id_vendedor = " . $parametros->id_vendedor . " and id_periodo = " . $parametros->id_periodo;
+        $result = clsDDBBOperations::ExecuteSelectNoParams($query);
+
+        return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
     }
 }
 
