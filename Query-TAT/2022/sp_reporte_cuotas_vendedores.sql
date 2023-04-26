@@ -5,14 +5,33 @@ LANGUAGE SQL
 DETERMINISTIC
 SQL SECURITY DEFINER
 BEGIN
-
+	
+	SET @id_periodo_temporal = 23	;
+	
 	DROP TEMPORARY TABLE IF EXISTS t_ventas_almacen;
 	CREATE TEMPORARY TABLE IF NOT EXISTS t_ventas_almacen AS (
 			
 		SELECT 
 			alm.id id_almacen,
 			alm.nombre almacen,
-			ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),1) venta_almacen
+			case
+					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),1)
+					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then ve.valor END),1)
+					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.valor END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.valor END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.valor END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.valor END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.valor END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.valor END),1)
+				END venta_almacen,
+				case
+					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.impactos END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.impactos END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.impactos END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.impactos END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.impactos END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.impactos END),1)
+				END impactos_almacen				
 		FROM 
 			ventas ve
 			INNER JOIN afiliados af ON ve.id_vendedor=af.ID
@@ -31,8 +50,36 @@ BEGIN
 			alm.id id_almacen,
 			af.ID id_vendedor,
 			af.nombre vendedor,
-			ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),0) venta_ultimo_q_vendedor,
-			ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor/3 END),0) venta_vendedor
+			case
+					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),1)
+					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then ve.valor END),1)
+					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.valor END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.valor END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.valor END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.valor END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.valor END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.valor END),1)
+				END venta_ultimo_q_vendedor,
+				case
+					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then round(ve.valor /3) END),1)
+					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then round(ve.valor/3) END),1)
+				END venta_vendedor,
+				case					
+					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then round(ve.impactos /3) END),1)
+					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then round(ve.impactos/3) END),1)
+				END impactos_vendedor		
 		FROM 
 			ventas ve
 			left JOIN afiliados af ON ve.id_vendedor=af.ID
@@ -57,15 +104,15 @@ BEGIN
 				(venta_ultimo_q_vendedor/venta_almacen)*100 porcentaje_participacion,
 				ca.cuota_aumentada cuota_almacen,
 				ROUND(((venta_ultimo_q_vendedor/venta_almacen)*100 * ca.cuota /100)) cuota_sin_aumento,
-				round(ca.impactos/ca.cantidad_supervisores) cuota_impactos,
+				impactos_vendedor cuota_impactos,
 				case 					
-					when esp.id_periodo IN (14,15,16,17,18,19) then esp.cuota
+					when esp.id_periodo IN (14,15,16,17,18,19,20,21,22,23,24,26) then esp.cuota
 					when ((venta_ultimo_q_vendedor/venta_almacen)*100 * ca.cuota_aumentada /100) < 500000 then 500000 
 					ELSE ROUND(((venta_ultimo_q_vendedor/venta_almacen)*100) * ca.cuota_aumentada /100)
 				end cuota_vendedor
 			FROM t_ventas_vendedores tv
 			INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
-			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen	AND ca.id_periodo = 18
+			inner JOIN cuotas_almacen ca ON ca.id_almacen=tv.id_almacen	AND ca.id_periodo = @id_periodo_temporal
 			left JOIN cuotas_especiales_2022 esp ON esp.id_vendedor = tv.id_vendedor AND esp.id_periodo = ca.id_periodo
 	
 		);

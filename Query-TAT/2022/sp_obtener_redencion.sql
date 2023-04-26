@@ -4,7 +4,7 @@ DELIMITER //
 
 create procedure sp_obtener_redencion(id_redencion_p int)
 begin
-s
+
 	SELECT
 		red.id folio,
 		pre.id id_premio,

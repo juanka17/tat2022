@@ -2,7 +2,7 @@ drop procedure if exists sp_registrar_operacion_redencion_2022;
 
 DELIMITER //
 
-create procedure sp_registrar_operacion_redencion_2022(id_redencion_p int, id_operacion_p int, comentario_p varchar(50),id_registra_p int)
+create procedure sp_registrar_operacion_redencion_2022(id_redencion_p int, id_operacion_p int, comentario_p varchar(50),observaciones_p VARCHAR(100),id_registra_p int)
 begin
 
 	set @ejecuta_cambio = 1;
@@ -10,16 +10,16 @@ begin
 	
 	set @diferencia_dias = (select DATEDIFF(now(),fecha) diferencia from redenciones where id = id_redencion_p);
 	
-	if (id_operacion_p = 5 and @diferencia_dias > 1) and id_registra_p in (12) then
+	if (id_operacion_p = 5 and @diferencia_dias > 1) and id_registra_p in (12,25714) then
 		
-		set @id_periodo = (SELECT max(id) FROM periodo WHERE now() between fecha_inicio and fecha_final);
+		set @id_periodo = (SELECT max(id) FROM periodo WHERE now() between inicio and final);
 		set @id_usuario = (SELECT max(id_usuario) FROM redenciones WHERE id = id_redencion_p);
 		set @puntos = (SELECT max(puntos) FROM redenciones WHERE id = id_redencion_p);
 		set @id_premio = (SELECT max(id_premio) FROM redenciones WHERE id = id_redencion_p);
 		set @descripcion_ecu = (SELECT concat('Cancelación redención ',nombre) FROM premios WHERE id = @id_premio);
 		
-		insert into estado_cuenta(id_periodo,id_concepto,id_usuario,puntos,descripcion,fecha)
-		values (@id_periodo,5,@id_usuario,@puntos ,@descripcion_ecu,now());
+		insert into t_estado_cuenta(id_periodo,id_concepto,id_vendedor,total_puntos,fecha)
+		values (@id_periodo,5,@id_usuario,@puntos ,now());
 	
 	elseif id_operacion_p = 5 and @diferencia_dias > 1 then
 		set @ejecuta_cambio = 0;
@@ -40,8 +40,8 @@ begin
 	end if;
 
 	if @ejecuta_cambio = 1 then
-		INSERT INTO seguimiento_redencion (id_redencion, id_operacion, comentario, fecha_operacion, id_usuario) 
-		VALUES (id_redencion_p, id_operacion_p, comentario_p, now(), id_registra_p);
+		INSERT INTO seguimiento_redencion (id_redencion, id_operacion, fecha_operacion, id_usuario,comentario,observaciones) 
+		VALUES (id_redencion_p, id_operacion_p, now(), id_registra_p,comentario_p,observaciones_p);
 
 		call sp_obtener_redencion_2022(id_redencion_p);
 	else
@@ -55,4 +55,4 @@ end //
 delimiter ;
 
 
-call sp_registrar_operacion_redencion_2022(51,2,'hecho',12);
+#call sp_registrar_operacion_redencion_2022(161,5,'Solicitado por el ejecutivo',12);

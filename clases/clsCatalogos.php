@@ -189,14 +189,14 @@ class clsCatalogos
                 break;
             case "estado_cuenta_vendedor_detallado": {
                     $query = Consultas::$consulta_estado_cuenta_detallado;
-                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor ." and con.id != 6";
                     $order = " order by per.id";
                 };
                 break;
             case "estado_cuenta_vendedor_detallado_supervisor": {
                     //$query = Consultas::$consulta_estado_cuenta_detallado_supervisor;
                     $query = Consultas::$consulta_estado_cuenta_detallado;
-                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor;
+                    $query = $query . " where est.id_vendedor = " . $parametros->id_vendedor ." and con.id != 6";
                     $order = " order by per.id";
                 };
                 break;
@@ -512,7 +512,7 @@ class clsCatalogos
                     $order = " order by seg.id";
                 };
                 break;
-                
+
 
             case "impactos_supervisores": {
                     $query = "SELECT * FROM impactos WHERE id_afiliado = " . $parametros->id_afiliado . " AND id_periodo = " . $parametros->id_periodo;
@@ -533,13 +533,19 @@ class clsCatalogos
                 break;
 
             case "total_puntos_estado_cuenta": {
-                    $query = "SELECT SUM(total_puntos) puntos FROM t_estado_cuenta t WHERE t.id_vendedor = " . $parametros->id_vendedor ;
+                    $query = "SELECT SUM(total_puntos) puntos FROM t_estado_cuenta t WHERE t.id_vendedor = " . $parametros->id_vendedor;
                     $order = " ";
                 };
                 break;
             case "documentos_activos": {
                     $query = "SELECT id FROM afiliados";
                     $order = " ";
+                };
+                break;
+
+            case "encuesta_redencion": {
+                    $query = $query . " where id_redencion = " . $parametros->id_redencion;
+                    $order = " order by id ";
                 };
                 break;
         }

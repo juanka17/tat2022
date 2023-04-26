@@ -77,13 +77,19 @@ class clsAfiliados
                 break;
             case "registrar_seguimiento_redencion":
                 return clsAfiliados::RegistrarOperacionRedencion($parametros);
-                break;   
+                break;
             case "actualizar_supervisores_nuevo":
                 return clsAfiliados::ActualizarSupervisorNuevo($parametros);
-                break;   
+                break;
             case "actualizar_supervisores_antiguo":
                 return clsAfiliados::ActualizarSupervisorAntiguo($parametros);
-                break;   
+                break;
+            case "registrar_cuotas_supervisores":
+                return clsAfiliados::RegistrarCuotasSupervisores($parametros);
+                break;
+            case "total_impactos_supervisores":
+                return clsAfiliados::ObtenerTotalImpactosSupervisores($parametros);
+                break;
         }
     }
 
@@ -504,7 +510,7 @@ class clsAfiliados
                     $insert_venta_solo["IMPACTOS"] = 1;
                     $insert_venta_solo["UNIDADES"] = 1;
                     $insert_venta_solo["VALOR"] = 1;
-                    
+
                     $insertResultSupervisor = clsDDBBOperations::ExecuteInsert($insert_venta_solo, "ventas");
                     return array('ok' => true, 'msj' => "Vendedor creado satisfactoriamente");
                 }
@@ -607,6 +613,7 @@ class clsAfiliados
             }
 
             $query = "call sp_redimir_premio(" . $id_usuario . "," . $id_premio . "," . $puntos . ",'" . $correo_envio . "','" . $numero_envio . "'," . $id_operador . ",'" . $id_registra . "','" . $cambio_datos . "');";
+            
             $resultado_redencion = clsDDBBOperations::ExecuteSelectNoParams($query);
 
             if (is_array($resultado_redencion)) {
@@ -616,7 +623,7 @@ class clsAfiliados
 
         if (count($redenciones_registradas) == count($parametros->premios)) {
 
-           /* foreach ($parametros->premios as $redencion) {
+            /* foreach ($parametros->premios as $redencion) {
                 $mailResult = clsMailHelper::EnviarMailRedencion($parametros->correo_envio, $redencion->id_categoria, "a");
             }
 
@@ -700,7 +707,7 @@ class clsAfiliados
 
         $result = clsDDBBOperations::ExecuteSelectNoParams($query);
 
-        $query_almacen = "update cuotas_almacen set cuota_aumentada = ".$parametros->diferencia." where id_almacen = " . $parametros->id_almacen . " and id_periodo = " . $parametros->id_periodo;
+        $query_almacen = "update cuotas_almacen set cuota_aumentada = " . $parametros->diferencia . " where id_almacen = " . $parametros->id_almacen . " and id_periodo = " . $parametros->id_periodo;
 
         $result = clsDDBBOperations::ExecuteSelectNoParams($query_almacen);
 
@@ -708,24 +715,24 @@ class clsAfiliados
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
     }
 
-    private static function ActualizarCuotasKam($parametros){
+    private static function ActualizarCuotasKam($parametros)
+    {
 
-        $query = "update cuotas_almacen set cuota_kam = ".$parametros->datos->cuota.", cuota_aumentada = " . $parametros->datos->cuota . " where id_almacen = " . $parametros->id_almacen . " and id_periodo = " . $parametros->id_periodo;
+        $query = "update cuotas_almacen set cuota_kam = " . $parametros->datos->cuota . ", cuota_aumentada = " . $parametros->datos->cuota . " where id_almacen = " . $parametros->id_almacen . " and id_periodo = " . $parametros->id_periodo;
         $result = clsDDBBOperations::ExecuteSelectNoParams($query);
 
-        if($result == 1){
-            $query_cuotas = "delete FROM cuotas_especiales_2022 WHERE id_vendedor IN (SELECT id FROM afiliados WHERE id_almacen = ".$parametros->id_almacen.") AND id_periodo = ". $parametros->id_periodo;
+        if ($result == 1) {
+            $query_cuotas = "delete FROM cuotas_especiales_2022 WHERE id_vendedor IN (SELECT id FROM afiliados WHERE id_almacen = " . $parametros->id_almacen . ") AND id_periodo = " . $parametros->id_periodo . " AND estado = 1";
             $result_cuotas = clsDDBBOperations::ExecuteSelectNoParams($query_cuotas);
 
-            $query_vendedores ="call sp_cuotas_vendedores(" . $parametros->id_almacen . "," . $parametros->id_periodo . ",1 )";
+            $query_vendedores = "call sp_cuotas_vendedores(" . $parametros->id_almacen . "," . $parametros->id_periodo . ",1 )";
             $result_vendedores = clsDDBBOperations::ExecuteSelectNoParams($query_vendedores);
-        }else{
+        } else {
             echo "error";
         }
 
 
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
-
     }
 
     private static function RegistrarOperacionRedencion($parametros)
@@ -735,9 +742,9 @@ class clsAfiliados
         $comentario = $parametros->datos->comentario;
         $id_usuario = $parametros->datos->id_usuario;
 
-        $query = "call sp_registrar_operacion_redencion_2022(" . $id_redencion . "," . $id_operacion . ",'" . $comentario . "'," . $id_usuario . ");";
+        $query = "call sp_registrar_operacion_redencion_2022(" . $id_redencion . "," . $id_operacion . ",'" . $comentario . "',"."''"."," . $id_usuario . ");";
         $resultado = clsDDBBOperations::ExecuteSelectNoParams($query);
-        
+
         if (is_array($resultado) && $resultado[0]["error"] == "") {
             $query_consulta = Consultas::$consulta_seguimiento_redencion . " where seg.id_redencion = " . $id_redencion . " order by seg.id";
             $seguimientos = clsDDBBOperations::ExecuteSelectNoParams($query_consulta);
@@ -749,7 +756,7 @@ class clsAfiliados
 
     private static function ActualizarSupervisorNuevo($parametros)
     {
-        $query= "insert into vendedores_supervisor (id_supervisor,id_vendedor,id_periodo) values (".$parametros->id_supervisor.",".$parametros->id_vendedor.",".$parametros->id_periodo.")";
+        $query = "insert into vendedores_supervisor (id_supervisor,id_vendedor,id_periodo) values (" . $parametros->id_supervisor . "," . $parametros->id_vendedor . "," . $parametros->id_periodo . ")";
         $result = clsDDBBOperations::ExecuteSelectNoParams($query);
 
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
@@ -758,10 +765,36 @@ class clsAfiliados
     private static function ActualizarSupervisorAntiguo($parametros)
     {
 
-        $query = "update vendedores_supervisor set id_supervisor = ".$parametros->id_supervisor." where id_vendedor = " . $parametros->id_vendedor . " and id_periodo = " . $parametros->id_periodo;
+        $query = "update vendedores_supervisor set id_supervisor = " . $parametros->id_supervisor . " where id_vendedor = " . $parametros->id_vendedor . " and id_periodo = " . $parametros->id_periodo;
         $result = clsDDBBOperations::ExecuteSelectNoParams($query);
 
         return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.");
+    }
+
+    private static function RegistrarCuotasSupervisores($parametros)
+    {
+        $supervisores = implode(', ', array_filter($parametros->total_supervisores));
+        $query = "SELECT COUNT(*) total FROM impactos WHERE id_afiliado =" . $parametros->datos->id_afiliado . " AND id_periodo = " . $parametros->datos->id_periodo;
+        $result = clsDDBBOperations::ExecuteSelectNoParams($query);
+        if ($result[0]['total'] == 0) {
+            $insert = "insert into impactos (id_afiliado,id_periodo,impactos,fecha) values (" . $parametros->datos->id_afiliado . "," . $parametros->datos->id_periodo . "," . $parametros->datos->impactos . ",now())";
+        } else {
+            $insert = "update impactos set impactos = " . $parametros->datos->impactos . " where id_afiliado = " . $parametros->datos->id_afiliado . " and id_periodo = " . $parametros->datos->id_periodo;
+        }
+        $resultado = clsDDBBOperations::ExecuteSelectNoParams($insert);
+
+        $total_impactos = "SELECT SUM(impactos) total FROM impactos WHERE id_afiliado IN (".$supervisores.") AND id_periodo = ".$parametros->datos->id_periodo;
+        $suma_imp = clsDDBBOperations::ExecuteSelectNoParams($total_impactos);
+        return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.", 'suma' => $suma_imp);
+    }
+
+    private static function ObtenerTotalImpactosSupervisores($parametros)
+    {
+        $supervisores = implode(', ', array_filter($parametros->total_supervisores));
+        
+        $total_impactos = "SELECT SUM(impactos) total FROM impactos WHERE id_afiliado IN (".$supervisores.") AND id_periodo = ".$parametros->id_periodo;
+        $suma_imp = clsDDBBOperations::ExecuteSelectNoParams($total_impactos);
+        return array('ok' => true, 'resultado' => "Cuota actualizadas satisfactoriamente.", 'suma' => $suma_imp);
     }
 }
 

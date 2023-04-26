@@ -10,7 +10,7 @@ BEGIN
 
 	set @id_concepto = 2;
 	set @id_periodo = 0;
-	set @id_redencion = 0;s
+	set @id_redencion = 0;
 	set @nombre_premio = '';
 	set @descripcion_ecu = '';
 	set @id_seguimiento_redencion = 0;
@@ -20,7 +20,7 @@ BEGIN
 	set puede_redimir = 1;
 	set error = '';
 	
-	set @saldo_actual = (select obtener_saldo_actual(24096));
+	set @saldo_actual = (select obtener_saldo_actual(id_usuario_p));
 	if (@saldo_actual - puntos_p) < 0 then
 		set puede_redimir = 0;
 		set error = 'Se supera el saldo disponible.';

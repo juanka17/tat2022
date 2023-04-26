@@ -94,7 +94,7 @@ class Consultas
             INNER JOIN categoria_premio cat ON cat.id = pre.id_categoria
         WHERE pre.activo = 1	
         ';
-    
+
     public static $consulta_familiares = '
     SELECT
 	fam.ID,
@@ -445,7 +445,7 @@ class Consultas
     ";
 
     public static $consulta_estado_cuenta_vendedores = "
-    SELECT *,(a.total_puntos_ganados-total_puntos_gastados) puntos_restantes FROM (
+    SELECT *,(a.total_puntos_ganados-(total_puntos_gastados-total_puntos_cancelados)) puntos_restantes FROM (
         SELECT 
                     est.id_periodo,
                     est.id_almacen,
@@ -459,14 +459,15 @@ class Consultas
                     SUM(est.impactos) impactos,
                     SUM(est.puntos_impactos) puntos_impactos,
                     SUM(est.total_puntos_venta) total_puntos_venta,
-                    SUM(case when est.id_concepto IN (1,3,4) then est.total_puntos ELSE 0 END) total_puntos_ganados,
-                    SUM(case when est.id_concepto = 2 then est.total_puntos ELSE 0 END) total_puntos_gastados
+                    SUM(case when est.id_concepto IN (1,3,4,6) then est.total_puntos ELSE 0 END) total_puntos_ganados,
+                    SUM(case when est.id_concepto = 2 then est.total_puntos ELSE 0 END) total_puntos_gastados,
+                    SUM(case when est.id_concepto = 5 then est.total_puntos ELSE 0 END) total_puntos_cancelados
                 FROM 
                     t_estado_cuenta est
                 INNER JOIN afiliados afi ON afi.ID = est.id_vendedor  
     ";
     public static $consulta_estado_cuenta_supervisores = "
-    SELECT *,(a.total_puntos_ganados-total_puntos_gastados) puntos_restantes FROM (
+    SELECT *,(a.total_puntos_ganados-(total_puntos_gastados-total_puntos_cancelados)) puntos_restantes FROM (
         SELECT 
                     est.id_periodo,
                     est.id_almacen,
@@ -478,8 +479,9 @@ class Consultas
                     SUM(est.cuota_impactos) cuota_impactos,
                     SUM(est.impactos) impactos,
                     SUM(est.puntos_impactos) puntos_impactos,
-                    SUM(case when est.id_concepto IN (1,3,4) then est.total_puntos ELSE 0 END) total_puntos_ganados,
-                    SUM(case when est.id_concepto = 2 then est.total_puntos ELSE 0 END) total_puntos_gastados
+                    SUM(case when est.id_concepto IN (1,3,4,6) then est.total_puntos ELSE 0 END) total_puntos_ganados,
+                    SUM(case when est.id_concepto = 2 then est.total_puntos ELSE 0 END) total_puntos_gastados,
+                    SUM(case when est.id_concepto = 5 then est.total_puntos ELSE 0 END) total_puntos_cancelados
                 FROM 
                     t_estado_cuenta est
                 INNER JOIN afiliados afi ON afi.ID = est.id_vendedor  
@@ -510,8 +512,10 @@ class Consultas
             case
                 when est.id_concepto in (1,3,4) then 'Puntos Ganados'
                 when est.id_concepto = 2 then CONCAT('Puntos Redimidos - ',pre.nombre)
+                when est.id_concepto = 5 then CONCAT('Puntos Cancelados')
             END concepto,
             est.id_concepto,
+            con.suma,
             red.id id_redencion,
             pre.nombre premio,
             est.cuota cuota,
@@ -533,6 +537,7 @@ class Consultas
             INNER JOIN temporada tem ON tem.id = per.id_temporada
             left JOIN redenciones red ON red.id_estado_cuenta = est.id
             LEFT JOIN premios pre ON pre.id = red.id_premio
+            INNER JOIN concepto_estado_cuenta con ON con.id = est.id_concepto
     ";
     public static $consulta_estado_cuenta_detallado_supervisor = "
         SELECT 
@@ -776,6 +781,7 @@ class Consultas
             afi.CELULAR,
             afi.EMAIL,
             afi.COD_FORMAS,
+            afi.nacimiento,
             rol.nombre rol,
             est.nombre estatus,
             afi.fecha_inscripcion creacion,
@@ -786,7 +792,7 @@ class Consultas
             afiliados afi
             LEFT JOIN almacenes alm ON alm.id = afi.id_almacen
             LEFT join roles rol on rol.id = afi.id_rol
-            LEFT join ciudad ciu on ciu.id = alm.id_ciudad
+            LEFT join ciudad ciu on ciu.id = afi.id_ciudad
             LEFT join estatus est on est.id = afi.ID_ESTATUS
             LEFT JOIN territorios ter ON ter.id = alm.id_territorio
             left JOIN distribuidora_madre dis ON dis.id = alm.id_madre
@@ -1156,9 +1162,10 @@ class Consultas
             per.nombre periodo,
             vis.id id_visitador,
             vis.NOMBRE visitador,
-            alm.id id_almacen,
-            alm.nombre almacen,
+            alm.id id_distribuidora,
+            alm.nombre distribuidora,
             ven.id id_vendedor,
+            ven.cedula,
             ven.nombre vendedor,
             con.nombre concepto,
             est.venta,
@@ -1172,13 +1179,14 @@ class Consultas
             est.cumplimiento_impactos,
             est.puntos_impactos,
             est.total_puntos_venta,
-            est.total_puntos
+            if(con.suma=1,est.total_puntos,est.total_puntos*-1) total_puntos
         FROM t_estado_cuenta est
             INNER JOIN periodo per ON per.id = est.id_periodo
-            INNER JOIN almacenes alm ON alm.id = est.id_almacen
+            left JOIN almacenes alm ON alm.id = est.id_almacen
             INNER JOIN afiliados ven ON ven.ID = est.id_vendedor
             left JOIN concepto_estado_cuenta con ON con.id = est.id_concepto
             left JOIN afiliados vis ON vis.id = alm.id_visitador
+            WHERE con.id != 6
     ";
     /*public static $reporte_estructura_supervisores = "
             SELECT 
@@ -1336,6 +1344,7 @@ class Consultas
             red.id folio,
             ope.nombre operacion,
             seg.comentario,
+            seg.observaciones,
             red.correo_envio,
             red.numero_envio,
             seg.fecha_operacion
@@ -1345,7 +1354,7 @@ class Consultas
             INNER JOIN redenciones red ON red.id=seg.id_redencion
     ";
 
-    public static $vendedores_reemplazo ="
+    public static $vendedores_reemplazo = "
             
         SELECT 
             v.id_vendedor,
@@ -1356,5 +1365,189 @@ class Consultas
 
     ";
 
-    
+    public static $reporte_cuotas_vendedor = "
+            
+        
+		SELECT
+        alm.id id_distribuidora,
+        alm.nombre distribuidora,
+        ter.nombre territorio,
+        afi.id id_vendedor,
+        afi.nombre vendedor,
+        vis.id id_ejecutivo,
+        vis.nombre ejecutivo,
+        per.id id_periodo,
+        per.nombre periodo,
+        ven.cuota      
+     from 
+        cuotas_especiales_2022 ven
+        left JOIN afiliados afi ON afi.ID = ven.id_vendedor
+        left JOIN almacenes alm ON alm.id = afi.id_almacen
+        left JOIN territorios ter ON ter.id = alm.id_territorio
+        left JOIN afiliados vis ON vis.ID = alm.id_visitador         
+        left join periodo per on per.id = ven.id_periodo      
+
+    ";
+
+    public static $ventas_sku_2022 = "
+            
+        SELECT
+         alm.id id_distribuidora,
+         alm.nombre distribuidora,
+         ter.nombre territorio,
+         afi.id id_vendedor,
+         afi.nombre vendedor,
+         vis.id id_ejecutivo,
+         vis.nombre ejecutivo,
+         per.id id_periodo,
+         per.nombre periodo,
+         ifnull(cat.nombre,'NO REGISTRA') categoria,
+         ifnull(pro.nombre,'NO REGISTRA') producto,
+         ifnull(pro.sku,'NO REGISTRA') sku,
+         pro.portafolio,
+         mar.nombre marca,
+         ven.unidades,
+         ven.valor      
+      from 
+         ventas ven
+         left JOIN afiliados afi ON afi.ID = ven.id_vendedor
+         left JOIN almacenes alm ON alm.id = afi.id_almacen
+         left JOIN territorios ter ON ter.id = alm.id_territorio
+         left JOIN afiliados vis ON vis.ID = alm.id_visitador         
+         left join periodo per on per.id = ven.id_periodo
+         left join productos pro on pro.id = ven.id_producto
+         left join categoria_producto cat on cat.id = pro.id_categoria
+         left JOIN marcas mar ON mar.id = pro.id_marca
+      WHERE ven.id_periodo >= 14       
+
+    ";
+
+    public static $reporte_ventas_2022 = "
+            
+    SELECT 
+a.id_periodo,
+periodo,
+id_visitador,
+visitador,
+id_distribuidora,
+distribuidora,
+a.id_vendedor,
+vendedor,
+sup.id_supervisor,
+afi.nombre supervisor,
+rol,
+a.cedula,
+a.cod_formas,
+estado,
+impactos,
+venta,
+cuota
+FROM
+ (
+SELECT						
+        per.id id_periodo,
+        per.nombre periodo,
+        vis.id id_visitador,
+        vis.NOMBRE visitador,
+        alm.id id_distribuidora,
+        alm.nombre distribuidora,
+        afi.id id_vendedor,
+        afi.nombre vendedor,
+        r.nombre rol,
+        afi.cedula,
+        afi.cod_formas,
+        case
+        when afi.id_estatus = 1 then 'Activo'
+        when afi.id_estatus = 2 then 'Inactivo'
+        when afi.id_estatus = 3 then 'Pendiente'
+        END estado,
+        SUM(ven.impactos) impactos,
+        sum(ven.valor) venta,
+        cuo.cuota
+    FROM 
+        ventas ven
+        LEFT JOIN cuotas_especiales_2022 cuo ON cuo.id_periodo = ven.id_periodo AND cuo.id_vendedor = ven.id_vendedor
+        INNER JOIN periodo per ON per.id = ven.id_periodo
+        INNER JOIN afiliados afi ON afi.ID = ven.id_vendedor            
+        INNER JOIN almacenes alm ON alm.id = afi.id_almacen
+        left JOIN afiliados vis ON vis.id = alm.id_visitador
+        INNER JOIN roles r ON r.id = afi.id_rol       
+    WHERE 
+        ven.id_periodo >= 14
+    GROUP BY 
+        afi.id,per.id
+    ORDER BY 
+        afi.id,per.id)a
+        LEFT JOIN vendedores_supervisor sup ON sup.id_vendedor = a.id_vendedor AND sup.id_periodo = a.id_periodo
+        LEFT JOIN afiliados afi ON afi.id = sup.id_supervisor
+         
+
+    ";
+
+    public static $reporte_impactos_2022 = "
+            
+        SELECT						
+            per.id id_periodo,
+            per.nombre periodo,
+            vis.id id_visitador,
+            vis.NOMBRE visitador,
+            alm.id id_distribuidora,
+            alm.nombre distribuidora,
+            afi.id id_vendedor,
+            afi.nombre vendedor,
+            r.nombre rol,
+            afi.cedula,
+            afi.cod_formas,
+            case
+            when afi.id_estatus = 1 then 'Activo'
+            when afi.id_estatus = 2 then 'Inactivo'
+            when afi.id_estatus = 3 then 'Pendiente'
+            END estado,
+            cat.nombre categoria,
+            pro.nombre producto,
+            pro.sku,
+            pro.portafolio,
+            mar.nombre marca,
+            SUM(ven.impactos) impactos,
+            sum(ven.valor) venta
+        FROM 
+            ventas ven
+            INNER JOIN periodo per ON per.id = ven.id_periodo
+            INNER JOIN afiliados afi ON afi.ID = ven.id_vendedor            
+            INNER JOIN almacenes alm ON alm.id = afi.id_almacen
+            left JOIN afiliados vis ON vis.id = alm.id_visitador
+            INNER JOIN roles r ON r.id = afi.id_rol 
+            INNER JOIN productos pro ON pro.id = ven.id_producto   
+            INNER JOIN categoria_producto cat ON cat.id = pro.id_categoria  
+            INNER JOIN marcas mar ON mar.id = pro.id_marca 
+        WHERE 
+            ven.id_periodo >= 14
+        GROUP BY 
+            afi.id,per.id,pro.id
+        ORDER BY 
+            afi.id,per.id
+         
+
+    ";
+    public static $reporte_distribuidoras_2022 = "
+            
+    SELECT 
+    m.nombre distribuidora_madre,
+    a.nombre distribuidora,
+    c.nombre ciudad,
+    f.nombre ejecutivo,
+    case
+        when a.estado = 0 then 'Inactivo'
+        ELSE 'Activo'
+    END estado,
+    t.nombre territorio,
+    a.margen
+     FROM almacenes a
+     INNER JOIN distribuidora_madre m ON m.id = a.id_madre
+     INNER JOIN ciudad c ON c.id = a.id_ciudad
+     INNER JOIN afiliados f ON f.id = a.id_visitador
+     INNER JOIN territorios t ON t.id = a.id_territorio
+         
+
+    ";
 }

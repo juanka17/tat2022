@@ -12,7 +12,13 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
         $scope.saldo_disponible = $scope.datos_usuario.saldo_actual == null ? 0 : parseInt($scope.datos_usuario.saldo_actual);
         $scope.nombre_ciudad = $scope.datos_usuario.ciudad_departamento;
         $scope.direccion = $scope.datos_usuario.DIRECCION;
-        $scope.ObtenerCategoriaPremios();
+        console.log($scope.datos_usuario)
+        if ($scope.datos_usuario.CEDULA == "0" || $scope.datos_usuario.CELULAR == null || $scope.datos_usuario.EMAIL == null) {
+            alert('Debe ingresar en "Mis datos" teléfono, cedula y correo para poder redimir. Si desea soporte comuníquese a las líneas de atención del programa');
+            document.location.href = "mis_datos_vendedor.php?id_usuario=" + $scope.datos_usuario.ID;
+        } else {
+            $scope.ObtenerCategoriaPremios();
+        }
 
     };
 
@@ -205,9 +211,9 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
     // <editor-fold defaultstate="collapsed" desc="Redencion">
     $scope.datos_envio = {
         correo: "",
-        cambio_correo: "",
+        cambio_correo: false,
         nuevo_correo: "",
-        cambio_celular: "",
+        cambio_celular: false,
         nuevo_celular: "",
         operador: "0"
     }
@@ -253,11 +259,25 @@ angular.module('catalogoApp', []).controller('catalogoController', function($sco
     $scope.GuardarRedenciones = function() {
         var legalizacion_completa = true;
         $scope.mensaje = "";
-        if ($scope.datos_envio.cambio_correo) {
-            $scope.datos_usuario.EMAIL = $scope.datos_envio.nuevo_correo
+        console.log($scope.datos_envio.nuevo_celular)
+        if ($scope.datos_envio.cambio_correo == true) {
+
+            if ($scope.datos_envio.nuevo_correo == "" || $scope.datos_envio.nuevo_correo == null) {
+                $scope.mensaje = "Debe ingresar el correo"
+                legalizacion_completa = false;
+            } else {
+                $scope.datos_usuario.EMAIL = $scope.datos_envio.nuevo_correo
+            }
+
         }
-        if ($scope.datos_envio.cambio_celular) {
-            $scope.datos_usuario.CELULAR = $scope.datos_envio.nuevo_celular
+
+        if ($scope.datos_envio.cambio_celular == true) {
+            if ($scope.datos_envio.nuevo_celular == "" || $scope.datos_envio.nuevo_celular == null) {
+                $scope.mensaje = "Debe ingresar el numero y seleccionar el operador"
+                legalizacion_completa = false;
+            } else {
+                $scope.datos_usuario.CELULAR = $scope.datos_envio.nuevo_celular
+            }
         }
 
         if (legalizacion_completa) {

@@ -40,33 +40,33 @@
             <section class="content">
                 <div class="row" ng-init="seleccion = 1">
                     <div class="col-md-3 col-sm-12">
-                        <button class="btn btn-primary btn-block" ng-click="seleccion = 1;">
+                        <button class="btn btn-success btn-block" ng-click="seleccion = 1;">
                             Mecánica Vendedores
                         </button>
                     </div>
                     <div class="col-md-3 col-sm-12">
-                        <button class="btn btn-primary btn-block" ng-click="seleccion = 2;">
+                        <button class="btn btn-success btn-block" ng-click="seleccion = 2;">
                             Mecánica Supervisores
                         </button>
                     </div>
                     <div class="col-md-3 col-sm-12">
-                        <button class="btn btn-primary btn-block" ng-click="seleccion = 3;">
+                        <button class="btn btn-success btn-block" ng-click="seleccion = 3;">
                             Mecánica Informatico
                         </button>
                     </div>
                     <div class="col-md-3 col-sm-12">
-                        <button class="btn btn-primary btn-block" ng-click="seleccion = 5">
+                        <button class="btn btn-success btn-block" ng-click="seleccion = 5">
                             Cronograma Interno
                         </button>
                     </div>
                     <div class="col-sm-12 col-md-8 offset-md-2 " ng-show="seleccion == 1">
                         <br />
-                        <div class="box box-primary">
+                        <div class="box box-success">
                             <div class="box-header with-border">
                                 <h4>¿Cómo ganan vendedores?</h4>
                             </div>
                             <div class="box-body">
-                                <img style="height: 100%; width: 100%" src="images/mecanica/como-participan-vendedores.jpg" class="img-responsive" />
+                                <img style="height: 100%; width: 100%" src="images/mecanica/ven.jpg" class="img-responsive" />
                             </div>
                         </div>
                         <br />
@@ -78,7 +78,7 @@
                                 <h4>¿Cómo ganan supervisores?</h4>
                             </div>
                             <div class="box-body">
-                                <img style="height: 100%; width: 100%" src="images/mecanica/como-participan-supervisores_2.jpg" class="img-responsive" />
+                                <img style="height: 100%; width: 100%" src="images/mecanica/sup.jpg" class="img-responsive" />
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                                 <h4>¿Cómo ganan informaticos?</h4>
                             </div>
                             <div class="box-body">
-                                <img style="height: 100%; width: 100%" src="images/mecanica/como-participan-informatico.jpg" class="img-responsive" />
+                                <img style="height: 100%; width: 100%" src="images/mecanica/info.jpg" class="img-responsive" />
                             </div>
                         </div>
                     </div>

@@ -213,7 +213,8 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             $scope.cuota_supervisor.push({
                 "id_supervisor": registro.id_supervisor,
                 "cuota": registro.cuota_vendedor,
-                "cuota_impactos": registro.cuota_impactos
+                "cuota_impactos": registro.cuota_impactos,
+                "cuota_impactos_modificados": registro.impactos_modificados
             })
 
         });
@@ -222,10 +223,12 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
         //Obtenemos solo las claves. 
         let claves = $scope.cuota_supervisor.map(x => x.id_supervisor)
             //Quitamos repetidos
-        claves = Array.from(new Set(claves))
 
+        claves = Array.from(new Set(claves))
+        $scope.total_supervisores = claves;
         //Unimos todos los objetos. 
         let todoParaSumarse = $scope.cuota_supervisor
+
         let resultados = []
 
         //Recorremos las claves para crear los nuevos valores. 
@@ -237,11 +240,15 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             let sumaPorimpactos = todoParaSumarse.filter(x => x.id_supervisor === clave)
                 .reduce((pree, curr) => pree + curr.cuota_impactos, 0)
 
+            let sumaPorimpactosModificador = todoParaSumarse.filter(x => x.id_supervisor === clave)
+                .reduce((pree, curr) => pree + curr.cuota_impactos_modificados, 0)
+
             //Creamos el nuevo objeto de la clave
             let objeto = {
                     id_supervisor: clave,
                     cuota: sumaPorClave,
-                    cuota_impactos: sumaPorimpactos
+                    cuota_impactos: sumaPorimpactos,
+                    cuota_impactos_modificados: sumaPorimpactosModificador
                 }
                 //Lo agregamos a nuestra pila
             resultados.push(objeto)
@@ -249,7 +256,6 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
         $scope.resultados_suma = resultados;
         periodos.push(periodo_actual);
-        console.log($scope.datos_vendedores)
         $scope.estado_cuenta = periodos;
         $scope.cuota_total = 0;
         $scope.cuota_impactos = 0;
@@ -264,7 +270,23 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
         //$scope.MostrarCuotasVendedorSupervisor();
         document.getElementById("overlay").style.display = "none";
+
+        $scope.ObtenerTotalImpactos();
     };
+
+    $scope.ObtenerTotalImpactos = function() {
+
+        var parametros = {
+            catalogo: "total_impactos_supervisores",
+            id_periodo: $scope.periodo_seleccionado,
+            total_supervisores: $scope.total_supervisores
+        };
+        $scope.EjecutarLlamado("afiliados", "total_impactos_supervisores", parametros, $scope.MostrarTotalImpactos);
+    }
+
+    $scope.MostrarTotalImpactos = function(data) {
+        $scope.total_impactos = data.suma[0].total
+    }
 
     $scope.CargarImpactosSupervisor = function(data) {
 
@@ -280,6 +302,7 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
 
     $scope.MostrarDatosImpactos = function(data) {
         $scope.impactos_supervisor = data;
+        console.log("hola")
         if (data.length == 0) {
 
         } else {
@@ -291,7 +314,6 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
                 }
                 c++
             });
-            console.log($scope.resultados_suma)
         }
 
     }
@@ -580,9 +602,10 @@ angular.module('almacenesApp', []).controller('almacenesController', function($s
             catalogo: "impactos",
             datos: datos,
             id_almacen: id_almacen,
-            id_periodo: $scope.periodo_seleccionado
+            id_periodo: $scope.periodo_seleccionado,
+            total_supervisores: $scope.total_supervisores
         };
-        $scope.EjecutarLlamado("catalogos", "RegistraCatalogoSimple", parametros, $scope.ResultadoActualizacionImpactos);
+        $scope.EjecutarLlamado("afiliados", "registrar_cuotas_supervisores", parametros, $scope.ResultadoActualizacionImpactos);
 
     };
 

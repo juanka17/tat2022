@@ -135,6 +135,7 @@
                                     <option value="1">Activo</option>
                                     <option value="2">Inactivo</option>
                                     <option value="3">Pendiente Aprobar</option>
+                                    <option value="4">Inactivar Definitivo</option>
                                 </select>
                             </div>
                             <div class="col-sm-12 col-md-6">

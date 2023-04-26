@@ -91,7 +91,7 @@ angular.module('estadoCuentaApp', []).controller('estadoCuentaController', funct
                     hoverMode: 'allArgumentPoints',
                     selectionMode: 'allArgumentPoints',
                     label: {
-                        visible: true,
+                        visible: false,
                         format: {
                             type: 'fixedPoint',
                             precision: 0,

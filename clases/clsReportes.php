@@ -38,7 +38,7 @@ class clsReportes {
             case "ventas_distribuidora": $datos = clsReportes::VentasDistribuidora($parametros);
                 break;
 
-            case "ventas_primer_bimestre_sku": $datos = clsReportes::ventas_primer_bimestre_sku($parametros);
+            case "reporte_ventas_sku_2022": $datos = clsReportes::reporte_ventas_sku_2022($parametros);
                 break;
             case "ventas_segundo_bimestre_sku": $datos = clsReportes::ventas_segundo_bimestre_sku($parametros);
                 break;
@@ -103,6 +103,8 @@ class clsReportes {
                 break;
             case "reporte_ventas_vendedor": $datos = clsReportes::ObtenerReporteCuotasVendedor($parametros);
                 break;
+            case "reporte_cuotas_vendedor": $datos = clsReportes::ReporteCuotasVendedor($parametros);
+                break;
  
 
             case "reporte_habeas_data": $datos = clsReportes::ReporteHabeasData($parametros);
@@ -115,6 +117,15 @@ class clsReportes {
                 break;
 
             case "reporte_llamadas": $datos = clsReportes::ReporteLlamadas($parametros);
+                break;
+
+            case "reporte_ventas_2022": $datos = clsReportes::ReporteVentas2022($parametros);
+                break;
+
+            case "reporte_impactos_2022": $datos = clsReportes::ReporteImpactos2022($parametros);
+                break;
+
+            case "reporte_ditribuidoras_2022": $datos = clsReportes::ReporteDistribuidoras2022($parametros);
                 break;
 
             
@@ -162,9 +173,16 @@ class clsReportes {
         return $results;
     }
 
+    private static function ReporteCuotasVendedor($parametros) {
 
-    private static function ventas_primer_bimestre_sku($parametros) {
-        $query = "call sp_reporte_ventas_sku(1) ";
+        $query = Consultas::$reporte_cuotas_vendedor;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
+
+
+    private static function reporte_ventas_sku_2022($parametros) {
+        $query = Consultas::$ventas_sku_2022;
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
         return $results;
     }
@@ -432,6 +450,27 @@ class clsReportes {
     private static function ReporteLlamadas($parametros)
     {        
         $query = Consultas::$reporte_llamadas_usuarios;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
+
+    private static function ReporteVentas2022($parametros)
+    {        
+        $query = Consultas::$reporte_ventas_2022;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
+
+    private static function ReporteImpactos2022($parametros)
+    {        
+        $query = Consultas::$reporte_impactos_2022;
+        $results = clsDDBBOperations::ExecuteSelectNoParams($query);
+        return $results;
+    }
+
+    private static function ReporteDistribuidoras2022($parametros)
+    {        
+        $query = Consultas::$reporte_distribuidoras_2022;
         $results = clsDDBBOperations::ExecuteSelectNoParams($query);
         return $results;
     }

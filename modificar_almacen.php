@@ -446,9 +446,8 @@
                             <p>¡Hola Equipo!
                                 <br>
                                 <spam ng-show="mes_cuota_seleccionado >= 20">
-                                    La cuota sugerida de agosto, que genera el sistema,
-                                    se calcula a partir del promedio de venta reportado de marzo,
-                                    abril y mayo.
+                                    La cuota sugerida que genera el sistema,
+                                    se calcula a partir del promedio de venta reportado de los ultimos 3 meses
                                     Antes de empezar a diligenciar las cuotas,
                                     válida si tu equipo de ventas está completo.
                                     De lo contrario, por favor en módulo "Crear Vendedor"
@@ -467,6 +466,11 @@
                                         <option value="18">Junio</option>
                                         <option value="19">Julio</option>
                                         <option value="20">Agosto</option>
+                                        <option value="21">Septiembre</option>
+                                        <option value="22">Octubre</option>
+                                        <option value="23">Noviembre</option>
+                                        <option value="24">Diciembre</option>
+                                        <option value="26">Febrero 2023</option>
                                     </select>
                                 </div>
                             </div>
@@ -530,14 +534,14 @@
                                             <h3>Cuota Modificada</h3>
                                             <h5>Cuota: ${{datos_vendedores[0].cuota_modificada | number:0}}</h5>
                                             <h5>Cuota costo: ${{datos_vendedores[0].cuota_costo_modificada | number:0}}</h5>
-                                            <h5>Impactos: {{cuota_impactos | number:0}}</h5>
+                                            <h5>Impactos: {{total_impactos | number:0}}</h5>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6">
                                             <button type="button" ng-click="ExportarExcel()">Exportar</button>
                                         </div>
-                                        <div class="col-sm-12 col-md-6" ng-show="mes_cuota_seleccionado >= 20">
+                                        <div class="col-sm-12 col-md-6" ng-show="mes_cuota_seleccionado >= 21">
                                             <input type="file" id="ngexcelfile" ng-blur="ArchivoSeleccionado()" ng-show="imput_subir_archivo" />
                                             <button type="button" class="btn btn-primary" ng-disabled="boton_ver_archivo" ng-click="LeerExcel()"><i class="fa fa-eye"></i> Mostrar Información</button>
                                         </div>
@@ -572,11 +576,11 @@
                                                                 </b>
                                                                 <br>
 
-                                                                <a href="" ng-click="HabilitarModificacionImpactos(supervisor.id_supervisor,$index)"><small> Modificar Cuota Impactos </small><a>
+                                                                <a  ng-show="mes_cuota_seleccionado >= 21" href="" ng-click="HabilitarModificacionImpactos(supervisor.id_supervisor,$index)"><small> Modificar Cuota Impactos </small><a>
                                                             </span>
                                                             <br>
 
-                                                            <div ng-if="modificar_impactos == 1" ng-show="mes_cuota_seleccionado >= 20">
+                                                            <div ng-if="modificar_impactos == 1" ng-show="mes_cuota_seleccionado >= 21">
                                                                 <label for="cuota_impactos">Modificar Cuota Impactos</label>
                                                                 <input type="text" id="cuota_impactos_supervisor_{{$index}}">
                                                                 <button style="cursor:pointer" ng-click="GuardarCuotasImpactos(supervisor.id_supervisor,$index)" class="btn btn-primary"><i class="fa fa-save fa-x2"></i></button>
@@ -613,10 +617,10 @@
                                                                         <td ng-init="$parent.total = total + (registro.cuota_vendedor - 0)">
                                                                             ${{registro.cuota_vendedor | number}}
                                                                         </td>
-                                                                        <td ng-show="mes_cuota_seleccionado >= 20">
+                                                                        <td ng-show="mes_cuota_seleccionado >= 21">
                                                                             <button class="btn btn-primary btn-tiny" ng-click="ModificarCuotasVendedor(registro)">Editar</button>
                                                                         </td>
-                                                                        <td ng-show="mes_cuota_seleccionado >= 20">
+                                                                        <td ng-show="mes_cuota_seleccionado >= 21">
                                                                             <button type="button" class="btn btn-danger btn-tiny" ng-click="RazonEliminacionCuotasVendedor(registro)" data-toggle="modal">Inactivar</button>
                                                                         </td>
                                                                     </tr>
@@ -1804,7 +1808,7 @@
 
 
 
-    <script src="js/almacenes.js?ver=59" type="text/javascript"></script>
+    <script src="js/almacenes.js?ver=61" type="text/javascript"></script>
     <script src="js/signature.js?reload=true"></script>
     <!-- DevExtreme library -->
     <script type="text/javascript" src="dev_x/lib/js/jszip.js"></script>

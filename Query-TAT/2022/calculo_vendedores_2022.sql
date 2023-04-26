@@ -1,5 +1,5 @@
-set @id_periodo = 18;
-set @cargar =0;
+set @id_periodo = 23;
+set @cargar = 0;
 
 	DROP TEMPORARY TABLE IF EXISTS t_cuotas;
 	CREATE TEMPORARY TABLE IF NOT EXISTS t_cuotas AS (
@@ -107,9 +107,9 @@ CREATE TEMPORARY TABLE IF NOT EXISTS t_consolidad_ventas AS (
 		ven.cuota,
 		ven.ventas,
 		esp.venta_especial,
-		(ven.ventas-esp.venta_especial) diferencia,
+		ifnull(ven.ventas-esp.venta_especial,ven.ventas) diferencia,
 		ROUND((ven.ventas/ven.cuota)*100) cumplimiento,
-		if(ROUND((ven.ventas/ven.cuota)*100)>=100, ROUND((ven.ventas-esp.venta_especial)/25000), 0)puntos_venta,
+		if(ROUND((ven.ventas/ven.cuota)*100)>=100, ROUND((ifnull(ven.ventas-esp.venta_especial,ven.ventas))/25000), 0)puntos_venta,
 		if(ROUND((ven.ventas/ven.cuota)*100)>=100, ROUND((esp.venta_especial/25000)*2), 0)puntos_especial
 	FROM t_puntos_venta ven
 	left JOIN t_puntos_venta_advil esp ON ven.id_usuario = esp.id_vendedor
@@ -185,7 +185,7 @@ select
 from
 	t_consolidado
 where
-	@cargar = 1 ;
+	@cargar = 1;
 
 select * from t_consolidado;
 

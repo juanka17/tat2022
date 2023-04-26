@@ -19,9 +19,19 @@ BEGIN
 					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),1)
 					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then ve.valor END),1)
 					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.valor END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.valor END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.valor END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.valor END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.valor END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.valor END),1)
 				END venta_almacen,
 				case
 					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.impactos END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.impactos END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.impactos END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.impactos END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.impactos END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.impactos END),1)
 				END impactos_almacen
 			FROM 
 				ventas ve
@@ -45,14 +55,29 @@ BEGIN
 					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then ve.valor END),1)
 					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then ve.valor END),1)
 					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then ve.valor END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then ve.valor END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then ve.valor END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then ve.valor END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then ve.valor END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then ve.valor END),1)
 				END venta_ultimo_q_vendedor,
 				case
 					when @id_periodo_temporal IN (14,15,16,17,18) then ifnull(sum(case when ve.id_periodo IN (9,10,11) then round(ve.valor/3) END),1)
 					when @id_periodo_temporal = 19 then ifnull(sum(case when ve.id_periodo IN (14,15,16) then round(ve.valor /3) END),1)
 					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then round(ve.valor/3) END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then round(ve.valor/3) END),1)
 				END venta_vendedor,
 				case					
 					when @id_periodo_temporal = 20 then ifnull(sum(case when ve.id_periodo IN (15,16,17) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 21 then ifnull(sum(case when ve.id_periodo IN (16,17,18) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 22 then ifnull(sum(case when ve.id_periodo IN (17,18,19) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 23 then ifnull(sum(case when ve.id_periodo IN (18,19,20) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 24 then ifnull(sum(case when ve.id_periodo IN (19,20,21) then round(ve.impactos/3) END),1)
+					when @id_periodo_temporal = 26 then ifnull(sum(case when ve.id_periodo IN (22,23,24) then round(ve.impactos/3) END),1)
 				END impactos_vendedor		
 				
 			FROM 
@@ -84,7 +109,7 @@ BEGIN
 				cuo.cuota_aumentada cuota_modificada,
 				ROUND(((venta_vendedor*alm.margen)/100)) por_venta,
 				case 					
-					when esp.id_periodo IN (14,15,16,17,18,19,20) then esp.cuota
+					when esp.id_periodo IN (14,15,16,17,18,19,20,21,22,23,24,26) then esp.cuota
 					when venta_vendedor < 500000 then 500000 
 					ELSE venta_vendedor
 				end cuota_vendedor,
@@ -95,8 +120,7 @@ BEGIN
 				t_ventas_vendedores tv
 				INNER JOIN t_ventas_almacen ta ON tv.id_almacen=ta.id_almacen
 				INNER JOIN almacenes alm ON alm.id = ta.id_almacen
-				left JOIN cuotas_especiales_2022 esp ON esp.id_vendedor = tv.id_vendedor AND esp.id_periodo = @id_periodo_temporal 
-				LEFT JOIN impactos imp ON imp.id_afiliado = esp.id_vendedor AND imp.id_periodo = esp.id_periodo
+				left JOIN cuotas_especiales_2022 esp ON esp.id_vendedor = tv.id_vendedor AND esp.id_periodo = @id_periodo_temporal 				
 				INNER JOIN cuotas_almacen cuo ON cuo.id_almacen = tv.id_almacen AND cuo.id_periodo = @id_periodo_temporal 
 		);
 
@@ -124,11 +148,13 @@ BEGIN
 			par.cuota_modificada,			
 			par.cuota_vendedor cuota_supervisor,
 			impactos_vendedor cuota_impactos,
+			imp.impactos impactos_modificados,
 			estado
 		FROM 
 			t_participacion_vendedores par
 			left JOIN vendedores_supervisor ven ON ven.id_vendedor = par.id_vendedor AND ven.id_periodo = @id_periodo_temporal
 			left JOIN afiliados v ON v.ID = ven.id_vendedor
+			LEFT JOIN impactos imp ON imp.id_afiliado = ven.id_supervisor AND imp.id_periodo = par.id_periodo
 		WHERE 
 			estado = 1
 		);
@@ -172,6 +198,17 @@ BEGIN
 				estado = 1
 				WHERE id_almacen = @id_almacen_temporal AND id_periodo = @id_periodo_temporal
 				AND estado = 0 ;
+				
+		INSERT ignore into impactos(id_afiliado,id_periodo,impactos,fecha)		
+		SELECT 
+			id_supervisor,
+			@id_periodo_temporal,
+			SUM(cuota_impactos),
+			NOW()
+			FROM t_total_cuotas_vendedores
+			WHERE
+					id_supervisor NOT IN (SELECT id_afiliado FROM impactos WHERE id_periodo = @id_periodo_temporal)
+			GROUP BY id_supervisor;
 			
 		#SELECT * FROM t_ventas_almacen;
 		#SELECT * FROM t_ventas_vendedores;	
@@ -185,4 +222,4 @@ BEGIN
 END//
 DELIMITER ;
 
-call sp_cuotas_vendedores(3924,20,0);
+call sp_cuotas_vendedores(3918,22,0);

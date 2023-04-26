@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/reportes.js?version=1" type="text/javascript"></script>
+    <script src="js/reportes.js?version=2" type="text/javascript"></script>
     <script type="text/javascript">
         var datos_usuario = <?php echo json_encode($_SESSION["usuario"]); ?>;
         $(document).ready(function() {

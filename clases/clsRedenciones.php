@@ -305,10 +305,11 @@ class clsRedenciones
         $id_redencion = $parametros->datos->id_redencion;
         $id_operacion = $parametros->datos->id_operacion;
         $comentario = $parametros->datos->comentario;
+        $observaciones = $parametros->datos->observaciones;
         $id_registra = $parametros->datos->id_registra;
 
-        $query = "call sp_registrar_operacion_redencion_2022(" . $id_redencion . "," . $id_operacion . ",'" . $comentario . "'," . $id_registra . ");";
-        
+        $query = "call sp_registrar_operacion_redencion_2022(" . $id_redencion . "," . $id_operacion . ",'" . $comentario . "','" . $observaciones . "'," . $id_registra . ");";
+                
         $resultado = clsDDBBOperations::ExecuteSelectNoParams($query);
 
         if (is_array($resultado) && $resultado[0]["error"] == "") {

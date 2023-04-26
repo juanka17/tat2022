@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/catalogo.js?reload=11" type="text/javascript"></script>
+    <script src="js/catalogo.js?reload=14" type="text/javascript"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript">
         var usuario_en_sesion = <?php echo json_encode($_SESSION["usuario"]); ?>;
@@ -55,7 +55,7 @@
         }
 
         .cate_logo {
-            
+
             padding: 10px;
             margin: 0% 0% 10% 0%;
             height: auto;
@@ -85,14 +85,15 @@
                 white-space: nowrap;
                 grid-gap: 16px;
             }
+
             .cate_logo_banner {
-            border: 2px solid #D6D8D5;
-            padding: 10px;
-            margin: 15% 0% 10% 0%;
-            height: auto;
-            width: 100%;
-            cursor: pointer;
-        }
+                border: 2px solid #D6D8D5;
+                padding: 10px;
+                margin: 15% 0% 10% 0%;
+                height: auto;
+                width: 100%;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
@@ -164,12 +165,12 @@
                                                 </h3>
                                                 <div class="btn-group-vertical btn-block">
                                                     <br />
-                                                    <button class="btn btn-outline-success" data-toggle="modal" data-target="#modal_detalle_premio" ng-click="MostrarPremioSeleccionado($index)" ng-disabled=" premio.puntos_actuales > saldo_disponible " ng-show="premio.id != 2646">
+                                                    <button class="btn btn-outline-success" data-toggle="modal" data-target="#modal_detalle_premio" ng-click="MostrarPremioSeleccionado($index)"  ng-show="premio.id != 2646">
                                                         Ver detalle
                                                     </button>
                                                     <br>
-                                                    <button ng-show="agregar == 0" class="btn btn-success" ng-click="ConfirmarPremioSeleccionado($index)">
-                                                        Agregar al carrito {{$index}}
+                                                    <button ng-show="agregar == 0" class="btn btn-success" ng-disabled=" premio.puntos_actuales > saldo_disponible " ng-click="ConfirmarPremioSeleccionado($index)">
+                                                        Agregar al carrito 
                                                     </button>
                                                     <p ng-show="agregar == 1">Agregando ...</p>
                                                     <!--<button class="btn btn-primary"
@@ -396,8 +397,8 @@
                                         <br>
                                         <input type="number" name="" placeholder="Ingrese nuevo celular" class="form-control hide" id="nuevo_celular" ng-model="datos_envio.nuevo_celular">
                                         <label for="operador">Seleccione el operador</label>
-                                        <select class="form-control" required id="operador" ng-model="datos_envio.operador" autocomplete="off">
-                                            <option value=''>Seleccionar</option>
+                                        <select class="form-control" required id="operador" ng-model="datos_envio.operador">
+                                            <option selected value='' >Seleccionar</option>
                                             <option value='1'>Movistar</option>
                                             <option value='2'>Tigo</option>
                                             <option value='3'>Exito</option>

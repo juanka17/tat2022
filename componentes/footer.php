@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12 text-center">
-        Linea de Atención 018000413544 Bogotá 4926529 --- Correo electrónico info@sociosyamigos.com.co
+        Linea de Atención 018000413544 --- Correo electrónico info@sociosyamigos.com.co
     </div>
     <div class="col-sm-12 text-center">
         Términos y condiciones 

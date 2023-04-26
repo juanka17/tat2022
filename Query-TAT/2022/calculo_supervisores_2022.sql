@@ -1,5 +1,5 @@
-set @id_periodo = 18;
-set @cargar =0;
+set @id_periodo = 23;
+set @cargar = 0;
 
 	DROP TEMPORARY TABLE IF EXISTS t_cuotas;
 	CREATE TEMPORARY TABLE IF NOT EXISTS t_cuotas AS (
@@ -62,9 +62,9 @@ CREATE TEMPORARY TABLE IF NOT EXISTS t_puntos_venta AS (
 		alma.nombre distribuidora,
 		cuo.id_supervisor,
 		afi.nombre supervisor,
-		ifnull(SUM(cuo.cuota_impactos),0) cuota_impactos,
+		ifnull(sum(cuo.cuota_impactos),0) cuota_impactos,
 		SUM(ven.impactos) impactos,
-		ifnull(ROUND((SUM(ven.impactos)/SUM(cuo.cuota_impactos))*100),0) cump_impactos,
+		ifnull(ROUND((SUM(ven.impactos)/sum(cuo.cuota_impactos))*100),0) cump_impactos,
 		sum(cuo.cuota_vendedor) cuota_venta,
 		SUM(ven.ventas) ventas,
 		ifnull(ROUND((SUM(ven.ventas)/SUM(cuo.cuota_vendedor))*100),0) cump_ventas
@@ -117,7 +117,7 @@ from
 	t_consolidado
 where
 	@cargar = 1
-AND id_supervisor IS NOT null;
+AND id_supervisor IS NOT NULL ;
 
 SELECT *,(puntos_impactos+puntos_ventas) total_puntos from t_consolidado;
 

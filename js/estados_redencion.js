@@ -33,7 +33,7 @@ angular.module('estadosRedencionApp', []).controller('estadosRedencionController
         $scope.operaciones_redencion = data;
     };
 
-    $scope.nuevo_estado = { id_operacion: 0, comentario: "", id_registra: 0 };
+    $scope.nuevo_estado = { id_operacion: 0, comentario: "", observaciones: "", id_registra: 0 };
     $scope.RegistrarSeguimiento = function() {
         $scope.nuevo_estado.id_redencion = id_redencion;
         $scope.nuevo_estado.id_registra = $scope.usuario_en_sesion.id;

@@ -7,7 +7,7 @@
 
     <?php include 'componentes/componentes_basicos.php'; ?>
 
-    <script src="js/estados_redencion.js?cant=tell&if=is_true&ver=2" type="text/javascript"></script>
+    <script src="js/estados_redencion.js?cant=tell&if=is_true&ver=3" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="style_estados_redenciones.css?ver=1" />
     <script src="js/app.js"></script>
     <script>
@@ -96,6 +96,7 @@
                                 <tr>
                                     <th>Operación</th>
                                     <th>Comentario</th>
+                                    <th>Observaciones</th>
                                     <th>Correo Envio</th>
                                     <th>Numero Envio</th>
                                     <th>Fecha</th>
@@ -105,11 +106,12 @@
                                 <tr ng-repeat="seguimiento in seguimiento_redencion track by $index">
                                     <td>{{seguimiento.operacion}}</td>
                                     <td>{{seguimiento.comentario}}</td>
+                                    <td>{{seguimiento.observaciones}}</td>
                                     <td>{{seguimiento.correo_envio}}</td>
                                     <td>{{seguimiento.numero_envio}}</td>
                                     <td>{{seguimiento.fecha_operacion}}</td>
                                     <td ng-show="seguimiento.operacion == 'Entregado'">
-                                        <a class="btn btn-primary" ng-href="../encuesta_premio/encuesta_premio.php?id_redencion={{redencion.folio}}">
+                                        <a class="btn btn-primary" ng-href="encuesta_premio.php?id_redencion={{redencion.folio}}">
                                             Encuesta
                                         </a>
                                     </td>
@@ -119,17 +121,21 @@
                     </div>
                 </div>
                 <div class="row" ng-show="redencion.operacion != 'Encuestado'">
-                    <div class="col-sm-4 form-group">
+                    <div class="col-sm-12 col-md-3">
                         <label>Nuevo estado</label>
                         <select class="form-control" ng-model='nuevo_estado.id_operacion'>
                             <option ng-repeat="operacion in operaciones_redencion track by $index" value='{{operacion.id}}'>{{operacion.nombre}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-4 form-group">
+                    <div class="col-sm-12 col-md-3">
                         <label>Comentario</label>
                         <input class="form-control" type="text" placeholder="Comentario" ng-model="nuevo_estado.comentario">
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-12 col-md-3">
+                        <label>Observaciones</label>
+                        <input class="form-control" type="text" placeholder="Observaciones" ng-model="nuevo_estado.observaciones">
+                    </div>
+                    <div class="col-sm-12 col-md-3">
                         <br />
                         <button class="btn btn-primary" ng-click="RegistrarSeguimiento()">Registrar
                             Seguimiento</button>

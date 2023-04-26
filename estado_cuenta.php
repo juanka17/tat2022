@@ -4,7 +4,7 @@
 
 <head>
     <?php include 'componentes/componentes_basicos.php'; ?>
-    <script src="js/estado_cuenta.js?ver=10" type="text/javascript"></script>
+    <script src="js/estado_cuenta.js?ver=11" type="text/javascript"></script>
     <link rel="stylesheet" href="dev_x/lib/css/dx.light.css">
     <script src="js/app.js"></script>
     <style>
@@ -32,12 +32,16 @@
             background-color: #ffff99;
             cursor: pointer;
         }
-        .alerta{
-            color:red
+
+        .alerta {
+            color: red
         }
-        .movil{
-            display: block;
-            overflow: auto;
+
+        @media only screen and (max-width: 600px) {
+            .movil {
+                display: block;
+                overflow: auto;
+            }
         }
     </style>
     <script>
@@ -94,6 +98,7 @@
                                     <tr>
                                         <th>Puntos Ganados</th>
                                         <th>Puntos Gastados</th>
+                                        <th>Puntos Cancelados</th>
                                         <th>Puntos Disponibles</th>
                                         <th></th>
                                     </tr>
@@ -103,6 +108,7 @@
                                     <tr ng-repeat="puntos in puntos_empleados">
                                         <td>{{puntos.total_puntos_ganados | number}}</td>
                                         <td>{{puntos.total_puntos_gastados | number}}</td>
+                                        <td>{{puntos.total_puntos_cancelados | number}}</td>
                                         <td>{{puntos.puntos_restantes | number}}</td>
                                     </tr>
                                 </tbody>
@@ -127,10 +133,10 @@
                                             <tr ng-repeat="registro in periodo.registros track by $index">
                                                 <td>{{registro.concepto}}</td>
                                                 <td>
-                                                    <spam ng-if="registro.id_concepto !=2">${{registro.venta | number}}</spam>
+                                                    <spam ng-if="registro.suma == 1">${{registro.venta | number}}</spam>
                                                 </td>
                                                 <td>
-                                                    <spam ng-if="registro.id_concepto !=2">${{registro.cuota| number}}</spam>
+                                                    <spam ng-if="registro.suma == 1">${{registro.cuota| number}}</spam>
                                                 </td>
                                                 <td>{{registro.cumplimiento| number}}</td>
                                                 <td>{{registro.total_puntos| number}}</td>
@@ -201,7 +207,7 @@
                                                 <th>Venta</th>
                                                 <th>Cuota</th>
                                                 <th>Cumplimiento</th>
-                                                <th class="alerta">Puntos Venta</th>   
+                                                <th class="alerta">Puntos Venta</th>
                                                 <th>Impactos</th>
                                                 <th>Cuota Imp</th>
                                                 <th>Cumplimiento Imp</th>

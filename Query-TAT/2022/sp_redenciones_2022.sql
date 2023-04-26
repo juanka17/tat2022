@@ -53,9 +53,23 @@ BEGIN
 		if(red.cambio_datos=0,'No','Si') alerta_cambio_datos,
 		red.correo_envio,
 		red.numero_envio,
+		case
+			when red.id_operador = 0 then 'N/A'
+			when red.id_operador = 1 then 'Movistar'
+			when red.id_operador = 2 then 'Tigo'
+			when red.id_operador = 3 then 'Exito'
+			when red.id_operador = 4 then 'Claro'
+			when red.id_operador = 5 then 'Virgin'
+			when red.id_operador = 6 then 'Uff'
+			when red.id_operador = 7 then 'ETB'
+			when red.id_operador = 8 then 'Avantel'
+			when red.id_operador = 9 then 'Wom'
+			when red.id_operador = 10 then 'Flash Mobile'
+		END operador,			
 		concat('GSK - ',red.id) folio,
 		red.fecha fecha_solicitud,
 		pre.nombre entrega,
+		red.puntos,
 		pre.marca,
 		'Bonos' Categoria,
 		eac.id_operacion,
@@ -71,7 +85,7 @@ BEGIN
 		INNER JOIN clasificacion cla on cla.id = cli.id_clasificacion		
 		INNER JOIN almacenes alm on alm.id = cli.id_almacen
 		INNER JOIN afiliados eje on eje.id = alm.id_visitador
-		LEFT JOIN ciudad ciu on ciu.id = alm.id_ciudad
+		LEFT JOIN ciudad ciu on ciu.id = cli.id_ciudad
 		LEFT JOIN territorios ter ON ter.id = alm.id_territorio
 		LEFT JOIN afiliados reg ON reg.ID = eac.id_usuario
 	order by
